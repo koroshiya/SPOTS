@@ -2,8 +2,8 @@
 *File: SPMS_02_stored_procedures.sql
 *Author: Koro
 *Date created: 04/July/2012
-*Date last modified: 04/July/2012
-*Version: 1.01
+*Date last modified: 05/July/2012
+*Version: 1.02
 *Changelog: 
 			1.01: Added delete_user, is_founder, is_webmaster, get_user_task_count
 			1.02: Fixed and tested get_user_task_count and get_project_count. Others not working or untested.

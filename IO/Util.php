@@ -7,7 +7,7 @@
 *Version: 1.0
 *Changelog: 
 *Purpose: Acts as an IO driver for interacting with the database.
-*/
+*/ 
 
 	$mysql_host = 'localhost';
 	$mysql_user = '';
