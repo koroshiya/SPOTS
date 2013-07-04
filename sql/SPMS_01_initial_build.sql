@@ -9,6 +9,7 @@
 
 
 CREATE DATABASE IF NOT EXISTS SPMS CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE SPMS;
 
 CREATE TABLE IF NOT EXISTS ScanGroup(
 
@@ -39,10 +40,10 @@ CREATE TABLE IF NOT EXISTS Chapter(
 
 	seriesID smallint unsigned not null,
 	chapterNumber smallint unsigned not null,
-	chapterSubNumber tinyint unsigned not null, --eg. 5 if the chapter is 10.5
-	chapterRevisionNumber tinyint unsigned not null, --0 by default; only changes when chapter has been revised after release
+	chapterSubNumber tinyint unsigned not null, /*eg. 5 if the chapter is 10.5*/
+	chapterRevisionNumber tinyint unsigned not null, /*0 by default; only changes when chapter has been revised after release*/
 	chapterName varchar(50) null,
-	groupOne smallint unsigned not null, --Home group, unless otherwise specified
+	groupOne smallint unsigned not null, /*Home group, unless otherwise specified*/
 	groupTwo smallint unsigned null,
 	groupThree smallint unsigned null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
@@ -58,7 +59,7 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	userRole character not null, --guest by default
+	userRole character not null, /*guest by default*/
 	email varchar(50) null,
 	title character null,
 	PRIMARY KEY (userID)
@@ -68,15 +69,15 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 CREATE TABLE IF NOT EXISTS Task(
 
 	seriesID smallint unsigned not null,
-	chapterNumber tinyint unsigned not null,
+	chapterNumber smallint unsigned not null,
+	chapterSubNumber tinyint unsigned not null,
 	userID smallint unsigned not null,
 	description varchar(100) null,
 	status character null,
-	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID),
-	FOREIGN KEY (seriesID) REFERENCES Series(seriesID),
-	FOREIGN KEY (chapterNumber) REFERENCES Chapter(chapterNumber),
-	FOREIGN KEY (userID) REFERENCES ScanUser(userID),
-	
+	UTCTimeCreated timestamp not null unique,
+	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, UTCTimeCreated),
+	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
+	FOREIGN KEY (userID) REFERENCES ScanUser(userID)
 
 );
 
