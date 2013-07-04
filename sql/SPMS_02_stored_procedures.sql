@@ -6,6 +6,7 @@
 *Version: 1.01
 *Changelog: 
 			1.01: Added delete_user, is_founder, is_webmaster, get_user_task_count
+			1.02: Fixed and tested get_user_task_count and get_project_count. Others not working or untested.
 */
 
 --UserIO
@@ -13,24 +14,29 @@
 --insert_user(userName, userPassword, userRole[, email, title])
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS insert_user(IN userName varchar(30), IN userPassword varchar(20), IN userRole character, IN email varchar(50), IN title character) RETURNS boolean
+DROP PROCEDURE IF EXISTS insert_user //
+CREATE PROCEDURE insert_user(IN userName varchar(30), IN userPassword varchar(20), IN userRole character, IN email varchar(50), IN title character, OUT boolResult boolean)
 BEGIN 
-IF SELECT(*) FROM ScanUser = 65535
-	RETURN false;
+DECLARE totalUsers smallint unsigned;
+SELECT COUNT(*) INTO totalUsers FROM ScanUser;
+IF totalUsers = 65535
+	boolResult = FALSE;
+ELSE
+	boolResult = TRUE;
 END IF;
 
 DECLARE sha1Password binary(20);
 sha1Password = UNHEX( SHA1 (CONCAT (userName, userpassword, 'myEpicSalt', email), 256));
 
 INSERT INTO ScanUser Values(userName, sha1Password, userRole, COALESCE(email, NULL), COALESCE(title, NULL));
-RETURN true;
 END // 
 DELIMITER ;
 
 --delete_user(userID)
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS delete_user(IN userID smallint unsigned) RETURNS boolean
+DROP PROCEDURE IF EXISTS delete_user //
+CREATE PROCEDURE delete_user(IN userID smallint unsigned) RETURNS boolean
 BEGIN 
 IF is_founder(userID) OR is_webmaster(userID) OR get_user_task_count(userID) > 0
 	RETURN false;
@@ -46,7 +52,8 @@ DELIMITER ;
 --Authentication
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS is_founder(IN userID smallint unsigned) RETURNS boolean
+DROP PROCEDURE IF EXISTS is_founder //
+CREATE PROCEDURE is_founder(IN userID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE suUserID smallint unsigned;
 SELECT founderID INTO suUserID FROM Config;
@@ -55,7 +62,8 @@ END //
 DELIMITER ;
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS is_webmaster(IN userID smallint unsigned) RETURNS boolean
+DROP PROCEDURE IF EXISTS is_webmaster //
+CREATE PROCEDURE is_webmaster(IN userID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE suUserID smallint unsigned;
 SELECT webmasterID INTO suUserID FROM Config;
@@ -68,16 +76,18 @@ DELIMITER ;
 --Getters
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS get_project_count() AS smallint unsigned
+DROP PROCEDURE IF EXISTS get_project_count //
+CREATE PROCEDURE get_project_count(OUT total smallint)
 BEGIN
-RETURN COUNT(*) FROM Series;
+SELECT COUNT(*) INTO total FROM Series;
 END // 
 DELIMITER ;
 
 DELIMITER // 
-CREATE PROCEDURE IF NOT EXISTS get_user_task_count(IN userID smallint unsigned) AS smallint unsigned
+DROP PROCEDURE IF EXISTS get_user_task_count //
+CREATE PROCEDURE get_user_task_count(IN userID smallint unsigned, OUT total smallint)
 BEGIN
-RETURN COUNT(*) FROM Task AS t WHERE t.userID = userID;
+SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = userID;
 END // 
 DELIMITER ;
 
