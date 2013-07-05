@@ -1,33 +1,29 @@
 <?php
 
-function addUser($userName, $userPassword, $userRole, $email=null, $title=null) {
-	mysqli_query($dbconnect, "INSERT INTO users VALUES ($userName, $userPassword, $userRole, $email, $title)");
-	return true;
+/**
+* Executes a stored procedure that accepts a single OUT argument.
+*
+* @param $procedure_name Name of the stored procedure to run WITHOUT the brackets. eg. function, not function() or function(integer)
+* */
+function executeSingleResultProcedure($dbconnect, $procedure_name){
+	
+	$total = 0;
+	$result = mysqli_query($dbconnect, "call $procedure_name(@total)");
+	$result = mysqli_query('SELECT @total');
+	return $result;
+
 }
 
-function removeUser($userName) {
-	mysqli_query($dbconnect, "DELETE * FROM users WHERE userName = $userName");
-	return true;
-}
-
-function is_founder($userName) {
-	$userID = mysqli_fetch_array(mysqli_query($dbconnect, "SELECT userID FROM users WHERE userName = $userName"));
-	$founderID = mysqli_fetch_array(mysqli_query($dbconnect, "SELECT founderID FROM config"));
-	if ($userID['0'] === $founderID['0']) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-function is_webmaster($userName) {
-	$userID = mysqli_fetch_array(mysqli_query($dbconnect, "SELECT userID FROM users WHERE userName = $userName"));
-	$webmasterID = mysqli_fetch_array(mysqli_query($dbconnect, "SELECT webmasterID FROM config"));
-	if ($userID['0'] === $webmasterID['0']) {
-		return true;
-	} else {
-		return false;
-	}
+/**
+* Example method for the use of this class.
+* If the database has been set up properly, returns the number of Series currently in the DB.
+*
+* @return Number of projects ("Series" in the DB).
+* */
+function getProjectCount($dbconnect){
+	
+	return executeSingleResultProcedure($dbconnect, 'get_project_count');
+	
 }
 
 ?>
