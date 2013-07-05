@@ -8,7 +8,7 @@
 *Changelog: 
 *			1.01: Changed MySQL methods to MySQLi, implemented isWebMaster, isFounder, getUserTaskCount, etc.
 *					Added support for multi-argument stored procedures
-*Purpose: Acts as an IO driver for interacting with the database.
+*Purpose: Acts as an IO driver for interacting with the database. 
 */ 
 
 	$mysql_host = 'localhost';
