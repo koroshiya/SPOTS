@@ -2,8 +2,9 @@
 *Author: Koro
 *File: SPMS_01_initial_build.sql
 *Date created: 04/July/2012
-*Date last modified: 04/July/2012
-*Changelog: 
+*Date last modified: 05/July/2012
+*Version: 1.01
+*Changelog: 1.01: userID in Task can now be null; necessary for deallocation
 */
 
 
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Task(
 	seriesID smallint unsigned not null,
 	chapterNumber smallint unsigned not null,
 	chapterSubNumber tinyint unsigned not null,
-	userID smallint unsigned not null,
+	userID smallint unsigned null,
 	description varchar(100) null,
 	status character null,
 	UTCTimeCreated timestamp not null unique,
