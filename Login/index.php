@@ -11,7 +11,7 @@ if (isset($_POST['PK_User']) && isset($_POST['PK_Pass'])) {
 	
 	$time = time() + 60 * 60;
 	if ($_POST['rememberme'] == 'on') {
-		$time = $time*24*365; // Create cookies for 1 year
+		$time *= 24*365; // Create cookies for 1 year
 	} 
 	setcookie('PK_User', $_POST['PK_User'], $time, '/', '', false, false);
 	setcookie('PK_Pass', $_POST['PK_Pass'], $time, '/', '', false, false);
