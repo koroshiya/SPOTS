@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS ScanGroup(
 
 );
 
+--Status - I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
 CREATE TABLE IF NOT EXISTS Series(
 
 	seriesID smallint unsigned not null AUTO_INCREMENT,

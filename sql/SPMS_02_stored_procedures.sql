@@ -2,13 +2,14 @@
 *File: SPMS_02_stored_procedures.sql
 *Author: Koro
 *Date created: 04/July/2012
-*Date last modified: 05/July/2012
-*Version: 1.04
+*Date last modified: 06/July/2012
+*Version: 1.05
 *Changelog: 
 			1.01: Added delete_user, is_founder, is_webmaster, get_user_task_count
 			1.02: Fixed and tested get_user_task_count and get_project_count. Others not working or untested.
 			1.03: Altered get_user_task_count and get_project_count. Fixed others.
-			1.04: Added tons of stored procedures. Many are still empty shells for later. None of the new procedures have been tested.
+			1.04: Added tons of functions. Many are still empty shells for later. None of the new functions have been tested.
+			1.05: More functions, first stored procedures
 */
 
 --ScanUserIO
@@ -234,16 +235,22 @@ BEGIN
 END // 
 DELIMITER ;
 
---modify_series_status
+--series_modify_status
+--I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
 
 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS series_modify_status //
+CREATE FUNCTION series_modify_status(seriesID smallint unsigned, status character) RETURNS boolean
 BEGIN 
+IF NOT (character = 'I' OR character = 'A' OR character = 'S' OR character = 'H' OR character = 'D' OR character = 'C') THEN
+RETURN false;
+END IF;
+UPDATE Series AS s SET s.status = character WHERE s.seriesID = seriesID;
+RETURN true;
 END // 
 DELIMITER ;
 
---modify_series_thumbnail
+--series_modify_thumbnail
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS ******** //
@@ -252,7 +259,7 @@ BEGIN
 END // 
 DELIMITER ;
 
---modify_series_project_manager
+--series_modify_project_manager
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS ******** //
@@ -261,7 +268,7 @@ BEGIN
 END // 
 DELIMITER ;
 
---modify_series_visible
+--series_modify_visible
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS ******** //
@@ -270,7 +277,7 @@ BEGIN
 END // 
 DELIMITER ;
 
---modify_series_adult
+--series_modify_adult
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS ******** //
@@ -540,6 +547,62 @@ BEGIN
 	DECLARE total smallint unsigned;
 	SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = userID;
 	RETURN total;
+END // 
+DELIMITER ;
+
+--get_series_status
+--I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
+--TODO: Consider returning character and force the assignment on the PHP
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS get_series_status //
+CREATE FUNCTION get_series_status(seriesID smallint unsigned) RETURNS varchar(8)
+BEGIN 
+DECLARE status character;
+SELECT s.status INTO status FROM Series AS s WHERE s.seriesID = seriesID;
+IF (status = 'I') THEN
+RETURN "Inactive";
+ELSE IF (status = 'A') THEN
+RETURN "Active";
+ELSE IF (status = 'S') THEN
+RETURN "Stalled";
+ELSE IF (status = 'H') THEN
+RETURN "Hiatus";
+ELSE IF (status = 'D') THEN
+RETURN "Dropped";
+ELSE IF (status = 'C') THEN
+RETURN "Complete";
+ELSE
+RETURN "N/A";
+END IF;
+END // 
+DELIMITER ;
+
+--get_series_by_letter
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_by_letter //
+CREATE PROCEDURE get_series_by_letter(IN startLetter character)
+BEGIN 
+SELECT * FROM Series AS s WHERE s.seriesTitle LIKE CONCAT(startLetter, '%');
+END // 
+DELIMITER ;
+
+--get_series_by_genre
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS ******** //
+CREATE FUNCTION ********() RETURNS ********
+BEGIN 
+END // 
+DELIMITER ;
+
+--get_series_by_status
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS ******** //
+CREATE FUNCTION ********() RETURNS ********
+BEGIN 
 END // 
 DELIMITER ;
 
