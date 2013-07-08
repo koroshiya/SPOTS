@@ -16,12 +16,25 @@
 	FOREIGN KEY (groupThree) REFERENCES ScanGroup(groupID)
 */
 
+/*
+Fixed delete_chapter, implemented insert_chapter (untested)
+*/
+
 --insert_chapter
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS insert_chapter //
+CREATE FUNCTION insert_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
+DECLARE totalChapters smallint unsigned;
+DECLARE homeID smallint unsigned;
+SELECT COUNT(*) INTO totalChapters FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+IF totalChapters > 0 THEN
+RETURN false;
+END IF;
+SELECT c.homeID INTO homeID FROM Config AS c;
+INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', homeID, null, null);
+RETURN true;
 END // 
 DELIMITER ;
 
@@ -30,14 +43,15 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter //
-CREATE FUNCTION delete_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
 DECLARE totalTasks smallint unsigned;
 SELECT COUNT(*) INTO totalTasks FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
 IF totalTasks > 0 THEN
 RETURN false;
 END IF;
-DELETE FROM Task As t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
+DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
+RETURN true;
 END // 
 DELIMITER ;
 
@@ -46,10 +60,11 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter_force //
-CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
-DELETE FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-DELETE FROM Chapter As c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+DELETE FROM Task WHERE Task.seriesID = seriesID AND Task.chapterNumber = chapterNumber AND Task.chapterSubNumber = chapterSubNumber;
+DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
+RETURN true;
 END // 
 DELIMITER ;
 
@@ -80,12 +95,24 @@ BEGIN
 END // 
 DELIMITER ;
 
---chapter_add_group --If all three are full, return false
+--chapter_add_group --If all three groups are occupied, return false
+--TODO: not working
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS chapter_add_group //
+CREATE FUNCTION chapter_add_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, newGroupID smallint unsigned) RETURNS boolean
 BEGIN 
+DECLARE groupSecond smallint unsigned;
+DECLARE groupThird smallint unsigned;
+SELECT c.groupTwo, c.groupThree INTO groupSecond, groupThird FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+IF groupSecond = NULL THEN
+UPDATE Chapter SET c.groupTwo = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+ELSE IF groupThird = NULL THEN
+UPDATE Chapter AS c SET c.groupThree = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+ELSE
+RETURN false;
+END IF;
+RETURN true;
 END // 
 DELIMITER ;
 
