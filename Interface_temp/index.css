@@ -49,6 +49,7 @@ a.sidebar_item {
 	margin:0 auto;
 }
 div#module {
+	margin-top:40px;
 	margin-left:240px;
 	color:white;
 	overflow : auto;
