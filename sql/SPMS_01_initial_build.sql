@@ -1,6 +1,6 @@
 /**
 *Author: Koro
-*File: SPMS_01_initial_build.sql
+*File: 01_initial_build.sql
 *Date created: 04/July/2012
 *Date last modified: 05/July/2012
 *Version: 1.01
@@ -9,8 +9,8 @@
 
 
 
-CREATE DATABASE IF NOT EXISTS SPMS CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE SPMS;
+CREATE DATABASE IF NOT EXISTS SPOTS CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE SPOTS;
 
 CREATE TABLE IF NOT EXISTS ScanGroup(
 

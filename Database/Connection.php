@@ -15,9 +15,9 @@
 
 	//When implemented, remove these four fields
 	$mysql_host = 'localhost';
-	$mysql_user = 'root';
-	$mysql_password = 'toor';
-	$mysql_database = 'SPMS';	
+	$mysql_user = '';
+	$mysql_password = '';
+	$mysql_database = 'SPOTS';	
 	
 	/**
 	 * Executes a stored procedure with no arguments.
