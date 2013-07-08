@@ -12,13 +12,17 @@
     <span class="header_nav">Root Navigation goes up here</span>
     <span id="header_user">UserName</span>
 </div>
+<div style="width:100%; margin:0px">
 <div id="sidebar">
 	<nav>
 		current "module"<br> navigation goes here
     </nav>
 </div>
 <div id="module">
-	
+	<?php
+		include 'admin_panel.html';
+	?>
+</div>
 </div>
 
 </body>
