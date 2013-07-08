@@ -29,6 +29,8 @@ DELIMITER //
 DROP FUNCTION IF EXISTS delete_scangroup //
 CREATE FUNCTION delete_scangroup(groupID smallint unsigned) RETURNS boolean
 BEGIN 
+--TODO: check for attached tasks/chapters
+--TODO: check if group is home group
 DELETE FROM ScanGroup AS sg WHERE sg.groupID = groupID;
 RETURN true;
 END // 

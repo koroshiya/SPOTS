@@ -17,7 +17,7 @@
 */
 
 /*
-Fixed delete_chapter, implemented insert_chapter (untested)
+Changelog: 1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
 */
 
 --insert_chapter
@@ -102,10 +102,13 @@ DELIMITER //
 DROP FUNCTION IF EXISTS chapter_add_group //
 CREATE FUNCTION chapter_add_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, newGroupID smallint unsigned) RETURNS boolean
 BEGIN 
+DECLARE groupFirst smallint unsigned;
 DECLARE groupSecond smallint unsigned;
 DECLARE groupThird smallint unsigned;
-SELECT c.groupTwo, c.groupThree INTO groupSecond, groupThird FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
-IF groupSecond = NULL THEN
+SELECT c.groupOne, c.groupTwo, c.groupThree INTO groupFirst, groupSecond, groupThird FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+IF groupFirst = newGroupID OR groupSecond = newGroupID OR groupThird = newGroupID THEN
+RETURN FALSE;
+ELSE IF groupSecond = NULL THEN
 UPDATE Chapter SET c.groupTwo = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
 ELSE IF groupThird = NULL THEN
 UPDATE Chapter AS c SET c.groupThree = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
@@ -115,6 +118,8 @@ END IF;
 RETURN true;
 END // 
 DELIMITER ;
+
+--chapter_remove_group
 
 
 
