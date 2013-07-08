@@ -15,8 +15,8 @@
 
 	//When implemented, remove these four fields
 	$mysql_host = 'localhost';
-	$mysql_user = '';
-	$mysql_password = '';
+	$mysql_user = 'root';
+	$mysql_password = 'toor';
 	$mysql_database = 'SPMS';	
 	
 	/**

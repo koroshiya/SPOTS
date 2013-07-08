@@ -2,14 +2,15 @@
 *File: SPMS_02_stored_procedures.sql
 *Author: Koro
 *Date created: 04/July/2012
-*Date last modified: 06/July/2012
-*Version: 1.05
+*Date last modified: 08/July/2012
+*Version: 1.06
 *Changelog: 
 			1.01: Added delete_user, is_founder, is_webmaster, get_user_task_count
 			1.02: Fixed and tested get_user_task_count and get_project_count. Others not working or untested.
 			1.03: Altered get_user_task_count and get_project_count. Fixed others.
 			1.04: Added tons of functions. Many are still empty shells for later. None of the new functions have been tested.
 			1.05: More functions, first stored procedures
+			1.06: Updated get_series_status; now returns character for processing by PHP. Added/implemented other procedures
 */
 
 --ScanUserIO
@@ -551,30 +552,24 @@ END //
 DELIMITER ;
 
 --get_series_status
---I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
---TODO: Consider returning character and force the assignment on the PHP
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_series_status //
-CREATE FUNCTION get_series_status(seriesID smallint unsigned) RETURNS varchar(8)
+CREATE FUNCTION get_series_status(seriesID smallint unsigned) RETURNS character
 BEGIN 
 DECLARE status character;
 SELECT s.status INTO status FROM Series AS s WHERE s.seriesID = seriesID;
-IF (status = 'I') THEN
-RETURN "Inactive";
-ELSE IF (status = 'A') THEN
-RETURN "Active";
-ELSE IF (status = 'S') THEN
-RETURN "Stalled";
-ELSE IF (status = 'H') THEN
-RETURN "Hiatus";
-ELSE IF (status = 'D') THEN
-RETURN "Dropped";
-ELSE IF (status = 'C') THEN
-RETURN "Complete";
-ELSE
-RETURN "N/A";
-END IF;
+RETURN status;
+END // 
+DELIMITER ;
+
+--get_series_by_id
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_by_id //
+CREATE PROCEDURE get_series_by_id(IN seriesID smallint unsigned)
+BEGIN 
+SELECT * FROM Series AS s WHERE s.seriesID = seriesID;
 END // 
 DELIMITER ;
 
@@ -600,9 +595,10 @@ DELIMITER ;
 --get_series_by_status
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP PROCEDURE IF EXISTS get_series_by_status //
+CREATE PROCEDURE get_series_by_status(IN status character)
 BEGIN 
+SELECT * FROM Series AS s WHERE s.status = status;
 END // 
 DELIMITER ;
 
