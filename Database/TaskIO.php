@@ -13,16 +13,41 @@
 	include 'Connection.php';
 
 	//Example usage:
-	//echo getUserTaskCount($mysql_host, $mysql_user, $mysql_password, $mysql_database, 1);
+	//echo getUserTaskCount(1);
 
 	//Returns the number of tasks assigned to a user
-	function getUserTaskCount($mysql_host, $mysql_user, $mysql_password, $mysql_database, $userID){
+	function getUserTaskCount($userID){
 		
+		if (!(validID($userID))){
+			return false;
+		}
+
+		global $connection;
 		$procedure_name = 'get_user_task_count';
 		
-		$row = connectAndExecuteFunction($procedure_name, $mysql_host, $mysql_user, $mysql_password, $mysql_database, $userID);
+		$row = executeFunction($procedure_name, $userID);
 		return $row[0];
 		
+	}
+
+	function getUserActiveTaskCount(){
+
+	}
+
+	function getUserCompleteTaskCount(){
+
+	}
+
+	getUserTasks(){
+		
+	}
+
+	function getUserActiveTasks(){
+
+	}
+
+	function getUserCompleteTasks(){
+
 	}
 
 	//TODO: number of unfinished tasks, number of complete tasks, actual tasks, actual incomplete tasks, actual complete tasks

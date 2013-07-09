@@ -9,6 +9,7 @@
 	groupOne smallint unsigned not null, --Home group, unless otherwise specified
 	groupTwo smallint unsigned null,
 	groupThree smallint unsigned null,
+	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
 	FOREIGN KEY (groupOne) REFERENCES ScanGroup(groupID), 
@@ -17,7 +18,8 @@
 */
 
 /*
-Changelog: 1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
+Changelog:	1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
+			1.02: Added visible param. Implemented is_visible_chapter, chapter_revision_modify, chapter_set_visible
 */
 
 --insert_chapter
@@ -33,7 +35,7 @@ IF totalChapters > 0 THEN
 RETURN false;
 END IF;
 SELECT c.homeID INTO homeID FROM Config AS c;
-INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', homeID, null, null);
+INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', homeID, null, null, false);
 RETURN true;
 END // 
 DELIMITER ;
@@ -77,21 +79,14 @@ BEGIN
 END // 
 DELIMITER ;
 
---chapter_revision_increment
+--chapter_revision_modify
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS chapter_revision_modify //
+CREATE FUNCTION chapter_revision_modify(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, revision tinyint unsigned) RETURNS boolean
 BEGIN 
-END // 
-DELIMITER ;
-
---chapter_revision_decrement
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
-BEGIN 
+UPDATE Chapter AS c SET c.chapterRevisionNumber = revision WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+RETURN true;
 END // 
 DELIMITER ;
 
@@ -121,7 +116,16 @@ DELIMITER ;
 
 --chapter_remove_group
 
+--chapter_set_visible
 
+DELIMITER // 
+DROP FUNCTION IF EXISTS chapter_set_visible //
+CREATE FUNCTION chapter_set_visible(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, visible boolean) RETURNS boolean
+BEGIN 
+UPDATE Chapter AS c SET c.visible = visible;
+RETURN true;
+END // 
+DELIMITER ;
 
 
 
@@ -133,8 +137,11 @@ DELIMITER ;
 --is_visible_chapter
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS is_visible_chapter //
+CREATE FUNCTION is_visible_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
+DECLARE visible boolean;
+SELECT c.visible INTO visible WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+RETURN visible;
 END // 
 DELIMITER ;

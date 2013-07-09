@@ -14,6 +14,10 @@
 	PRIMARY KEY (seriesID)
 */
 
+/*
+Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_project_manager
+*/
+
 --insert_series
 
 DELIMITER // 
@@ -50,8 +54,8 @@ DELIMITER ;
 --Deletes a series and all associated chapters & tasks.
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS delete_series //
-CREATE FUNCTION delete_series(seriesID smallint unsigned) RETURNS boolean
+DROP FUNCTION IF EXISTS delete_series_force //
+CREATE FUNCTION delete_series_force(seriesID smallint unsigned) RETURNS boolean
 BEGIN 
 DELETE FROM Task AS t WHERE t.seriesID = seriesID;
 DELETE FROM Chapter AS c WHERE c.seriesID = seriesID;
@@ -92,30 +96,36 @@ BEGIN
 END // 
 DELIMITER ;
 
---series_modify_project_manager
+--series_set_project_manager
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS series_set_project_manager //
+CREATE FUNCTION series_set_project_manager(seriesID smallint unsigned, managerID smallint unsigned) RETURNS boolean
 BEGIN 
+UPDATE Series AS s SET s.projectManagerID = managerID WHERE s.seriesID = seriesID;
+RETURN true;
 END // 
 DELIMITER ;
 
---series_modify_visible
+--series_set_visible
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS series_set_visible //
+CREATE FUNCTION series_set_visible(seriesID smallint unsigned, visible boolean) RETURNS boolean
 BEGIN 
+UPDATE Series AS s SET s.visibleToPublic = visible WHERE s.seriesID = seriesID;
+RETURN true;
 END // 
 DELIMITER ;
 
---series_modify_adult
+--series_set_adult
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS series_set_adult //
+CREATE FUNCTION series_set_adult(seriesID smallint unsigned, adult boolean) RETURNS boolean
 BEGIN 
+UPDATE Series AS s SET s.isAdult = adult WHERE s.seriesID = seriesID;
+RETURN true;
 END // 
 DELIMITER ;
 

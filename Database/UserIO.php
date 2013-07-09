@@ -12,16 +12,8 @@
 
 	include 'Connection.php';
 	
-	function deleteUser($mysql_host, $mysql_user, $mysql_password, $mysql_database, $userID){
-		
-		$procedure_name = 'delete_user';
-		
-		$row = connectAndExecuteFunction($procedure_name, $mysql_host, $mysql_user, $mysql_password, $mysql_database, $userID);
-		return $row[0];
-		
-	}
-	
-	function insertUser($mysql_host, $mysql_user, $mysql_password, $mysql_database, $userName, $userPassword, $userRole, $email, $title){
+	//TODO: type checking for insertUser
+	function insertUser($userName, $userPassword, $userRole, $email, $title){
 		
 		$procedure_name = 'delete_user';
 		
@@ -32,7 +24,22 @@
 				"email" => $email,
 				"title" => $title,
 		];
-		$row = connectAndExecuteFunction($procedure_name, $mysql_host, $mysql_user, $mysql_password, $mysql_database, $array);
+		global $connection;
+		$row = executeFunction($procedure_name, $array, $connection);
+		return $row[0];
+		
+	}
+	
+	function deleteUser($userID){
+		
+		if (!(validID($userID))){
+			return false;
+		}
+
+		global $connection;
+		$procedure_name = 'delete_user';
+		
+		$row = executeFunction($procedure_name, $userID, $connection);
 		return $row[0];
 		
 	}

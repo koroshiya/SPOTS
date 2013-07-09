@@ -5,6 +5,7 @@
 *Date last modified: 05/July/2012
 *Version: 1.01
 *Changelog: 1.01: userID in Task can now be null; necessary for deallocation
+			1.02: Added visible param to Chapter table.
 */
 
 
@@ -48,6 +49,7 @@ CREATE TABLE IF NOT EXISTS Chapter(
 	groupOne smallint unsigned not null, /*Home group, unless otherwise specified*/
 	groupTwo smallint unsigned null,
 	groupThree smallint unsigned null,
+	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
 	FOREIGN KEY (groupOne) REFERENCES ScanGroup(groupID), 
