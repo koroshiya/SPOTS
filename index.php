@@ -13,19 +13,18 @@ if (!$dbconnect) {
 
 // Check if the user is logged in, and if so set an associative array for easy access to their information
 if (isset($_COOKIE['SPOTS_USER']) && isset($_COOKIE['SPOTS_PASS'])) {
-	$passwordCheck = mysqli_fetch_array(mysqli_query($dbconnect, 'SELECT userPass FROM users WHERE userName ='. $_COOKIE['SPOTS_USER']));
+	$userInfoRaw = mysqli_fetch_array(mysqli_query($dbconnect, 'SELECT * FROM users WHERE userName = '. $_COOKIE['SPOTS_USER']));
 	
-	if ($_COOKIE['SPOTS_PASS'] === $passwordCheck[0]) {
+	if ($_COOKIE['SPOTS_PASS'] === $userInfoRaw[2]) {
 		$loggedIn = true;
 		
-		$userInfoRaw = mysqli_fetch_array(mysqli_query($dbconnect, 'SELECT * FROM users WHERE userName = '. $_COOKIE['SPOTS_USER']));
-		$userInfo = array(
-			'userID' => $userInfoRaw['0'],
-			'userName' => $userInfoRaw['1'],
-			'userRole' => $userInfoRaw['3'],
-			'userEmail' => $userInfoRaw['4'],
-			'userTitle' => $userInfoRaw['5'],
-		);
+		$userInfo = [
+			'userID' => $userInfoRaw[0],
+			'userName' => $userInfoRaw[1],
+			'userRole' => $userInfoRaw[3],
+			'userEmail' => $userInfoRaw[4],
+			'userTitle' => $userInfoRaw[5],
+		];
 		unset($userInfoRaw); // Destroy the raw array to use as little memory as possible.
 	}
 }
