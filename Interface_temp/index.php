@@ -1,28 +1,40 @@
+<?php
+if (!isset($_GET['action'])) {
+	$action = 'Dashboard';
+} else {
+	$action = str_replace('\0', '', $_GET['action']);
+	
+	if (isset($_GET['sub'])) {
+		$sub = str_replace('\0', '', $_GET['sub']);
+	} else {
+		$sub = 'Main';
+	}
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title>PMS_Title</title>
-	<link rel="stylesheet" href="index.css" type="text/css">
-	<link rel="stylesheet" href="admin_panel.css" type="text/css">
+	<title><?php echo str_replace('_', ' ', $action); ?></title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="./Modules/<?php echo $action; ?>/<?php echo $sub ?>/style.css" type="text/css">
 </head>
 <body>
 
-<div id="header">
-    <span class="header_nav">Root Navigation goes up here</span>
+<header>
+	<nav style="display:inline-block; float:left; margin-left:10px;" role="navigation">
+		<a class="header_nav" href="/" style="margin-right:20px;">SPOTS</a>
+		<a class="header_nav" href="?action=Tasks">My Tasks</a>
+		<a class="header_nav" href="?action=AdminCP">AdminCP</a>
+		<a class="header_nav" href="?action=UserCP">UserCP</a>
+	</nav>
     <span id="header_user">UserName</span>
-</div>
+</header>
 <div style="width:100%; margin:0px">
-<div id="sidebar">
-	<nav>
-		current "module"<br> navigation goes here
-    </nav>
-</div>
-<div id="module">
 	<?php
-		include 'admin_panel.html';
+		if (!include './Modules/'.$action.'/mindex.php')
+			echo '<div style="margin-top:50px; margin-left:10px;">This page does not exist!</div>';
 	?>
-</div>
 </div>
 
 </body>
