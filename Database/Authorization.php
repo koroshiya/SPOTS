@@ -4,27 +4,26 @@
 *File: Authorization.php
 *Author: Koro
 *Date created: 06/July/2012
-*Date last modified: 06/July/2012
-*Version: 1.00
-*Changelog: 
+*Date last modified: 29/July/2012
+*Changelog: 1.01: Changed methods to reflect changes made to database; webmaster and founder changed to admin and mod
 *Purpose: Provides methods for determining user permissions
 **/ 
 
 	include 'Connection.php';
 
 	//Example usage:
-	//echo isWebMaster($mysql_host, $mysql_user, $mysql_password, $mysql_database, 1);
-	//echo isFounder($mysql_host, $mysql_user, $mysql_password, $mysql_database, 1);
+	//echo isAdmin(1);
+	//echo isMod(1);
 
 	//If the user is the webmaster, returns true
-	function isWebMaster($userID){
+	function isAdmin($userID){
 		
 		if (!validID($userID)){
 			return false;
 		}
 
 		global $connection;
-		$procedure_name = 'is_webmaster';
+		$procedure_name = 'is_admin';
 		
 		$row = executeFunction($procedure_name, $userID, $connection);
 		return $row[0];
@@ -32,14 +31,14 @@
 	}
 	
 	//If the user is the site founder, returns true
-	function isFounder($userID){
+	function isMod($userID){
 				
 		if (!validID($userID)){
 			return false;
 		}
 
 		global $connection;
-		$procedure_name = 'is_founder';
+		$procedure_name = 'is_mod';
 		
 		$row = executeFunction($procedure_name, $userID, $connection);
 		return $row[0];

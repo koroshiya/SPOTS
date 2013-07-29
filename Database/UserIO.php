@@ -44,4 +44,8 @@
 		
 	}
 
+	function getUserRole($userID){} //user_get_role
+
+	function getUserTitle($userID){} //user_get_title
+
 ?>

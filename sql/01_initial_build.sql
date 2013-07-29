@@ -2,10 +2,11 @@
 *Author: Koro
 *File: 01_initial_build.sql
 *Date created: 04/July/2012
-*Date last modified: 05/July/2012
-*Version: 1.01
+*Date last modified: 29/July/2012
 *Changelog: 1.01: userID in Task can now be null; necessary for deallocation
 			1.02: Added visible param to Chapter table.
+			1.03: Removed genres from Series, added Genre and SeriesGenre tables
+			1.04: Removed config table; such params are to be declared via user role instead
 */
 
 
@@ -100,17 +101,5 @@ CREATE TABLE IF NOT EXISTS Task(
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, UTCTimeCreated),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (userID) REFERENCES ScanUser(userID)
-
-);
-
-CREATE TABLE IF NOT EXISTS Config(
-
-	founderID smallint unsigned not null,
-	webmasterID smallint unsigned not null,
-	homeGroupID smallint unsigned not null,
-	PRIMARY KEY (founderID, webmasterID, homeGroupID),
-	FOREIGN KEY (founderID) REFERENCES ScanUser(userID),
-	FOREIGN KEY (webmasterID) REFERENCES ScanUser(userID),
-	FOREIGN KEY (homeGroupID) REFERENCES ScanGroup(groupID)
 
 );

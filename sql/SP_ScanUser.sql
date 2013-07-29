@@ -87,7 +87,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS user_set_role //
 CREATE FUNCTION user_set_role(userID smallint unsigned, newRole character) RETURNS boolean
 BEGIN 
-IF NOT(newRole = 's' OR newRole = 'a') THEN --s = staff, a = admin
+IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN --s = staff, a = admin, m = mod
 RETURN false;
 END IF;
 UPDATE ScanUser SET ScanUser.userRole = newRole;
@@ -108,7 +108,9 @@ DELIMITER ;
 
 
 
+--user_get_role
 
+--user_get_title
 
 
 
