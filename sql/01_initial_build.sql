@@ -28,14 +28,32 @@ CREATE TABLE IF NOT EXISTS Series(
 	seriesID smallint unsigned not null AUTO_INCREMENT,
 	seriesTitle varchar(50) not null,
 	status character null,
-	genrePrimary varchar(20) null,
-	genreSecondary varchar(20) null,
 	description varchar(255) null,
 	thumbnailURL varchar(50) null,
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
 	PRIMARY KEY (seriesID)
+
+);
+
+--May be phased out later and replaced by SeriesGenre
+CREATE TABLE IF NOT EXISTS Genre(
+
+	name varchar(20) not null unique,
+	PRIMARY KEY (name)
+
+);
+
+--Associative entity, so only one row for each genre needs to exist
+--Seemingly redundant, but the Genre table has explicit uses that make it useful
+CREATE TABLE IF NOT EXISTS SeriesGenre(
+
+	seriesID smallint unsigned not null,
+	name varchar(20) not null,
+	PRIMARY KEY (seriesID, name),
+	FOREIGN KEY (seriesID) REFERENCES Series(seriesID),
+	FOREIGN KEY (name) REFERENCES Genre(name)
 
 );
 

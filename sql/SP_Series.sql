@@ -4,8 +4,6 @@
 	seriesID smallint unsigned not null AUTO_INCREMENT,
 	seriesTitle varchar(50) not null,
 	status character null,
-	genrePrimary varchar(20) null,
-	genreSecondary varchar(20) null,
 	description varchar(255) null,
 	thumbnailURL varchar(50) null,
 	projectManagerID smallint unsigned null,
@@ -16,20 +14,21 @@
 
 /*
 Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_project_manager
+			1.02: Removed genre instances to reflect changes to DB, implemented get_series_by_genre
 */
 
 --insert_series
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_series //
-CREATE FUNCTION insert_series(seriesTitle varchar(50), status character, genrePrimary varchar(20), genreSecondary varchar(20), description varchar(255), thumbnailURL varchar(50), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean
+CREATE FUNCTION insert_series(seriesTitle varchar(50), status character, description varchar(255), thumbnailURL varchar(50), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean
 BEGIN 
 DECLARE totalSeries smallint unsigned;
 SELECT COUNT(*) INTO totalSeries FROM Series;
 IF totalSeries = 65535 THEN
 RETURN false;
 END IF;
-INSERT INTO Series VALUES(seriesTitle, character, genrePrimary, genreSecondary, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
+INSERT INTO Series VALUES(seriesTitle, character, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
 RETURN true;
 END // 
 DELIMITER ;
@@ -211,15 +210,6 @@ SELECT * FROM Series AS s WHERE s.seriesTitle LIKE CONCAT(startLetter, '%');
 END // 
 DELIMITER ;
 
---get_series_by_genre
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
-BEGIN 
-END // 
-DELIMITER ;
-
 --get_series_by_status
 
 DELIMITER // 
@@ -227,5 +217,27 @@ DROP PROCEDURE IF EXISTS get_series_by_status //
 CREATE PROCEDURE get_series_by_status(IN status character)
 BEGIN 
 SELECT * FROM Series AS s WHERE s.status = status;
+END // 
+DELIMITER ;
+
+--get_series_by_genre
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_by_genre //
+CREATE PROCEDURE get_series_by_genre(IN genre text)
+BEGIN 
+SELECT * FROM SERIES AS s WHERE s.seriesID = sg.seriesID
+INNER JOIN SeriesGenre AS sg
+ON sg.name = genre;
+END // 
+DELIMITER ;
+
+--get_series_all
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_all //
+CREATE PROCEDURE get_series_all()
+BEGIN 
+SELECT * FROM Series AS s;
 END // 
 DELIMITER ;

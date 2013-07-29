@@ -9,6 +9,7 @@
  * Changelog:	1.01: Reduced repeat code in getSeriesByLetter, implemented getSeriesStatus, getSeriesByStatus, getSeriesByID
  *				1.02: Implemented addSeries, deleteSeries, deleteSeriesByForce, modifySeriesStatus, seriesSetVisible, seriesSetAdult, seriesSetProjectManager
  						Implemented basic type checking for some methods
+ 				1.03: Removed genre inputs to reflect changes to DB
  * Purpose: Provides methods for interacting with Series objects in the database
  **/ 
 
@@ -23,17 +24,15 @@
 	//echo getSeriesByID(4);
 
 
-	function addSeries($seriesTitle, $status, $genrePrimary, $genreSecondary, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
+	function addSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
 		
-		if (!validSeries($seriesTitle, $status, $genrePrimary, $genreSecondary, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult)){
+		if (!validSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult)){
 			return false;
 		}
 
 		$args = [
 				"seriesTitle" => $seriesTitle,
 				"status" => $status,
-				"genrePrimary" => $genrePrimary,
-				"genreSecondary" => $genreSecondary,
 				"description" => $description,
 				"thumbnailURL" => $thumbnailURL,
 				"projectManagerID" => $projectManagerID,
@@ -214,23 +213,35 @@
 		$procedure_name = "get_series_status";
 		$result = executeFunction($procedure_name, $seriesID, $connection);
 		$result = $result[0];
+		return getSeriesStatusFromChar($result);
 
-		if ($result === 'i') {
+	}
+
+	function getSeriesStatusFromChar($char){
+
+		if ($char === 'i') {
 			return "Inactive";
-		} else if ($result === 'a') {
+		} else if ($char === 'a') {
 			return "Active";
-		} else if ($result === 'a') {
+		} else if ($char === 'a') {
 			return "Stalled";
-		} else if ($result === 'h') {
+		} else if ($char === 'h') {
 			return "Hiatus";
-		} else if ($result === 'd') {
+		} else if ($char === 'd') {
 			return "Dropped";
-		} else if ($result === 'c') {
+		} else if ($char === 'c') {
 			return "Complete";
 		} else {
 			return "N/A";
 		}
 
+	}
+
+	function getSeriesAll(){
+		global $connection;
+		$procedure_name = "get_series_all";
+		$result = executeStoredProcedure($procedure_name, null, $connection);
+		return $result;
 	}
 
 	/**
@@ -248,13 +259,11 @@
 		
 	}
 
-	function validSeries($seriesTitle, $status, $genrePrimary, $genreSecondary, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
+	function validSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
 
 		return (
 			(checkLength($seriesTitle, 50)) && 
 			($status === NULL || validStatus($status)) &&
-			($genrePrimary === NULL || checkLength($genrePrimary, 20)) &&
-			($genreSecondary === NULL || checkLength($genreSecondary, 20)) &&
 			($description === NULL || checkLength($description, 255)) &&
 			($thumbnailURL === NULL || checkLength($thumbnailURL, 50)) &&
 			($projectManagerID === NULL || validID($projectManagerID)) &&

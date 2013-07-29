@@ -17,7 +17,7 @@
 
 	//global $connection;
 	//global $connection;
-	//eg. $connection = connect('localhost', 'user', 'password', 'SPOTS');
+	//$connection = connect('localhost', 'root', 'toor', 'SPMS');
 
 	/**
 	 * Common parameters.
@@ -64,7 +64,7 @@
 
 		if ($result === FALSE) {
 			//mysqli_close($connection);
-			echo "Failed<br />";
+			echo "Func Failed<br />";
 			return false;
 		}
 
@@ -77,12 +77,12 @@
 
 	function executeStoredProcedure($procedure_name, $arr, $connection){
 
-		$init = "call $procedure_name('";
+		$init = "call $procedure_name(";
 		$result = buildAndRunQuery($init, $arr, $connection);
 
 		if ($result === FALSE) {
 			//mysqli_close($connection);
-			echo "Failed<br />";
+			echo "SP Failed<br />";
 			return false;
 		}
 
@@ -118,6 +118,7 @@
 		}
 
 		$query .= ");";
+		//echo "$query";
 		$result = mysqli_query($connection, $query);
 		return $result;
 	}
