@@ -20,7 +20,7 @@ if (!$fromIndex)
 
 <?php
 
-if (!include('./Modules/'.$action.'/'.$sub.'/sindex.php'))
+if (!include($moduleDir.'/sindex.php'))
 	echo '<div style="margin-top:50px; margin-left:230px; color:black;">This is not a valid submodule!</div>';
 
 ?>

@@ -5,6 +5,7 @@
  * Authors: Daktyl198, Koro
  * Version: 0.0.1
  */
+
 //Declare SPOTS variables
 $fromIndex = TRUE;
 $loggedIn = FALSE;
@@ -30,24 +31,24 @@ if (isset($_COOKIE['SPOTS_USER']) && isset($_COOKIE['SPOTS_PASS'])) {
 			'userTitle' => $userInfoRaw[5],
 		];
 		unset($userInfoRaw); // Destroy the raw array to use as little memory as possible.
-	}
-}
-//Get the name of the Module
-if ($loggedIn) {
-	if (!isset($_GET['action'])) {
-		$action = 'Dashboard';
-	} else {
-		$action = str_replace('\0', '', $_GET['action']);
-		
-		if (isset($_GET['sub'])) {
-			$sub = str_replace('\0', '', $_GET['sub']);
+
+		//Get the name of the module, and if it isn't set go to dashboard.
+		if (!isset($_GET['action'])) {
+			$action = 'Dashboard';
 		} else {
-			$sub = 'Main';
+			$action = str_replace('\0', '', $_GET['action']);
+			
+			//Get the name of the sub-module, and if it isn't set use "Main"
+			if (isset($_GET['sub'])) {
+				$sub = str_replace('\0', '', $_GET['sub']);
+			} else {
+				$sub = 'Main';
+			}
 		}
 	}
-}	//Guests get the project page
-else {
-	$action = 'Project_Page';
+	else {
+		$action = 'Project_Page';
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -79,6 +80,7 @@ else {
 </body>
 </html>
 <?php
+
 // Disconnect from the database
 mysqli_close($dbconnect);
 
