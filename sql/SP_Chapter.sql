@@ -6,9 +6,6 @@
 	chapterSubNumber tinyint unsigned not null,
 	chapterRevisionNumber tinyint unsigned not null, --0 by default; only changes when chapter has been revised after release
 	chapterName varchar(50) null,
-	groupOne smallint unsigned not null, --Home group, unless otherwise specified
-	groupTwo smallint unsigned null,
-	groupThree smallint unsigned null,
 	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
@@ -20,6 +17,7 @@
 /*
 Changelog:	1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
 			1.02: Added visible param. Implemented is_visible_chapter, chapter_revision_modify, chapter_set_visible
+			1.03: Updated to reflect new ChapterGroup table
 */
 
 --insert_chapter
@@ -35,7 +33,8 @@ IF totalChapters > 0 THEN
 RETURN false;
 END IF;
 SELECT c.homeID INTO homeID FROM Config AS c;
-INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', homeID, null, null, false);
+INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', false);
+INSERT INTO ChapterGroup Values(seriesID, chapterNumber, chapterSubNumber, homeID);
 RETURN true;
 END // 
 DELIMITER ;
@@ -53,6 +52,7 @@ IF totalTasks > 0 THEN
 RETURN false;
 END IF;
 DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
+DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
 RETURN true;
 END // 
 DELIMITER ;
@@ -66,6 +66,7 @@ CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber s
 BEGIN 
 DELETE FROM Task WHERE Task.seriesID = seriesID AND Task.chapterNumber = chapterNumber AND Task.chapterSubNumber = chapterSubNumber;
 DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
+DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
 RETURN true;
 END // 
 DELIMITER ;
@@ -97,19 +98,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS chapter_add_group //
 CREATE FUNCTION chapter_add_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, newGroupID smallint unsigned) RETURNS boolean
 BEGIN 
-DECLARE groupFirst smallint unsigned;
-DECLARE groupSecond smallint unsigned;
-DECLARE groupThird smallint unsigned;
-SELECT c.groupOne, c.groupTwo, c.groupThree INTO groupFirst, groupSecond, groupThird FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
-IF groupFirst = newGroupID OR groupSecond = newGroupID OR groupThird = newGroupID THEN
-RETURN FALSE;
-ELSE IF groupSecond = NULL THEN
-UPDATE Chapter SET c.groupTwo = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
-ELSE IF groupThird = NULL THEN
-UPDATE Chapter AS c SET c.groupThree = newGroupID WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
-ELSE
-RETURN false;
-END IF;
+INSERT INTO ChapterGroup Values(seriesID, chapterNumber, chapterSubNumber, newGroupID);
 RETURN true;
 END // 
 DELIMITER ;

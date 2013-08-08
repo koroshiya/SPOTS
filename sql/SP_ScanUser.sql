@@ -4,7 +4,6 @@
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	userRole character not null,
 	email varchar(50) null,
 	title character null,
 	PRIMARY KEY (userID)
@@ -14,7 +13,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_user //
-CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), userRole character, email varchar(50), title character) RETURNS boolean
+CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), email varchar(50), title character) RETURNS boolean
 BEGIN 
 DECLARE totalUsers smallint unsigned;
 DECLARE sha1Password binary(20);
@@ -23,7 +22,7 @@ IF totalUsers = 65535 THEN
 RETURN false;
 END IF;
 SET sha1Password = UNHEX(SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
-INSERT INTO ScanUser VALUES(userName, sha1Password, userRole, COALESCE(email, NULL), COALESCE(title, NULL));
+INSERT INTO ScanUser VALUES(userName, sha1Password, COALESCE(email, NULL), COALESCE(title, NULL));
 RETURN true;
 END // 
 DELIMITER ;
@@ -54,7 +53,8 @@ BEGIN
 IF is_founder(userID) OR is_webmaster(userID) THEN
 RETURN false;
 END IF;
-UPDATE Task AS t SET t.userID = NULL WHERE t.userID = userID;
+DELETE FROM Task WHERE Task.userID = userID;
+DELETE FROM UserRole WHERE UserRole.userID = userID;
 UPDATE Series AS s SET s.projectManagerID = NULL WHERE s.projectManagerID = userID;
 DELETE FROM ScanUser WHERE ScanUser.userID = userID;
 RETURN true;
@@ -81,11 +81,11 @@ RETURN true;
 END // 
 DELIMITER ;
 
---user_set_role
+--user_set_permission
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS user_set_role //
-CREATE FUNCTION user_set_role(userID smallint unsigned, newRole character) RETURNS boolean
+DROP FUNCTION IF EXISTS user_set_permission //
+CREATE FUNCTION user_set_permission(userID smallint unsigned, newRole character) RETURNS boolean
 BEGIN 
 IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN --s = staff, a = admin, m = mod
 RETURN false;
@@ -94,6 +94,10 @@ UPDATE ScanUser SET ScanUser.userRole = newRole;
 RETURN true;
 END // 
 DELIMITER ;
+
+--user_add_role
+
+--user_remove_role
 
 --user_set_title
 

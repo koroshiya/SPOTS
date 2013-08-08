@@ -7,6 +7,7 @@
 			1.02: Added visible param to Chapter table.
 			1.03: Removed genres from Series, added Genre and SeriesGenre tables
 			1.04: Removed config table; such params are to be declared via user role instead
+			1.05: Added Role, UserRole, ScanUser & ChapterGroup tables
 */
 
 
@@ -58,6 +59,13 @@ CREATE TABLE IF NOT EXISTS SeriesGenre(
 
 );
 
+CREATE TABLE IF NOT EXISTS Role(
+
+	name varchar(20) not null unique,
+	PRIMARY KEY (name)
+
+);
+
 CREATE TABLE IF NOT EXISTS Chapter(
 
 	seriesID smallint unsigned not null,
@@ -65,9 +73,6 @@ CREATE TABLE IF NOT EXISTS Chapter(
 	chapterSubNumber tinyint unsigned not null, /*eg. 5 if the chapter is 10.5*/
 	chapterRevisionNumber tinyint unsigned not null, /*0 by default; only changes when chapter has been revised after release*/
 	chapterName varchar(50) null,
-	groupOne smallint unsigned not null, /*Home group, unless otherwise specified*/
-	groupTwo smallint unsigned null,
-	groupThree smallint unsigned null,
 	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
@@ -77,15 +82,36 @@ CREATE TABLE IF NOT EXISTS Chapter(
 
 );
 
+CREATE TABLE IF NOT EXISTS ChapterGroup(
+
+	seriesID smallint unsigned not null,
+	chapterNumber smallint unsigned not null,
+	chapterSubNumber tinyint unsigned not null,
+	groupID smallint unsigned not null,
+	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, groupID),
+	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
+	FOREIGN KEY (groupID) REFERENCES ScanGroup(groupID)
+
+);
+
 CREATE TABLE IF NOT EXISTS ScanUser(
 
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	userRole character not null, /*guest by default*/
 	email varchar(50) null,
 	title character null,
 	PRIMARY KEY (userID)
+
+);
+
+CREATE TABLE IF NOT EXISTS UserRole(
+
+	userID smallint unsigned not null,
+	name varchar(20) not null,
+	PRIMARY KEY (userID, name),
+	FOREIGN KEY (userID) REFERENCES ScanUser(userID),
+	FOREIGN KEY (name) REFERENCES Role(name)
 
 );
 
@@ -97,9 +123,10 @@ CREATE TABLE IF NOT EXISTS Task(
 	userID smallint unsigned not null,
 	description varchar(100) null,
 	status character null,
-	userRole character not null,
+	userRole varchar(20) not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID, userRole),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
-	FOREIGN KEY (userID) REFERENCES ScanUser(userID)
+	FOREIGN KEY (userID) REFERENCES ScanUser(userID),
+	FOREIGN KEY (userRole) REFERENCES Role(name)
 
 );
