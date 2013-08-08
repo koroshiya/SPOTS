@@ -3,10 +3,7 @@
 /**
 *File: UserIO.php
 *Author: Koro
-*Date created: 06/July/2012
-*Date last modified: 06/July/2012
-*Version: 1.00
-*Changelog: 
+*Changelog: 1.01: Implemented getUserRole and getUserTitle
 *Purpose: Provides methods for interacting with User objects in the database
 **/ 
 
@@ -44,8 +41,32 @@
 		
 	}
 
-	function getUserRole($userID){} //user_get_role
+	function getUserRole($userID){
+		
+		if (!(validID($userID))){
+			return false;
+		}
 
-	function getUserTitle($userID){} //user_get_title
+		global $connection;
+		$procedure_name = 'user_get_role'; //Not yet implemented DB side
+		
+		$row = executeFunction($procedure_name, $userID, $connection);
+		return $row[0];
+		
+	}
+
+	function getUserTitle($userID){
+		
+		if (!(validID($userID))){
+			return false;
+		}
+
+		global $connection;
+		$procedure_name = 'user_get_title'; //Not yet implemented DB side
+		
+		$row = executeFunction($procedure_name, $userID, $connection);
+		return $row[0];
+		
+	}
 
 ?>

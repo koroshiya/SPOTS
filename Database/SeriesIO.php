@@ -10,6 +10,7 @@
  *				1.02: Implemented addSeries, deleteSeries, deleteSeriesByForce, modifySeriesStatus, seriesSetVisible, seriesSetAdult, seriesSetProjectManager
  						Implemented basic type checking for some methods
  				1.03: Removed genre inputs to reflect changes to DB
+ 				1.04: Added missing connection params
  * Purpose: Provides methods for interacting with Series objects in the database
  **/ 
 
@@ -40,8 +41,9 @@
 				"boolAdult" => $boolAdult,
 		];
 
+		global $connection;
 		$procedure_name = 'insert_series';
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -52,9 +54,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'delete_series';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -65,9 +68,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'delete_series_force';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -78,9 +82,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'series_modify_status';
 		$args = array($seriesID, $status);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -91,9 +96,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'series_set_visible';
 		$args = array($seriesID, $boolVisible);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -104,9 +110,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'series_set_adult';
 		$args = array($seriesID, $boolAdult);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -117,9 +124,10 @@
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = 'series_set_project_manager';
 		$args = array($seriesID, $managerID);
-		$result = executeFunction($procedure_name, $args);
+		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;
 	}
@@ -150,11 +158,11 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		global $connection;
 		if (!validID($seriesID)){
 			return false;
 		}
 
+		global $connection;
 		$procedure_name = "get_series_by_id";
 		$result = executeStoredProcedure($procedure_name, $seriesID, $connection);
 		

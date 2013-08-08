@@ -94,11 +94,11 @@ CREATE TABLE IF NOT EXISTS Task(
 	seriesID smallint unsigned not null,
 	chapterNumber smallint unsigned not null,
 	chapterSubNumber tinyint unsigned not null,
-	userID smallint unsigned null,
+	userID smallint unsigned not null,
 	description varchar(100) null,
 	status character null,
-	UTCTimeCreated timestamp not null unique,
-	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, UTCTimeCreated),
+	userRole character not null,
+	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID, userRole),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (userID) REFERENCES ScanUser(userID)
 
