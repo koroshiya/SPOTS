@@ -1,27 +1,54 @@
-html {
-	height:100%;
-	overflow:auto;
-}
-body {
+html, body {
+	margin:0px;
 	background-color:#ededed;
-	margin:0;
-	height:100%;
-	overflow:auto;
 }
 header {
 	width:100%;
 	height:40px;
-	margin:0;
+	margin:0px;
+	top:0px;
 	background-color:#008BC0;
 	border-bottom:2px solid black;
 	color:white;
 	line-height:40px;
 	text-align:center;
-	position:absolute;
+	position:fixed;
 }
 a {
 	text-decoration:none;
 	color:black;
+}
+table {
+	display:inline-table;
+}
+input[type="text"], input[type="checkbox"], textarea {
+	border:2px solid #999;
+	border-radius:5px;
+	transition:0.25s;
+}
+input[type="text"]:focus, input[type="checkbox"]:checked, textarea:focus {
+	box-shadow:0 0 5px #008bc0;
+	border-color:#008bc0;
+	outline:none;
+	color:#008bc0;
+}
+input[type="text"] {
+	height:18px;
+	width:250px;
+	text-indent:5px;
+}
+input[type="checkbox"] {
+	width:15px;
+	height:15px;
+}
+input[type="submit"] {
+	width:100px;
+	height:30px;
+}
+select {
+	width:100px;
+	height:25px;
+	font-size:10pt;
 }
 
 .header_nav {
@@ -44,28 +71,33 @@ a {
 #header_user:hover {
 	background-color:#00688B;
 }
+
 #sidebar {
+	height:100%;
+	width:235px;
 	top:42px;
-	bottom:0px;
-	float:left;
 	padding-top:10px;
-	background-color:#d4d4d4;
-	border-right:4px solid black;
-	position:absolute;
-}
-#sidbar_hr {
-	height:40px;
-	width:80%;
-	float:left;
 	margin:0px;
+	position:fixed;
+	background-color:#d4d4d4;
+	border-right:3px solid black;
+	text-align:center;
+	line-height:40px;
+}
+.sidebar_heading {
+	height:40px;
+	margin:0px;
+	margin-top:10px;
+	text-align:left;
+	color:#008BC0;
+	font-size:20pt;
+	margin-left:10px;
 }
 .sidebar_item {
 	height:40px;
-	width:215px;
-	float:left;
+	width:100%;
 	margin:0px;
-	text-align:center;
-	line-height:40px;
+	float:left;
 	color:black;
 	font-size:14pt;
 }
@@ -73,8 +105,18 @@ a {
 	color:white;
 	background-color:#00688B;
 }
+
 #module {
 	margin-top:50px;
-	margin-left:225px;
-	overflow : auto;
+	margin-left:240px;
+	text-align:center;
+}
+
+.sectionTitle {
+	color:#008BC0;
+	font-size:24pt;
+}
+.subTitle {
+	color:#008BC0;
+	font-size:18pt;
 }

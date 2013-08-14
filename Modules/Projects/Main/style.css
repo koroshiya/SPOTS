@@ -1,0 +1,24 @@
+#projectList {
+	background-color:lightgrey;
+	border-collapse:collapse;
+	margin-top:8px;
+}
+#projectListHeader {
+	color:white;
+	background-color:#008BC0;
+}
+.projectTitle, .projectStatus, .projectManager {
+	border:1px solid black;
+}
+.projectListRow {
+	height:35px;
+}
+.projectTitle {
+	width:450px;
+}
+.projectStatus {
+	width:100px;
+}
+.projectManager {
+	width:200px;
+}
