@@ -61,11 +61,11 @@ RETURN true;
 END // 
 DELIMITER ;
 
---modify_user(userID, userPassword, email)
+--user_set_password
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS modify_user //
-CREATE FUNCTION modify_user(userID smallint unsigned, newPassword varchar(20), newEmail varchar(100)) RETURNS boolean
+DROP FUNCTION IF EXISTS user_set_password //
+CREATE FUNCTION user_set_password(userID smallint unsigned, newPassword varchar(20)) RETURNS boolean
 BEGIN 
 DECLARE sha1Password binary(20);
 DECLARE userName varchar(30);
@@ -76,8 +76,59 @@ RETURN false;
 END IF;
 SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
 SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
-Update ScanUser SET ScanUser.userPassword = newPassword, ScanUser.email = newEmail;
+Update ScanUser SET ScanUser.userPassword = sha1Password;
 RETURN true;
+END // 
+DELIMITER ;
+
+--user_get_password_valid
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS user_get_password_valid //
+CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS boolean
+BEGIN 
+DECLARE sha1Password binary(20);
+DECLARE userName varchar(30);
+DECLARE userExists boolean;
+SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
+IF NOT userExists THEN
+RETURN false;
+END IF;
+SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
+SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
+RETURN password = sha1Password;
+END // 
+DELIMITER ;
+
+--user_set_email
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS user_set_email //
+CREATE FUNCTION user_set_email(userID smallint unsigned, newEmail varchar(100)) RETURNS boolean
+BEGIN 
+DECLARE sha1Password binary(20);
+DECLARE userName varchar(30);
+DECLARE userExists boolean;
+SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
+IF NOT userExists THEN
+RETURN false;
+END IF;
+SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
+SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
+Update ScanUser SET ScanUser.userPassword = sha1Password, ScanUser.email = newEmail;
+RETURN true;
+END // 
+DELIMITER ;
+
+--user_get_email
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS user_get_email //
+CREATE FUNCTION user_set_email(userID smallint unsigned) RETURNS varchar(100)
+BEGIN 
+DECLARE email varchar(100);
+SELECT s.email INTO email FROM ScanUser AS s WHERE s.userID = userID;
+RETURN email;
 END // 
 DELIMITER ;
 
@@ -90,30 +141,28 @@ BEGIN
 IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN --s = staff, a = admin, m = mod
 RETURN false;
 END IF;
-UPDATE ScanUser SET ScanUser.userRole = newRole;
+UPDATE ScanUser AS su SET su.title = newRole;
 RETURN true;
 END // 
 DELIMITER ;
 
---user_set_title
+--user_get_permission
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS user_set_title //
-CREATE FUNCTION user_set_title(character title) RETURNS boolean
-BEGIN --TODO: Decide on user titles
+DROP FUNCTION IF EXISTS user_get_permission //
+CREATE FUNCTION user_get_permission(userID smallint unsigned) RETURNS character
+BEGIN
+DECLARE title character;
+SELECT u.title INTO title FROM ScanUser AS u WHERE u.userID = userID;
+RETURN title;
 END // 
 DELIMITER ;
-
-
---user_get_title
-
-
-
 
 
 
 
 --is_project_manager
+--Tests if the user is a project manager for ANY series, not one in particular.
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_project_manager //
@@ -122,5 +171,18 @@ BEGIN
 	DECLARE total smallint unsigned;
 	SELECT COUNT(*) INTO total FROM Series AS s WHERE s.projectManagerID = userID;
 	RETURN total != 0;
+END // 
+DELIMITER ;
+
+--is_project_manager_of_series
+--Tests if the user is a project manager of a particular series
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS is_project_manager_of_series //
+CREATE FUNCTION is_project_manager_of_series(userID smallint unsigned, seriesID smallint unsigned) RETURNS boolean
+BEGIN
+	DECLARE pmID smallint unsigned;
+	SELECT s.projectManagerID INTO pmID FROM Series AS s WHERE s.seriesID = seriesID;
+	RETURN pmID = userID;
 END // 
 DELIMITER ;

@@ -16,10 +16,8 @@ DROP FUNCTION IF EXISTS is_admin //
 CREATE FUNCTION is_admin(userID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE suUserRole character;
-DECLARE boolResult boolean;
 SELECT su.userRole INTO suUserRole FROM ScanUser AS su WHERE su.userID = userID;
-SELECT suUserRole = 'A' INTO boolResult;
-RETURN boolResult;
+RETURN suUserRole = 'A';
 END // 
 DELIMITER ;
 
@@ -31,9 +29,7 @@ DROP FUNCTION IF EXISTS is_mod //
 CREATE FUNCTION is_mod(userID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE suUserRole character;
-DECLARE boolResult boolean;
 SELECT su.userRole INTO suUserRole FROM ScanUser AS su WHERE su.userID = userID;
-SELECT suUserRole = 'M' INTO boolResult;
-RETURN boolResult;
+RETURN suUserRole = 'M';
 END // 
 DELIMITER ;

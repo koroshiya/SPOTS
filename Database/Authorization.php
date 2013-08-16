@@ -4,7 +4,6 @@
 *File: Authorization.php
 *Author: Koro
 *Date created: 06/July/2012
-*Date last modified: 29/July/2012
 *Changelog: 1.01: Changed methods to reflect changes made to database; webmaster and founder changed to admin and mod
 *Purpose: Provides methods for determining user permissions
 **/ 
@@ -30,7 +29,7 @@
 		
 	}
 	
-	//If the user is the site founder, returns true
+	//If the user is a mod, returns true
 	function isMod($userID){
 				
 		if (!validID($userID)){
