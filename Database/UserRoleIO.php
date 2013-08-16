@@ -22,10 +22,6 @@
 	}
 
 	function getUserRoles($userID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		return executeStoredProcedure('user_get_roles', $userID, $connection);
@@ -37,10 +33,6 @@
 	}
 	
 	function userIOFunction($userID, $name, $procedure_name){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		$array = [
 				"userID" => $userID,
@@ -55,10 +47,6 @@
 	}
 	
 	function userFunction($userID, $procedure_name){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		

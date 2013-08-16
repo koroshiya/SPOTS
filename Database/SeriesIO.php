@@ -25,10 +25,6 @@
 
 
 	function addSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
-		
-		if (!validSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult)){
-			return false;
-		}
 
 		$args = [
 				"seriesTitle" => $seriesTitle,
@@ -48,10 +44,6 @@
 	}
 
 	function deleteSeries($seriesID){
-		
-		if (!validID($seriesID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'delete_series';
@@ -62,10 +54,6 @@
 	}
 
 	function deleteSeriesByForce($seriesID){
-		
-		if (!validID($seriesID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'delete_series_force';
@@ -76,10 +64,6 @@
 	}
 
 	function seriesSetStatus($seriesID, $status){
-		
-		if (!(validID($seriesID) && validStatus($status))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'series_set_status';
@@ -90,10 +74,6 @@
 	}
 
 	function seriesSetVisible($seriesID, $boolVisible){
-		
-		if (!validID($seriesID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'series_set_visible';
@@ -104,10 +84,6 @@
 	}
 
 	function seriesSetAdult($seriesID, $boolAdult){
-		
-		if (!validID($seriesID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'series_set_adult';
@@ -118,10 +94,6 @@
 	}
 
 	function seriesSetProjectManager($seriesID, $managerID){
-		
-		if (!(validID($seriesID) && validID($managerID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'series_set_project_manager';
@@ -157,10 +129,6 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		if (!validID($seriesID)){
-			return false;
-		}
-
 		global $connection;
 		$procedure_name = "get_series_by_id";
 		$result = executeStoredProcedure($procedure_name, $seriesID, $connection);
@@ -173,10 +141,6 @@
 	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
 	 **/
 	function getSeriesByLetter($character){
-
-		if (!(validChar($character))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = "get_series_by_letter";
@@ -193,10 +157,6 @@
 	 **/
 	function getSeriesByStatus($character){
 
-		if (!validStatus($character)){
-			return false;
-		}
-
 		global $connection;
 		$procedure_name = "get_series_by_status";
 		$result = executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
@@ -211,16 +171,12 @@
 	 * @return Returns a String representing the series' status. eg. "Dropped", "Complete", etc.
 	 **/
 	function getSeriesStatus($seriesID){
-		
-		if (!(validID($seriesID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = "get_series_status";
 		$result = executeFunction($procedure_name, $seriesID, $connection);
-		$result = $result[0];
-		return getSeriesStatusFromChar($result);
+                $resultRow = $result[0];
+		return getSeriesStatusFromChar($resultRow);
 
 	}
 
@@ -249,39 +205,6 @@
 		$procedure_name = "get_series_all";
 		$result = executeStoredProcedure($procedure_name, null, $connection);
 		return $result;
-	}
-
-	/**
-	 * Checks if the character passed in maps to a valid status.
-	 * Calls validChar intrinsically.
-	 *
-	 * @return True if the character represents a valid status, otherwise false
-	 */
-	function validStatus($character){
-
-		if (validChar($character)){
-			return ($character === 'i' || $character === 'a' || $character === 's' || $character === 'h' || $character === 'd' || $character === 'c');
-		}
-		return false;
-		
-	}
-
-	function validSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
-
-		return (
-			(checkLength($seriesTitle, 100)) && 
-			($status === NULL || validStatus($status)) &&
-			($description === NULL || checkLength($description, 255)) &&
-			($thumbnailURL === NULL || checkLength($thumbnailURL, 255)) &&
-			($projectManagerID === NULL || validID($projectManagerID)) &&
-			(is_bool($visibleToPublic)) &&
-			(is_bool($boolAdult))
-			);
-
-	}
-
-	function checkLength($arg, $maxLength){
-		return (strlen($arg) <= $maxLength);
 	}
 
 ?>

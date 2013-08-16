@@ -31,8 +31,8 @@
 	}
 
 	//Sets/updates a task's description
-	function updateDescription($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole){
-		return executeFullFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status, 'task_set_description');
+	function updateDescription($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $description){
+		return executeFullFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $description, 'task_set_description');
 	}
 
 
@@ -118,10 +118,6 @@
 
 	function executeUserProcedure($userID, $procedure_name){
 
-		if (!(validID($userID))){
-			return false;
-		}
-
 		global $connection;
 		
 		$result = executeStoredProcedure($procedure_name, $userID, $connection);
@@ -130,10 +126,6 @@
 	}
 
 	function executeUserFunction($userID, $procedure_name){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		

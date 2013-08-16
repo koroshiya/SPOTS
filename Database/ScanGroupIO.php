@@ -31,10 +31,6 @@
 	 * @return True or false, depending on success
 	 */
 	function deleteGroup($groupID){
-				
-		if (!(validID($groupID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'delete_scangroup';
@@ -51,14 +47,10 @@
 	 * @return True or false, repending on success
 	 **/
 	function modifyGroup($groupID, $groupName, $groupURL){
-				
-		if (!(validID($groupID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'modify_scangroup';
-		$args = array($groupID, $groupName, $URL);
+		$args = array($groupID, $groupName, $groupURL);
 		$result = executeFunction($procedure_name, $args, $connection);
 
 		return $result;

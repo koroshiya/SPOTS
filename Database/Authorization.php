@@ -16,10 +16,6 @@
 
 	//If the user is the webmaster, returns true
 	function isAdmin($userID){
-		
-		if (!validID($userID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'is_admin';
@@ -31,10 +27,6 @@
 	
 	//If the user is a mod, returns true
 	function isMod($userID){
-				
-		if (!validID($userID)){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'is_mod';

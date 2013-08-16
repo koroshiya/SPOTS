@@ -45,7 +45,7 @@
 		
 	}
 
-	function disconnect(){
+	function disconnect($connection){
 		mysqli_close($connection);
 	}
 	
@@ -119,18 +119,6 @@
 		//echo "$query";
 		$result = mysqli_query($connection, $query);
 		return $result;
-	}
-
-	function validID($seriesID){
-		
-		return (is_int($seriesID) && $seriesID >= 0 && $seriesID <= 65535);
-
-	}
-	
-	function validChar($character){
-
-		return (strlen($character) === 1 && ctype_alpha($character));
-
 	}
 
 

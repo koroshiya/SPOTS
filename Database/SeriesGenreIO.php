@@ -22,10 +22,6 @@
 	}
 
 	function getSeriesGenres($seriesID){
-		
-		if (!(validID($seriesID))){
-			return false;
-		}
 
 		global $connection;
 		return executeStoredProcedure('series_get_genres', $seriesID, $connection);
@@ -37,10 +33,6 @@
 	}
 	
 	function seriesIOFunction($seriesID, $name, $procedure_name){
-		
-		if (!(validID($seriesID))){
-			return false;
-		}
 
 		$array = [
 				"seriesID" => $seriesID,
@@ -55,10 +47,6 @@
 	}
 	
 	function seriesFunction($seriesID, $procedure_name){
-		
-		if (!(validID($seriesID))){
-			return false;
-		}
 
 		global $connection;
 		

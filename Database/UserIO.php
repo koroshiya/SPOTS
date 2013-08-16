@@ -29,10 +29,6 @@
 	}
 	
 	function deleteUser($userID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'delete_user';
@@ -43,10 +39,6 @@
 	}
 	
 	function deleteUserForcibly($userID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'delete_user_force';
@@ -58,10 +50,6 @@
 
 	function userSetPassword($userID, $newPassword){
 
-		if (!(validID($userID))){
-			return false;
-		}
-
 		global $connection;
 		$procedure_name = 'user_set_password';
 		$arr = array($userID, $newPassword);
@@ -72,10 +60,6 @@
 	}
 
 	function userSetEmail($userID, $newEmail){
-
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'user_set_email';
@@ -93,10 +77,6 @@
 	 */
 	function userGetPasswordIsValid($userID, $passwordAttempt){
 
-		if (!(validID($userID))){
-			return false;
-		}
-
 		global $connection;
 		$procedure_name = 'user_get_password_valid';
 		$arr = array($userID, $passwordAttempt);
@@ -108,10 +88,6 @@
 
 	function userGetEmail($userID){
 
-		if (!(validID($userID))){
-			return false;
-		}
-
 		global $connection;
 		$procedure_name = 'user_get_email';
 		
@@ -121,10 +97,6 @@
 	}
 
 	function userSetPermission($userID, $char){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'user_set_permission';
@@ -139,10 +111,6 @@
 	 *@return Returns user permission as character. Can be translated into sensible text by decodePermission
 	 */
 	function userGetPermission($userID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'user_get_permission';
@@ -170,10 +138,6 @@
 	}
 
 	function isProjectManager($userID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'is_project_manager';
@@ -184,10 +148,6 @@
 	}
 
 	function isProjectManagerOfSeries($userID, $seriesID){
-		
-		if (!(validID($userID))){
-			return false;
-		}
 
 		global $connection;
 		$procedure_name = 'is_project_manager_of_series';
