@@ -4,7 +4,7 @@
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	email varchar(50) null,
+	email varchar(100) null,
 	title character null,
 	PRIMARY KEY (userID)
 */
@@ -13,7 +13,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_user //
-CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), email varchar(50), title character) RETURNS boolean
+CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), email varchar(100), title character) RETURNS boolean
 BEGIN 
 DECLARE totalUsers smallint unsigned;
 DECLARE sha1Password binary(20);
@@ -65,7 +65,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS modify_user //
-CREATE FUNCTION modify_user(userID smallint unsigned, newPassword varchar(20), newEmail varchar(50)) RETURNS boolean
+CREATE FUNCTION modify_user(userID smallint unsigned, newPassword varchar(20), newEmail varchar(100)) RETURNS boolean
 BEGIN 
 DECLARE sha1Password binary(20);
 DECLARE userName varchar(30);

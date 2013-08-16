@@ -2,12 +2,12 @@
 *Author: Koro
 *File: 01_initial_build.sql
 *Date created: 04/July/2012
-*Date last modified: 29/July/2012
 *Changelog: 1.01: userID in Task can now be null; necessary for deallocation
 			1.02: Added visible param to Chapter table.
 			1.03: Removed genres from Series, added Genre and SeriesGenre tables
 			1.04: Removed config table; such params are to be declared via user role instead
 			1.05: Added Role, UserRole, ScanUser & ChapterGroup tables
+			1.06: Increased length of some URL/name fields
 */
 
 
@@ -18,8 +18,8 @@ USE SPOTS;
 CREATE TABLE IF NOT EXISTS ScanGroup(
 
 	groupID smallint unsigned not null AUTO_INCREMENT,
-	groupName varchar(30) not null,
-	URL varchar(50) null,
+	groupName varchar(50) not null,
+	URL varchar(255) null,
 	PRIMARY KEY (groupID)
 
 );
@@ -28,10 +28,10 @@ CREATE TABLE IF NOT EXISTS ScanGroup(
 CREATE TABLE IF NOT EXISTS Series(
 
 	seriesID smallint unsigned not null AUTO_INCREMENT,
-	seriesTitle varchar(50) not null,
+	seriesTitle varchar(100) not null,
 	status character null,
 	description varchar(255) null,
-	thumbnailURL varchar(50) null,
+	thumbnailURL varchar(255) null,
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Chapter(
 	chapterNumber smallint unsigned not null,
 	chapterSubNumber tinyint unsigned not null, /*eg. 5 if the chapter is 10.5*/
 	chapterRevisionNumber tinyint unsigned not null, /*0 by default; only changes when chapter has been revised after release*/
-	chapterName varchar(50) null,
+	chapterName varchar(100) null,
 	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	email varchar(50) null,
+	email varchar(100) null,
 	title character null,
 	PRIMARY KEY (userID)
 
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS Task(
 	chapterNumber smallint unsigned not null,
 	chapterSubNumber tinyint unsigned not null,
 	userID smallint unsigned not null,
-	description varchar(100) null,
+	description varchar(255) null,
 	status character null,
 	userRole varchar(20) not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID, userRole),

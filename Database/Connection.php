@@ -3,8 +3,6 @@
 *File: Connection.php
 *Author: Koro
 *Date created: 04/July/2012
-*Date last modified: 06/July/2012
-*Version: 1.03
 *Changelog: 
 *			1.01: Changed MySQL methods to MySQLi, implemented isWebMaster, isFounder, getUserTaskCount, etc.
 *					Added support for multi-argument functions

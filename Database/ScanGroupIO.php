@@ -2,8 +2,6 @@
 
 	include 'Connection.php';
 
-	//Example usage:
-
 	/**
 	 * Common parameters.
 	 * 

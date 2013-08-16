@@ -2,10 +2,10 @@
 
 /*
 	seriesID smallint unsigned not null AUTO_INCREMENT,
-	seriesTitle varchar(50) not null,
+	seriesTitle varchar(100) not null,
 	status character null,
 	description varchar(255) null,
-	thumbnailURL varchar(50) null,
+	thumbnailURL varchar(255) null,
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
@@ -15,13 +15,14 @@
 /*
 Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_project_manager
 			1.02: Removed genre instances to reflect changes to DB, implemented get_series_by_genre
+			1.03: Finished series_set_thumbnail, updated varchar fields
 */
 
 --insert_series
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_series //
-CREATE FUNCTION insert_series(seriesTitle varchar(50), status character, description varchar(255), thumbnailURL varchar(50), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean
+CREATE FUNCTION insert_series(seriesTitle varchar(100), status character, description varchar(255), thumbnailURL varchar(255), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean
 BEGIN 
 DECLARE totalSeries smallint unsigned;
 SELECT COUNT(*) INTO totalSeries FROM Series;
@@ -62,21 +63,11 @@ DELETE FROM Series As s WHERE s.seriesID = seriesID;
 END // 
 DELIMITER ;
 
---modify_series
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
-BEGIN 
-END // 
-DELIMITER ;
-
---series_modify_status
+--series_set_status
 --I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
 
-
-DROP FUNCTION IF EXISTS series_modify_status //
-CREATE FUNCTION series_modify_status(seriesID smallint unsigned, status character) RETURNS boolean
+DROP FUNCTION IF EXISTS series_set_status //
+CREATE FUNCTION series_set_status(seriesID smallint unsigned, status character) RETURNS boolean
 BEGIN 
 IF NOT (character = 'I' OR character = 'A' OR character = 'S' OR character = 'H' OR character = 'D' OR character = 'C') THEN
 RETURN false;
@@ -86,12 +77,14 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_modify_thumbnail
+--series_set_thumbnail
 
 DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
+DROP FUNCTION IF EXISTS series_set_thumbnail //
+CREATE FUNCTION series_set_thumbnail(seriesID smallint unsigned, thumbnailURL varchar(255)) RETURNS boolean
 BEGIN 
+UPDATE Series AS s SET s.thumbnailURL = thumbnailURL WHERE s.seriesID = seriesID;
+RETURN true;
 END // 
 DELIMITER ;
 
@@ -127,20 +120,6 @@ UPDATE Series AS s SET s.isAdult = adult WHERE s.seriesID = seriesID;
 RETURN true;
 END // 
 DELIMITER ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --is_visible_series
 

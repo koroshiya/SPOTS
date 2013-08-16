@@ -2,8 +2,8 @@
 
 /*
 	groupID smallint unsigned not null AUTO_INCREMENT,
-	groupName varchar(30) not null,
-	URL varchar(50) null,
+	groupName varchar(50) not null,
+	URL varchar(255) null,
 	PRIMARY KEY (groupID)
 */
 
@@ -11,7 +11,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_scangroup //
-CREATE FUNCTION insert_scangroup(groupName varchar(30), URL varchar(50)) RETURNS boolean
+CREATE FUNCTION insert_scangroup(groupName varchar(50), URL varchar(255)) RETURNS boolean
 BEGIN 
 DECLARE totalGroups smallint unsigned;
 SELECT COUNT(*) INTO totalGroups FROM ScanGroup;
@@ -40,7 +40,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS modify_scangroup //
-CREATE FUNCTION modify_scangroup(groupID smallint unsigned, groupName varchar(30), groupURL varchar(50)) RETURNS boolean
+CREATE FUNCTION modify_scangroup(groupID smallint unsigned, groupName varchar(50), groupURL varchar(255)) RETURNS boolean
 BEGIN 
 UPDATE ScanGroup AS sg SET sg.groupName = COALESCE(groupName, sg.groupName), sg.groupURL = COALESCE(groupURL, sg.URL) WHERE sg.groupID = groupID;
 RETURN true;

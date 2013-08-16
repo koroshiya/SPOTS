@@ -4,13 +4,12 @@
  * File: SeriesIO.php
  * Author: Koro
  * Date created: 06/July/2012
- * Date last modified: 09/July/2012
- * Version: 1.02
  * Changelog:	1.01: Reduced repeat code in getSeriesByLetter, implemented getSeriesStatus, getSeriesByStatus, getSeriesByID
  *				1.02: Implemented addSeries, deleteSeries, deleteSeriesByForce, modifySeriesStatus, seriesSetVisible, seriesSetAdult, seriesSetProjectManager
  						Implemented basic type checking for some methods
  				1.03: Removed genre inputs to reflect changes to DB
  				1.04: Added missing connection params
+ 				1.05: Updated to reflect changes to DB
  * Purpose: Provides methods for interacting with Series objects in the database
  **/ 
 
@@ -76,14 +75,14 @@
 		return $result;
 	}
 
-	function modifySeriesStatus($seriesID, $status){
+	function seriesSetStatus($seriesID, $status){
 		
 		if (!(validID($seriesID) && validStatus($status))){
 			return false;
 		}
 
 		global $connection;
-		$procedure_name = 'series_modify_status';
+		$procedure_name = 'series_set_status';
 		$args = array($seriesID, $status);
 		$result = executeFunction($procedure_name, $args, $connection);
 
@@ -270,10 +269,10 @@
 	function validSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
 
 		return (
-			(checkLength($seriesTitle, 50)) && 
+			(checkLength($seriesTitle, 100)) && 
 			($status === NULL || validStatus($status)) &&
 			($description === NULL || checkLength($description, 255)) &&
-			($thumbnailURL === NULL || checkLength($thumbnailURL, 50)) &&
+			($thumbnailURL === NULL || checkLength($thumbnailURL, 255)) &&
 			($projectManagerID === NULL || validID($projectManagerID)) &&
 			(is_bool($visibleToPublic)) &&
 			(is_bool($boolAdult))
