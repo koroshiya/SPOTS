@@ -95,24 +95,15 @@ RETURN true;
 END // 
 DELIMITER ;
 
---user_add_role
-
---user_remove_role
-
 --user_set_title
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_title //
-CREATE FUNCTION user_set_title() RETURNS boolean
+CREATE FUNCTION user_set_title(character title) RETURNS boolean
 BEGIN --TODO: Decide on user titles
 END // 
 DELIMITER ;
 
-
-
-
-
---user_get_role
 
 --user_get_title
 
