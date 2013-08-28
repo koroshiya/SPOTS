@@ -23,31 +23,46 @@ $moduleDir = './Modules/'.$action.'/'.$sub;
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<title><?php echo str_replace('_', ' ', $action); ?></title>
+	<title><?php echo str_replace('_', ' ', $action); ?> | SPOTS</title>
 	<link rel="stylesheet" href="style.css" type="text/css">
-	<link rel="stylesheet" href="<?php echo $actionDir; ?>/style.css" type="text/css">
 	<link rel="stylesheet" href="<?php echo $moduleDir; ?>/style.css" type="text/css">
 </head>
 <body>
 
 <header>
 	<nav style="display:inline-block; float:left; margin:0px; margin-left:10px;" role="navigation">
-		<a class="header_nav" style="margin-right:40px;" href="?">SPOTS</a>
+		<span id="header_title">SPOTS</span>
 		<a class="header_nav" href="?action=Tasks">Tasks</a>
 		<a class="header_nav" href="?action=Projects">Projects</a>
-		<a class="header_nav" href="?action=UserCP">UserCP</a>
-		<a class="header_nav" href="?action=AdminCP">AdminCP</a>
+		<a class="header_nav" href="?action=Members">Members</a>
+		<a class="header_nav" href="?action=Groups">Groups</a>
+		<a class="header_nav" href="?action=Settings">Settings</a>
 	</nav>
-    <span id="header_user">UserName</span>
+    <span id="header_user">Guest</span>
 </header>
+<div id="userMenu">...</div>
 	<?php
-		include $actionDir.'/sidebar.html';
-		echo '<div id="module">';
+		if (!include $actionDir.'/sidebar.html') {
+			$marginFix = ' style="margin-left:0px;"';
+		}
+		else {
+			$marginFix = '';
+		}
+
+		echo '<div id="module"'.$marginFix.'>';
 		if (!include $moduleDir.'/mindex.php') {
-			echo '<div style="margin-top:50px; margin-left:10px;">This page does not exist!</div>';
+			echo '<div style="margin-top:50px;">This page does not exist!</div>';
 		}
 		echo '</div>';
 	?>
-
+<script src="index.js"></script>
+<?php 
+	if (file_exists($moduleDir.'/script.js')) {
+		echo '<script src="'.$moduleDir.'/index.js"></script>';
+	}
+	if (file_exists($actionDir.'/script.js')) {
+		echo '<script src="'.$actionDir.'/index.js"></script>';
+	}
+?>
 </body>
 </html>

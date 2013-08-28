@@ -15,9 +15,9 @@ if (isset($_POST['projectGenres'])) {
 }
 
 //Dummy data to be replaced with a SQL call later
-$genres = [
+$genres = array(
 	'Action', 'Drama', 'Romance', 'Tragedy'
-];
+);
 
 ?>
 

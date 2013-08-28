@@ -1,6 +1,8 @@
 html, body {
 	margin:0px;
 	background-color:#ededed;
+	text-rendering:optimizeLegibility;
+	image-rendering:optimizeSpeed;
 }
 header {
 	width:100%;
@@ -20,6 +22,9 @@ a {
 }
 table {
 	display:inline-table;
+}
+tr {
+	height:35px;
 }
 input[type="text"], input[type="checkbox"], textarea {
 	border:2px solid #999;
@@ -45,13 +50,28 @@ input[type="submit"] {
 	width:100px;
 	height:30px;
 }
+input[type="file"] {
+	height:25px;
+	font-size:10pt;
+}
 select {
 	width:100px;
 	height:25px;
 	font-size:10pt;
 }
+select:focus {
+	box-shadow:0 0 3px #008bc0;
+}
 
-.header_nav {
+#header_title {
+	margin-right:40px;
+	-moz-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	cursor:default;
+}
+.header_nav, #header_title {
 	padding-left:8px;
 	padding-right:8px;
 	float:left;
@@ -66,10 +86,29 @@ select {
 	margin-right:10px;
 	padding-left:8px;
 	padding-right:8px;
+	-moz-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	cursor:pointer;
 	color:white;
 }
 #header_user:hover {
 	background-color:#00688B;
+}
+#userMenu {
+	position:fixed;
+	margin:0px;
+	top:42px;
+	right:10px;
+	width:160px;
+	height:180px;
+	background-color:white;
+	visibility:hidden;
+	border-bottom-right-radius:5px;
+	border-bottom-left-radius:5px;
+	border:1px solid black;
+	border-top:0px;
 }
 
 #sidebar {
@@ -81,17 +120,15 @@ select {
 	position:fixed;
 	background-color:#d4d4d4;
 	border-right:3px solid black;
-	text-align:center;
 	line-height:40px;
 }
 .sidebar_heading {
 	height:40px;
 	margin:0px;
 	margin-top:10px;
-	text-align:left;
 	color:#008BC0;
 	font-size:20pt;
-	margin-left:10px;
+	text-indent:10px;
 }
 .sidebar_item {
 	height:40px;
@@ -100,6 +137,7 @@ select {
 	float:left;
 	color:black;
 	font-size:14pt;
+	text-indent:20px;
 }
 .sidebar_item:hover {
 	color:white;

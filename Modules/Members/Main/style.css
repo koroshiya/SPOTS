@@ -1,0 +1,22 @@
+#memberList {
+	margin-top:8px;
+	border:1px solid black;
+	border-collapse:collapse;
+	background-color:lightgrey;
+}
+#memberListHeader {
+	color:white;
+	background-color:#008BC0;
+}
+.memberName, .memberPositionMain, .lastActive {
+	border: 1px solid black;
+}
+.memberName {
+	width:250px;
+}
+.memberPositionMain {
+	width:150px;
+}
+.lastActive {
+	width:150px;
+}
