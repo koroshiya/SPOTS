@@ -6,12 +6,12 @@
  * Date created: 06/July/2012
  * Changelog:	1.01: Reduced repeat code in getSeriesByLetter, implemented getSeriesStatus, getSeriesByStatus, getSeriesByID
  *				1.02: Implemented addSeries, deleteSeries, deleteSeriesByForce, modifySeriesStatus, seriesSetVisible, seriesSetAdult, seriesSetProjectManager
- 						Implemented basic type checking for some methods
- 				1.03: Removed genre inputs to reflect changes to DB
- 				1.04: Added missing connection params
- 				1.05: Updated to reflect changes to DB
+ *						Implemented basic type checking for some methods
+ *				1.03: Removed genre inputs to reflect changes to DB
+ *				1.04: Added missing connection params
+ *				1.05: Updated to reflect changes to DB
  * Purpose: Provides methods for interacting with Series objects in the database
- **/ 
+*/ 
 
 	include 'Connection.php';
 
@@ -24,6 +24,19 @@
 	//echo getSeriesByID(4);
 
 
+	/**
+	 * Adds a new series to the database.
+	 * 
+	 * @param $seriesTitle Title of the series.
+	 * @param $status Current status of the series (dropped, complete, etc.)
+	 * @param $description Description of the series to add.
+	 * @param $thumbnailURL URL path (relative or absolute) to the series' thumbnail.
+	 * @param $projectManagerID ID of the member managing this specific series.
+	 * @param $visibleToPublic True if series is visible to guest users, otherwise false.
+	 * @param $boolAdult True if series is adults-only, otherwise false.
+	 *
+	 * @return True if command is successful, otherwise false.
+	 */
 	function addSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
 
 		$args = [
@@ -38,78 +51,115 @@
 
 		global $connection;
 		$procedure_name = 'insert_series';
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Removes a series from the database.
+	 * Fails if the series has any chapters, tasks, etc. assigned to it.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function deleteSeries($seriesID){
 
 		global $connection;
 		$procedure_name = 'delete_series';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Removes a series from the database.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function deleteSeriesByForce($seriesID){
 
 		global $connection;
 		$procedure_name = 'delete_series_force';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Updates the status of a series.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 * @param $status New status to set for the series. eg. Dropped, complete, etc.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function seriesSetStatus($seriesID, $status){
 
 		global $connection;
 		$procedure_name = 'series_set_status';
 		$args = array($seriesID, $status);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Updates the status of a series.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 * @param $boolVisible True if the series is visible to guests, otherwise false.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function seriesSetVisible($seriesID, $boolVisible){
 
 		global $connection;
 		$procedure_name = 'series_set_visible';
 		$args = array($seriesID, $boolVisible);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Updates the status of a series.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 * @param $boolAdult True if the series is adults-only, otherwise false.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function seriesSetAdult($seriesID, $boolAdult){
 
 		global $connection;
 		$procedure_name = 'series_set_adult';
 		$args = array($seriesID, $boolAdult);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
+	/**
+	 * Updates the status of a series.
+	 *
+	 * @param $seriesID ID of the series to perform this function on.
+	 * @param $managerID ID of the user to assign as a series' manager.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
 	function seriesSetProjectManager($seriesID, $managerID){
 
 		global $connection;
 		$procedure_name = 'series_set_project_manager';
 		$args = array($seriesID, $managerID);
-		$result = executeFunction($procedure_name, $args, $connection);
-
-		return $result;
+		return executeFunction($procedure_name, $args, $connection);
+		
 	}
 
 
 	/**
 	 * Returns the number of Series currently in the DB.
-	 * @param $mysql_host Host on which the database resides. Can be 'localhost'
-	 * @param $mysql_user MySQL username of the user through whom a database connection will be established
-	 * @param $mysql_password Password of the user through whom a database connection will be established
-	 * @param $mysql_database Password of the database for which to create a connection
+	 * 
 	 * @return Number of projects ("Series" in the DB). If connection failed, returns false.
 	 **/
 	function getProjectCount(){
@@ -123,51 +173,55 @@
 	}
 
 	/**
-	 * Returns the series specified by the ID passed in
-	 * @param $seriesID ID of the series to retrieve
-	 * @return Series corresponding to the ID passed in, retrieved as an array of parameters
+	 * Returns the series specified by the ID passed in.
+	 *
+	 * @param $seriesID ID of the series to retrieve.
+	 *
+	 * @return Series corresponding to the ID passed in, retrieved as an array of parameters.
 	 **/
 	function getSeriesByID($seriesID){
 
 		global $connection;
 		$procedure_name = "get_series_by_id";
-		$result = executeStoredProcedure($procedure_name, $seriesID, $connection);
-		
-		return $result;
+		return executeStoredProcedure($procedure_name, $seriesID, $connection);
 
 	}
 
 	/**
+	 * Gets all series that start with a specific character.
+	 *
+	 * @param $character Letter to retrieve series beginning with.
+	 *
 	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
 	 **/
 	function getSeriesByLetter($character){
 
 		global $connection;
 		$procedure_name = "get_series_by_letter";
-		$result = executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
-		
-		return $result;
+		return executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
 
 	}
 
 	/**
-	 * Returns all series for which the specified status applies
+	 * Returns all series for which the specified status applies.
+	 *
 	 * @param $character Char representing the status of a series. eg. 'd' for Dropped.
+	 *
 	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
 	 **/
 	function getSeriesByStatus($character){
 
 		global $connection;
 		$procedure_name = "get_series_by_status";
-		$result = executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
-
-		return $result;
+		return executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
 
 	}
 
 	/**
-	 * Returns the status of a particular series
-	 * @param $seriesID ID of the series to retrieve the status for
+	 * Returns the status of a particular series.
+	 *
+	 * @param $seriesID ID of the series to retrieve the status for.
+	 *
 	 * @return Returns a String representing the series' status. eg. "Dropped", "Complete", etc.
 	 **/
 	function getSeriesStatus($seriesID){
@@ -175,11 +229,17 @@
 		global $connection;
 		$procedure_name = "get_series_status";
 		$result = executeFunction($procedure_name, $seriesID, $connection);
-                $resultRow = $result[0];
-		return getSeriesStatusFromChar($resultRow);
+		return getSeriesStatusFromChar($result[0]);
 
 	}
 
+	/**
+	 * Gets the status string corresponding to a specific character.
+	 *
+	 * @param $char Character representing a possible series status.
+	 *
+	 * @return String portraying a series' status.
+	 */
 	function getSeriesStatusFromChar($char){
 
 		if ($char === 'i') {
@@ -200,11 +260,15 @@
 
 	}
 
+	/**
+	 * Retrieves all series from the database.
+	 *
+	 * @return All series from the database.
+	 */
 	function getSeriesAll(){
 		global $connection;
 		$procedure_name = "get_series_all";
-		$result = executeStoredProcedure($procedure_name, null, $connection);
-		return $result;
+		return executeStoredProcedure($procedure_name, null, $connection);
 	}
 
 ?>
