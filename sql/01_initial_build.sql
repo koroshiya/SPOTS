@@ -75,10 +75,7 @@ CREATE TABLE IF NOT EXISTS Chapter(
 	chapterName varchar(100) null,
 	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
-	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
-	FOREIGN KEY (groupOne) REFERENCES ScanGroup(groupID), 
-	FOREIGN KEY (groupTwo) REFERENCES ScanGroup(groupID), 
-	FOREIGN KEY (groupThree) REFERENCES ScanGroup(groupID)
+	FOREIGN KEY (seriesID) REFERENCES Series(seriesID)
 
 );
 

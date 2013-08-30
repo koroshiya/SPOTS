@@ -23,14 +23,29 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_scangroup
+--delete_scangroup --TODO: check if group is home group
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_scangroup //
 CREATE FUNCTION delete_scangroup(groupID smallint unsigned) RETURNS boolean
 BEGIN 
---TODO: check for attached tasks/chapters
---TODO: check if group is home group
+DECLARE totalChapters smallint unsigned;
+SELECT COUNT(*) INTO totalChapters FROM ChapterGroup AS cg WHERE cg.groupID = groupID;
+IF totalChapters > 0 THEN
+RETURN false;
+END IF;
+DELETE FROM ScanGroup AS sg WHERE sg.groupID = groupID;
+RETURN true;
+END // 
+DELIMITER ;
+
+--delete_scangroup_force --TODO: check if group is home group
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS delete_scangroup_force //
+CREATE FUNCTION delete_scangroup_force(groupID smallint unsigned) RETURNS boolean
+BEGIN 
+DELETE FROM ChapterGroup AS cg WHERE cg.groupID = groupID
 DELETE FROM ScanGroup AS sg WHERE sg.groupID = groupID;
 RETURN true;
 END // 

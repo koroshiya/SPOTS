@@ -8,10 +8,7 @@
 	chapterName varchar(50) null,
 	visible boolean not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber),
-	FOREIGN KEY (seriesID) REFERENCES Series(seriesID), 
-	FOREIGN KEY (groupOne) REFERENCES ScanGroup(groupID), 
-	FOREIGN KEY (groupTwo) REFERENCES ScanGroup(groupID), 
-	FOREIGN KEY (groupThree) REFERENCES ScanGroup(groupID)
+	FOREIGN KEY (seriesID) REFERENCES Series(seriesID)
 */
 
 /*
@@ -51,8 +48,8 @@ SELECT COUNT(*) INTO totalTasks FROM Task AS t WHERE t.seriesID = seriesID AND t
 IF totalTasks > 0 THEN
 RETURN false;
 END IF;
-DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
 DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
+DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
 RETURN true;
 END // 
 DELIMITER ;
@@ -65,8 +62,8 @@ DROP FUNCTION IF EXISTS delete_chapter_force //
 CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
 DELETE FROM Task WHERE Task.seriesID = seriesID AND Task.chapterNumber = chapterNumber AND Task.chapterSubNumber = chapterSubNumber;
-DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
 DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
+DELETE FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
 RETURN true;
 END // 
 DELIMITER ;
@@ -92,7 +89,7 @@ END //
 DELIMITER ;
 
 --chapter_add_group --If all three groups are occupied, return false
---TODO: not working
+--TODO: need to test if working
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_add_group //

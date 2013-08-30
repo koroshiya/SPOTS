@@ -21,6 +21,7 @@
 
 	/**
 	 * Deletes an existing group from the DB.
+	 * Fails if any ChapterGroup objects exist for this group.
 	 * 
 	 * @param $groupID ID of the group to modify.
 	 *
@@ -30,6 +31,21 @@
 
 		global $connection;
 		$procedure_name = 'delete_scangroup';
+		return executeFunction($procedure_name, $groupID, $connection);
+		
+	}
+
+	/**
+	 * Deletes an existing group from the DB.
+	 * 
+	 * @param $groupID ID of the group to modify.
+	 *
+	 * @return True or false, depending on success.
+	 */
+	function deleteGroupForce($groupID){
+
+		global $connection;
+		$procedure_name = 'delete_scangroup_force';
 		return executeFunction($procedure_name, $groupID, $connection);
 		
 	}
