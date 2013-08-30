@@ -2,97 +2,132 @@
 
 	include 'Connection.php';
 
-	//Example usage:
-
 	/**
-	 * Common parameters:
-	 * @param $seriesID ID of the series to which the chapter belongs
-	 * @param $chapterNumber Whole number representing the chapter number
+	 * Pushes the different parameters necessary to define a specific chapter into one array.
+	 * 
+	 * @param $seriesID ID of the series to which the chapter belongs.
+	 * @param $chapterNumber Whole number representing the chapter number.
 	 * @param $chapterSubNumber Point number for the chapter. 
 	 * eg. If $chapterNumber was 10 and $chapterSubNumber was 5, you would be specifying chapter 10.5
+	 *
+	 * @return An array containing the necessary parameters to define a specific chapter.
 	 */
+	function setChapterParams($seriesID, $chapterNumber, $chapterSubNumber){
+		return array($seriesID, $chapterNumber, $chapterSubNumber);
+	}
 
-	function addChapter($seriesID, $chapterNumber, $chapterSubNumber){
+	/**
+	 * Adds a new chapter to the database.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * 
+	 * @return True if command was successful, otherwise false.
+	 */
+	function addChapter($args){
 		
 		global $connection;
 		$procedure_name = 'insert_chapter';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber);
-		$result = executeFunction($procedure_name, $args, $connection);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
-	function deleteChapter($seriesID, $chapterNumber, $chapterSubNumber){
+	/**
+	 * Removes a chapter from the database.
+	 * Command will fail if any incomplete tasks pertaining to the chapter exist.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * 
+	 * @return True if command was successful, otherwise false.
+	 */
+	function deleteChapter($args){
 		
 		global $connection;
 		$procedure_name = 'delete_chapter';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber);
-		$result = executeFunction($procedure_name, $args, $connection);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
-	function deleteChapterForce($seriesID, $chapterNumber, $chapterSubNumber){
+	/**
+	 * Removes a chapter from the database.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * 
+	 * @return True if command was successful, otherwise false.
+	 */
+	function deleteChapterForce($args){
 		
 		global $connection;
 		$procedure_name = 'delete_chapter_force';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber);
-		$result = executeFunction($procedure_name, $args, $connection);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
 	/**
 	 * Sets the revision number of the chapter.
 	 * eg. If the chapter has been revised once since release, revision number would be 1.
 	 *
-	 * @param $revision Revision number to set
-	 * @return True or false, depending on success
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * @param $revision Revision number to set.
+	 *
+	 * @return True or false, depending on success.
 	 */
-	function modifyChapterRevision($seriesID, $chapterNumber, $chapterSubNumber, $revision){
+	function modifyChapterRevision($args, $revision){
 		
 		global $connection;
 		$procedure_name = 'chapter_revision_modify';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber, $revision);
-		$result = executeFunction($procedure_name, $args, $connection);
+		array_push($args, $revision);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
 	/**
 	 * Attaches an existing group to the chapter.
-	 * If the chapter already has 3 groups attached, or the group is already attached, function returns false.
+	 * If the group is already attached, function returns false.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * @param $newGroupID ID of the group to attach to a chapter.
 	 *
-	 * @return True or false, depending on success
+	 * @return True or false, depending on success.
 	 **/
-	function attachGroup($seriesID, $chapterNumber, $chapterSubNumber, $newGroupID){
+	function attachGroup($args, $newGroupID){
 		
 		global $connection;
 		$procedure_name = 'chapter_add_group';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber, $newGroupID);
-		$result = executeFunction($procedure_name, $args, $connection);
+		array_push($args, $newGroupID);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
-	function isChapterVisible($seriesID, $chapterNumber, $chapterSubNumber){
+	/**
+	 * Checks if a chapter is visible to guest users or not.
+	 *
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * 
+	 * @return True if the chapter is visible to guest users, otherwise false.
+	 */
+	function isChapterVisible($args){
 
 		global $connection;
 		$procedure_name = 'is_visible_chapter';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber);
-		$result = executeFunction($procedure_name, $args, $connection);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
-	function setChapterVisible($seriesID, $chapterNumber, $chapterSubNumber, $visible){
+	/**
+	 * Makes a chapter visible or invisible to guest users.
+	 *
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * @param $visible Boolean value indicating the new visibility of the chapter.
+	 * 
+	 * @return True if the command was successful, otherwise false
+	 */
+	function setChapterVisible($args, $visible){
 
 		global $connection;
 		$procedure_name = 'chapter_set_visible';
-		$args = array($seriesID, $chapterNumber, $chapterSubNumber, $visible);
-		$result = executeFunction($procedure_name, $args, $connection);
+		array_push($args, $visible);
+		return executeFunction($procedure_name, $args, $connection);
 
-		return $result;
 	}
 
 ?>

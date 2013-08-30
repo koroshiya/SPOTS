@@ -1,13 +1,14 @@
 <?php
 
 /**
-*File: TaskIO.php
-*Author: Koro
-*Date created: 06/July/2012
-*Changelog: 1.01: Added getUser* and getUserCount* functions
-					Added IO functions
-			1.02: Implemented chapter functions, implemented/updated others
-*Purpose: Provides methods for interacting with Task objects in the database
+ *File: TaskIO.php
+ *Author: Koro
+ *Date created: 06/July/2012
+ *Changelog: 1.01: Added getUser* and getUserCount* functions
+ *					Added IO functions
+ *			1.02: Implemented chapter functions, implemented/updated others
+ *			1.03: Reduced repeat params, removed no longer necessary functions
+ *Purpose: Provides methods for interacting with Task objects in the database
 **/ 
 
 	include 'Connection.php';
@@ -15,92 +16,221 @@
 	//Example usage:
 	//echo getUserTaskCount(1);
 
-	//Creates a new task using the parameters passed in
-	function addTask($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole){
-		return executeIOFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, 'insert_task');
+	/**
+	 * Pushes the different parameters necessary to define a specific task into one array.
+	 * 
+	 * @param $seriesID ID of the series to which the task belongs. (mandatory)
+	 * @param $chapterNumber Whole number representing the chapter number. (mandatory)
+	 * @param $chapterSubNumber Point number for the chapter. (mandatory)
+	 * eg. If $chapterNumber was 10 and $chapterSubNumber was 5, you would be specifying chapter 10.5
+	 * @param $userID (optional; null if not required)
+	 * @param $userRole (optional; null if not required)
+	 * @param $status (optional; null if not required)
+	 * @param $description (optional; null if not required)
+	 *
+	 * @return An array containing the necessary parameters to define a specific task.
+	 */
+	function setTaskParams($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status, $description){
+		return array($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status, $description);
 	}
 
-	//Deletes an existing task corresponding to the Primary Keys passed in
-	function deleteTask($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole){
-		return executeIOFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, 'delete_task');
+	/**
+	 * Creates a new task using the parameters passed in
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function addTask($args){
+		return executeChapterFunction($args, 'insert_task');
 	}
 
-	//Sets/updates a task's status
-	function updateStatus($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status){
-		return executeFullFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status, 'task_set_status');
+	/**
+	 * Deletes an existing task corresponding to the Primary Keys passed in.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function deleteTask($args){
+		return executeChapterFunction($args, 'delete_task');
 	}
 
-	//Sets/updates a task's description
-	function updateDescription($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $description){
-		return executeFullFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $description, 'task_set_description');
+	/**
+	 * Sets/updates a task's status.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $status
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function updateStatus($args){
+		return executeChapterFunction($args, 'task_set_status');
 	}
 
-
-	//Returns the number of tasks assigned to a user
+	/**
+	 * Sets/updates a task's description
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $description
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function updateDescription($args){
+		return executeChapterFunction($args, 'task_set_description');
+	}
+	
+	/**
+	 * Returns the number of tasks assigned to a user.
+	 *
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns the total number of tasks a specific user has assigned to them.
+	 */
 	function getUserTaskCount($userID){
-		return executeUserFunction($userID, 'get_user_task_count');
+		return executeChapterFunction($userID, 'get_user_task_count');
 	}
 
-	//Returns the number of incomplete tasks assigned to a user
+	/**
+	 * Returns the number of incomplete tasks assigned to a user.
+	 *
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns the total number of tasks a specific user has started, but not completed.
+	 */
 	function getUserActiveTaskCount($userID){
-		return executeUserFunction($userID, 'get_user_task_count_active');
+		return executeChapterFunction($userID, 'get_user_task_count_active');
 	}
 
-	//Returns the number of completed tasks assigned to a user
+	/**
+	 * Returns the number of completed tasks assigned to a user.
+	 *
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns the total number of tasks a specific user has completed.
+	 */
 	function getUserCompleteTaskCount($userID){
-		return executeUserFunction($userID, 'get_user_task_count_complete');
+		return executeChapterFunction($userID, 'get_user_task_count_complete');
 	}
 
-	//Retrieves all tasks that a specific user has assigned to them
+	/**
+	 * Retrieves all tasks that a specific user has assigned to them
+	 *
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns all tasks pertaining to a specific user.
+	 */
 	function getUserTasks($userID){
-		return executeUserProcedure($userID, 'get_user_tasks');
+		return executeChapterProcedure($userID, 'get_user_tasks');
 	}
 
-	//Retrieves all tasks that a specific user has not completed
+	/**
+	 * Retrieves all tasks that a specific user has not completed.
+	 *
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns all tasks that a specific user has started, but not completed.
+	 */
 	function getUserActiveTasks($userID){
-		return executeUserProcedure($userID, 'get_user_tasks_active');
+		return executeChapterProcedure($userID, 'get_user_tasks_active');
 	}
 
-	//Retrieves all tasks that a specific user has completed
+	/**
+	 * Retrieves all tasks that a specific user has completed.
+	 * 
+	 * @param $userID ID of the user for whom to process the command.
+	 *
+	 * @return Returns all tasks that a specific user has completed.
+	 */
 	function getUserCompleteTasks($userID){
-		return executeUserProcedure($userID, 'get_user_tasks_complete');
+		return executeChapterProcedure($userID, 'get_user_tasks_complete');
 	}
 
-
-	//Returns the number of tasks associated with a chapter
-	function getChapterTaskCount($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_task_count');
+	/**
+	 * Returns the number of tasks associated with a chapter
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterTaskCount($args){
+		return executeChapterFunction($args, 'get_chapter_task_count');
 	}
 
-	//Returns the number of incomplete tasks associated with a chapter
-	function getChapterActiveTaskCount($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_task_count_active');
+	/**
+	 * Returns the number of incomplete tasks associated with a chapter
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterActiveTaskCount($args){
+		return executeChapterFunction($args, 'get_chapter_task_count_active');
 	}
 
-	//Returns the number of complete tasks associated with a chapter
-	function getChapterCompleteTaskCount($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_task_count_complete');
+	/**
+	 * Returns the number of complete tasks associated with a chapter
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterCompleteTaskCount($args){
+		return executeChapterFunction($args, 'get_chapter_task_count_complete');
 	}
 
-	//Retrieves all tasks associated with a specific chapter
-	function getChapterTasks($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_tasks');
+	/**
+	 * Retrieves all tasks associated with a specific chapter.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterTasks($args){
+		return executeChapterFunction($args, 'get_chapter_tasks');
 	}
 
-	//Retrieves all incomplete tasks associated with a specific chapter
-	function getChapterActiveTasks($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_tasks_active');
+	/**
+	 * Retrieves all incomplete tasks associated with a specific chapter.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterActiveTasks($args){
+		return executeChapterFunction($args, 'get_chapter_tasks_active');
 	}
 
-	//Retrieves all complete tasks associated with a specific chapter
-	function getChapterCompleteTasks($seriesID, $chapterNumber, $chapterSubNumber){
-		return executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, 'get_chapter_tasks_complete');
+	/**
+	 * Retrieves all complete tasks associated with a specific chapter.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return True if successful, otherwise false.
+	 */
+	function getChapterCompleteTasks($args){
+		return executeChapterFunction($args, 'get_chapter_tasks_complete');
 	}
 
-
-	function getTaskStatus($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole){
+	/**
+	 * Converts a char to its equivalent status string. eg. d = dropped.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole
+	 *
+	 * @param $args Arguments to process with this function.
+	 *
+	 * @return Status as string corresponding to char thrown in.
+	 */
+	function getTaskStatus($args){
 		
-		$charStatus = executeIOFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, 'get_task_status');
+		$charStatus = executeChapterFunction($args, 'get_task_status');
 
 		if ($charStatus === 'A'){
 			return 'Active';
@@ -116,69 +246,31 @@
 
 	}
 
-	function executeUserProcedure($userID, $procedure_name){
+	/**
+	 * Executes a stored procedure using a user's ID as the sole argument.
+	 *
+	 * @param $userID ID of the user whom the function pertains to.
+	 * @param $procedure_name Name of the procedure to execute.
+	 *
+	 * @return False if command failed, otherwise returns the result of the procedure.
+	 */
+	function executeChapterProcedure($userID, $procedure_name){
 
 		global $connection;
-		
-		$result = executeStoredProcedure($procedure_name, $userID, $connection);
-		return $result;
+		return executeStoredProcedure($procedure_name, $userID, $connection);
 
-	}
-
-	function executeUserFunction($userID, $procedure_name){
-
-		global $connection;
-		
-		$row = executeFunction($procedure_name, $userID, $connection);
-		return $row[0];
-		
-	}
-
-	function executeChapterFunction($seriesID, $chapterNumber, $chapterSubNumber, $procedure_name){
-
-		$args = [
-				"seriesID" => $seriesID,
-				"chapterNumber" => $chapterNumber,
-				"chapterSubNumber" => $chapterSubNumber,
-		];
-
-		global $connection;
-		
-		$row = executeFunction($procedure_name, $args, $connection);
-		return $row[0];
-		
-	}
-
-	function executeIOFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $procedure_name){
-
-		$args = [
-				"seriesID" => $seriesID,
-				"chapterNumber" => $chapterNumber,
-				"chapterSubNumber" => $chapterSubNumber,
-				"userID" => $userID,
-				"userRole" => $userRole,
-		];
-
-		global $connection;
-		
-		$row = executeFunction($procedure_name, $args, $connection);
-		return $row[0];
-		
 	}
 
 	/**
-	 *@param $var An additional variable to throw into the procedure, such as status or description
+	 * Executes a function using a variable set of possible Task params.
+	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
+	 *
+	 * @param $args Arguments to process with this function.
+	 * @param $procedure_name Name of the procedure to execute.
+	 *
+	 * @return False if command failed, otherwise returns the result of the function.
 	 */
-	function executeFullFunction($seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole, $var, $procedure_name){
-
-		$args = [
-				"seriesID" => $seriesID,
-				"chapterNumber" => $chapterNumber,
-				"chapterSubNumber" => $chapterSubNumber,
-				"userID" => $userID,
-				"userRole" => $userRole,
-				"var" => $var,
-		];
+	function executeChapterFunction($args, $procedure_name){
 
 		global $connection;
 		
