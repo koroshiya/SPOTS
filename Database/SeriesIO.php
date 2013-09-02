@@ -51,7 +51,8 @@
 
 		global $connection;
 		$procedure_name = 'insert_series';
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -68,7 +69,8 @@
 		global $connection;
 		$procedure_name = 'delete_series';
 		$args = array($seriesID);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -84,7 +86,8 @@
 		global $connection;
 		$procedure_name = 'delete_series_force';
 		$args = array($seriesID);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -101,7 +104,8 @@
 		global $connection;
 		$procedure_name = 'series_set_status';
 		$args = array($seriesID, $status);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -118,7 +122,8 @@
 		global $connection;
 		$procedure_name = 'series_set_visible';
 		$args = array($seriesID, $boolVisible);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -135,7 +140,8 @@
 		global $connection;
 		$procedure_name = 'series_set_adult';
 		$args = array($seriesID, $boolAdult);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 
@@ -152,7 +158,8 @@
 		global $connection;
 		$procedure_name = 'series_set_project_manager';
 		$args = array($seriesID, $managerID);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 		
 	}
 

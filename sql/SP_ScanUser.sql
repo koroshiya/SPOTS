@@ -1,15 +1,13 @@
---ScanUserIO
-
-/*
+/*ScanUserIO
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	email varchar(100) null,
-	title character null,
+	email varchar(100) not null,
+	title character not null,
 	PRIMARY KEY (userID)
 */
 
---insert_user(userName, userPassword, userRole[, email, title])
+/*insert_user(userName, userPassword, userRole[, email, title])*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_user //
@@ -22,13 +20,14 @@ IF totalUsers = 65535 THEN
 RETURN false;
 END IF;
 SET sha1Password = UNHEX(SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
-INSERT INTO ScanUser VALUES(userName, sha1Password, COALESCE(email, NULL), COALESCE(title, NULL));
+INSERT INTO ScanUser(userName, userPassword, email, title) VALUES(userName, sha1Password, email, title);
 RETURN true;
 END // 
 DELIMITER ;
 
---delete_user(userID)
---If a user is the founder, webmaster, has tasks still assigned to them, or is the project manager of at least one series, fails and returns false.
+/*delete_user(userID)
+If a user is the founder, webmaster, has tasks still assigned to them, 
+or is the project manager of at least one series, this function fails and returns false.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_user //
@@ -42,9 +41,9 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_user_force(userID)
---If a user is the founder or webmaster, fails and returns false.
---All associated Tasks are deallocated. Same with Series for which the user is the project manager.
+/*delete_user_force(userID)
+If a user is the founder or webmaster, fails and returns false.
+All associated Tasks are deallocated. Same with Series for which the user is the project manager.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_user_force //
@@ -61,7 +60,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---user_set_password
+/*user_set_password*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_password //
@@ -69,19 +68,20 @@ CREATE FUNCTION user_set_password(userID smallint unsigned, newPassword varchar(
 BEGIN 
 DECLARE sha1Password binary(20);
 DECLARE userName varchar(30);
+DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
+SELECT ScanUser.userName, ScanUser.email INTO userName, userEmail FROM ScanUser WHERE ScanUser.userID = userID;
+SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
 Update ScanUser SET ScanUser.userPassword = sha1Password;
 RETURN true;
 END // 
 DELIMITER ;
 
---user_get_password_valid
+/*user_get_password_valid*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_password_valid //
@@ -89,18 +89,19 @@ CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varch
 BEGIN 
 DECLARE sha1Password binary(20);
 DECLARE userName varchar(30);
+DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
+SELECT ScanUser.userName, ScanUser.email INTO userName, userEmail FROM ScanUser WHERE ScanUser.userID = userID;
+SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
 RETURN password = sha1Password;
 END // 
 DELIMITER ;
 
---user_set_email
+/*user_set_email*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_email //
@@ -120,7 +121,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---user_get_email
+/*user_get_email*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_email //
@@ -132,13 +133,13 @@ RETURN email;
 END // 
 DELIMITER ;
 
---user_set_permission
+/*user_set_permission*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_permission //
 CREATE FUNCTION user_set_permission(userID smallint unsigned, newRole character) RETURNS boolean
 BEGIN 
-IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN --s = staff, a = admin, m = mod
+IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN /*s = staff, a = admin, m = mod*/
 RETURN false;
 END IF;
 UPDATE ScanUser AS su SET su.title = newRole;
@@ -146,7 +147,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---user_get_permission
+/*user_get_permission*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_permission //
@@ -158,11 +159,31 @@ RETURN title;
 END // 
 DELIMITER ;
 
+/*get_user_by_id*/
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_user_by_id //
+CREATE PROCEDURE get_user_by_id(userID smallint unsigned)
+BEGIN 
+SELECT * FROM ScanUser AS s WHERE s.userID = userID;
+END // 
+DELIMITER ;
+
+/*get_users_all*/
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_users_all //
+CREATE PROCEDURE get_users_all()
+BEGIN 
+SELECT * FROM ScanUser AS s;
+END // 
+DELIMITER ;
 
 
 
---is_project_manager
---Tests if the user is a project manager for ANY series, not one in particular.
+
+/*is_project_manager
+Tests if the user is a project manager for ANY series, not one in particular.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_project_manager //
@@ -174,8 +195,8 @@ BEGIN
 END // 
 DELIMITER ;
 
---is_project_manager_of_series
---Tests if the user is a project manager of a particular series
+/*is_project_manager_of_series
+Tests if the user is a project manager of a particular series*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_project_manager_of_series //

@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS ScanGroup(
 
 );
 
---Status - I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
+/*Status - I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete*/
 CREATE TABLE IF NOT EXISTS Series(
 
 	seriesID smallint unsigned not null AUTO_INCREMENT,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Series(
 
 );
 
---May be phased out later and replaced by SeriesGenre
+/*May be phased out later and replaced by SeriesGenre*/
 CREATE TABLE IF NOT EXISTS Genre(
 
 	name varchar(20) not null unique,
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS Genre(
 
 );
 
---Associative entity, so only one row for each genre needs to exist
---Seemingly redundant, but the Genre table has explicit uses that make it useful
+/*Associative entity, so only one row for each genre needs to exist
+Seemingly redundant, but the Genre table has explicit uses that make it useful*/
 CREATE TABLE IF NOT EXISTS SeriesGenre(
 
 	seriesID smallint unsigned not null,
@@ -96,8 +96,8 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
 	userPassword binary(20) not null,
-	email varchar(100) null,
-	title character null,
+	email varchar(100) not null,
+	title character not null,
 	PRIMARY KEY (userID)
 
 );

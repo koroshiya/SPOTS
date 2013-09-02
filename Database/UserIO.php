@@ -6,6 +6,7 @@
  *Changelog: 1.01: Implemented getUserRole and getUserTitle
  *			1.02: Implemented other IO and validation methods
  *			1.03: Grouped similar functions
+ *			1.04: Fixed invalid connection passing, implemented getUser functions
  *Purpose: Provides methods for interacting with User objects in the database
 **/ 
 
@@ -33,7 +34,7 @@
 				"email" => $email,
 				"title" => $title,
 		];
-		return executeFunction($procedure_name, $array, $connection);
+		return executeUserFunction($procedure_name, $array);
 		
 	}
 	
@@ -48,7 +49,7 @@
 	function deleteUser($userID){
 
 		$procedure_name = 'delete_user';
-		return executeFunction($procedure_name, $userID, $connection);
+		return executeUserFunction($procedure_name, $userID);
 		
 	}
 	
@@ -62,7 +63,7 @@
 	function deleteUserForcibly($userID){
 
 		$procedure_name = 'delete_user_force';
-		return executeFunction($procedure_name, $userID, $connection);
+		return executeUserFunction($procedure_name, $userID);
 		
 	}
 
@@ -78,7 +79,7 @@
 
 		$procedure_name = 'user_set_password';
 		$arr = array($userID, $newPassword);
-		return executeFunction($procedure_name, $arr, $connection);
+		return executeUserFunction($procedure_name, $arr);
 		
 	}
 
@@ -94,7 +95,7 @@
 
 		$procedure_name = 'user_set_email';
 		$arr = array($userID, $newEmail);
-		return executeFunction($procedure_name, $arr, $connection);
+		return executeUserFunction($procedure_name, $arr);
 		
 	}
 
@@ -110,7 +111,7 @@
 
 		$procedure_name = 'user_get_password_valid';
 		$arr = array($userID, $passwordAttempt);
-		return executeFunction($procedure_name, $arr, $connection);
+		return executeUserFunction($procedure_name, $arr);
 		
 	}
 
@@ -124,7 +125,7 @@
 	function userGetEmail($userID){
 
 		$procedure_name = 'user_get_email';
-		return executeFunction($procedure_name, $userID, $connection);
+		return executeUserFunction($procedure_name, $userID);
 		
 	}
 
@@ -140,7 +141,7 @@
 
 		$procedure_name = 'user_set_permission';
 		$arr = array($userID, $char);
-		return executeFunction($procedure_name, $arr, $connection);
+		return executeUserFunction($procedure_name, $arr);
 		
 	}
 
@@ -150,7 +151,7 @@
 	function userGetPermission($userID){
 
 		$procedure_name = 'user_get_permission';
-		return executeFunction($procedure_name, $userID, $connection);
+		return executeUserFunction($procedure_name, $userID);
 		
 	}
 
@@ -181,7 +182,7 @@
 	function isProjectManager($userID){
 
 		$procedure_name = 'is_project_manager';
-		return executeFunction($procedure_name, $userID, $connection);
+		return executeUserFunction($procedure_name, $userID);
 		
 	}
 
@@ -196,11 +197,43 @@
 
 		$procedure_name = 'is_project_manager_of_series';
 		$arr = array($userID, $seriesID);
-		return executeFunction($procedure_name, $arr, $connection);
+		return executeUserFunction($procedure_name, $arr);
 		
 	}
 
-	function executeUserFunction($procedure_name, $array, $connection){
+	/**
+	 * Retrieves a user from the DB specified by their ID.
+	 *
+	 * @param $userID Unique ID used to define the user we want to grab from the DB.
+	 *
+	 * @return User specified by ID. False if function fails.
+	 */
+	function getUser($userID){
+		global $connection;
+		$procedure_name = 'get_user_by_id';
+		return executeStoredProcedure($procedure_name, $userID, $connection);
+	}
+
+	/**
+	 * Retrieves all users from the DB.
+	 *
+	 * @return All users stored in the DB. False if function fails.
+	 */
+	function getUsersAll(){
+		global $connection;
+		$procedure_name = 'get_users_all';
+		return executeStoredProcedure($procedure_name, null, $connection);
+	}
+
+	/**
+	 * Processed a user function and attempts to run it.
+	 *
+	 * @param $procedure_name Name of the function/procedure we want to run.
+	 * @param $array Array of arguments (or single argument, or null) to pass into the function we want to run.
+	 *
+	 * @return First row returned by the function. False if function fails.
+	 */
+	function executeUserFunction($procedure_name, $array){
 		global $connection;
 		$row = executeFunction($procedure_name, $array, $connection);
 		return $row[0];

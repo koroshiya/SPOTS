@@ -27,7 +27,8 @@
 		
 		global $connection;
 		$procedure_name = 'insert_chapter';
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -43,7 +44,8 @@
 		
 		global $connection;
 		$procedure_name = 'delete_chapter';
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -58,7 +60,8 @@
 		
 		global $connection;
 		$procedure_name = 'delete_chapter_force';
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -76,7 +79,8 @@
 		global $connection;
 		$procedure_name = 'chapter_revision_modify';
 		array_push($args, $revision);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -94,7 +98,8 @@
 		global $connection;
 		$procedure_name = 'chapter_add_group';
 		array_push($args, $newGroupID);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -109,7 +114,8 @@
 
 		global $connection;
 		$procedure_name = 'is_visible_chapter';
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -126,7 +132,8 @@
 		global $connection;
 		$procedure_name = 'chapter_set_visible';
 		array_push($args, $visible);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 

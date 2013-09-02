@@ -42,7 +42,8 @@ $moduleDir = './Modules/'.$action.'/'.$sub;
 </header>
 <div id="userMenu">...</div>
 	<?php
-		if (!include $actionDir.'/sidebar.html') {
+		$sidebarCheck = $actionDir.'/sidebar.html';
+		if (!file_exists($sidebarCheck) || !include($sidebarCheck)){
 			$marginFix = ' style="margin-left:0px;"';
 		}
 		else {
@@ -50,7 +51,8 @@ $moduleDir = './Modules/'.$action.'/'.$sub;
 		}
 
 		echo '<div id="module"'.$marginFix.'>';
-		if (!include $moduleDir.'/mindex.php') {
+		$mindexCheck = $moduleDir.'/mindex.php';
+		if (!file_exists($mindexCheck) || !include($mindexCheck)) {
 			echo '<div style="margin-top:50px;">This page does not exist!</div>';
 		}
 		echo '</div>';

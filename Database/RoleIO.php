@@ -13,7 +13,8 @@
 		
 		global $connection;
 		$procedure_name = 'insert_role';
-		return executeFunction($procedure_name, $name, $connection);
+		$result = executeFunction($procedure_name, $name, $connection);
+		return $result[0];
 		
 	}
 

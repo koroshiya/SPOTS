@@ -11,6 +11,7 @@
  *			1.04: Removed global connection details, replaced with $connection variable.
  *					Single connection now remains across function calls.
  *			1.05: Fix to BuildAndRun function. Comment refactoring/completion.
+ *			1.06: Failed functions now return false in an array so calling classes process the result properly.
  *Purpose: Establishes database connections and provides methods for interacting with the database. 
 */ 
 
@@ -59,7 +60,7 @@
 		if ($result === FALSE) {
 			//mysqli_close($connection);
 			echo "Func Failed<br />";
-			return false;
+			return array(false);
 		}
 
 		$row = mysqli_fetch_array($result);
@@ -88,7 +89,7 @@
 		if ($result === FALSE) {
 			//mysqli_close($connection);
 			echo "SP Failed<br />";
-			return false;
+			return array(false);
 		}
 
 		$array = array();
@@ -115,7 +116,7 @@
 	 */
 	function buildAndRunQuery($init, $arr, $connection){
 
-		if ($connection === FALSE){
+		if ($connection === FALSE || $connection === NULL){
 			echo 'Connection refused<br />';
 			return FALSE;
 		}
@@ -129,7 +130,7 @@
 					$query .= $value . ', ';
 				}
 			}
-			if (substr($query, -2) == ',')){
+			if (substr($query, -2) == ','){
 				$query = substr($query, 0, -2);
 			}
 		}else if ($arr != null){

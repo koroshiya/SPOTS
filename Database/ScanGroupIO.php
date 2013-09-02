@@ -15,7 +15,8 @@
 		global $connection;
 		$procedure_name = 'insert_scangroup';
 		$args = array($groupName, $URL);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 
@@ -31,7 +32,8 @@
 
 		global $connection;
 		$procedure_name = 'delete_scangroup';
-		return executeFunction($procedure_name, $groupID, $connection);
+		$result = executeFunction($procedure_name, $groupID, $connection);
+		return $result[0];
 		
 	}
 
@@ -46,7 +48,8 @@
 
 		global $connection;
 		$procedure_name = 'delete_scangroup_force';
-		return executeFunction($procedure_name, $groupID, $connection);
+		$result = executeFunction($procedure_name, $groupID, $connection);
+		return $result[0];
 		
 	}
 
@@ -64,7 +67,8 @@
 		global $connection;
 		$procedure_name = 'modify_scangroup';
 		$args = array($groupID, $groupName, $groupURL);
-		return executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args, $connection);
+		return $result[0];
 
 	}
 

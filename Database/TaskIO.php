@@ -273,7 +273,6 @@
 	function executeChapterFunction($args, $procedure_name){
 
 		global $connection;
-		
 		$row = executeFunction($procedure_name, $args, $connection);
 		return $row[0];
 		
