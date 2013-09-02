@@ -16,7 +16,7 @@
 			<?php
 				$parent = dirname(dirname(dirname(__FILE__))) . '/Database/';
 				//echo "$parent";
-				include_once($parent . 'Connection.php');
+				//include_once($parent . 'Connection.php');
 				global $connection;
 				if ($connection !== null && mysqli_ping($connection)){
 					include_once($parent . 'RoleIO.php');

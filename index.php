@@ -47,9 +47,9 @@ $moduleDir = './Modules/'.$action.'/'.$sub;
 		include_once('./Database/Connection.php');
 		global $connection;
 		if ($connection === null || !mysqli_ping($connection)){
-			$connection = connect('localhost', 'root', '', 'SPOTS');
+			connect('localhost', 'root', '', 'SPOTS');
 		}
-		
+
 		$sidebarCheck = $actionDir.'/sidebar.php';
 		if (!file_exists($sidebarCheck) || !include_once($sidebarCheck)){
 			$marginFix = ' style="margin-left:0px;"';

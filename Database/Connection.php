@@ -28,6 +28,7 @@
 	 * */
 	function connect($mysql_host, $mysql_user, $mysql_password, $mysql_database){
 		
+		global $connection;
 		$connection = @mysqli_connect($mysql_host, $mysql_user, $mysql_password, $mysql_database);
 		
 	}
@@ -114,9 +115,6 @@
 	function buildAndRunQuery($init, $arr){
 
 		global $connection;
-		if ($connection === FALSE || $connection === NULL){ 
-			$connection = connect('localhost', 'root', '', 'SPOTS');
-		}
 		if ($connection === FALSE || $connection === NULL){
 			echo 'Connection refused<br />';
 			return FALSE;
