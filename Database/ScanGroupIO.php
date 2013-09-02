@@ -1,6 +1,6 @@
 <?php
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	/**
 	 * Adds a new group to the DB.
@@ -12,10 +12,9 @@
 	 **/
 	function addGroup($groupName, $URL){
 		
-		global $connection;
 		$procedure_name = 'insert_scangroup';
 		$args = array($groupName, $URL);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -30,9 +29,8 @@
 	 */
 	function deleteGroup($groupID){
 
-		global $connection;
 		$procedure_name = 'delete_scangroup';
-		$result = executeFunction($procedure_name, $groupID, $connection);
+		$result = executeFunction($procedure_name, $groupID);
 		return $result[0];
 		
 	}
@@ -46,9 +44,8 @@
 	 */
 	function deleteGroupForce($groupID){
 
-		global $connection;
 		$procedure_name = 'delete_scangroup_force';
-		$result = executeFunction($procedure_name, $groupID, $connection);
+		$result = executeFunction($procedure_name, $groupID);
 		return $result[0];
 		
 	}
@@ -64,10 +61,9 @@
 	 **/
 	function modifyGroup($groupID, $groupName, $groupURL){
 
-		global $connection;
 		$procedure_name = 'modify_scangroup';
 		$args = array($groupID, $groupName, $groupURL);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}

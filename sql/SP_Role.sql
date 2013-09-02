@@ -12,3 +12,13 @@ INSERT INTO Role VALUES(name);
 RETURN true;
 END // 
 DELIMITER ;
+
+--get_roles
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_roles //
+CREATE PROCEDURE get_roles()
+BEGIN 
+SELECT ur.name FROM Role AS ur;
+END // 
+DELIMITER ;

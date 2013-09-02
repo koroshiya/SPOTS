@@ -13,10 +13,9 @@
  * Purpose: Provides methods for interacting with Series objects in the database
 */ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	//Example usage:
-	//$connection = connect('localhost', 'user', 'pass', 'SPMS'); //TODO: connection should later be defined elsewhere. eg. index.php
 	//echo getProjectCount();
 	//echo getSeriesByLetter('t');
 	//echo getSeriesStatus(4);
@@ -49,9 +48,8 @@
 				"boolAdult" => $boolAdult,
 		];
 
-		global $connection;
 		$procedure_name = 'insert_series';
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -66,10 +64,9 @@
 	 */
 	function deleteSeries($seriesID){
 
-		global $connection;
 		$procedure_name = 'delete_series';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -83,10 +80,9 @@
 	 */
 	function deleteSeriesByForce($seriesID){
 
-		global $connection;
 		$procedure_name = 'delete_series_force';
 		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -101,10 +97,9 @@
 	 */
 	function seriesSetStatus($seriesID, $status){
 
-		global $connection;
 		$procedure_name = 'series_set_status';
 		$args = array($seriesID, $status);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -119,10 +114,9 @@
 	 */
 	function seriesSetVisible($seriesID, $boolVisible){
 
-		global $connection;
 		$procedure_name = 'series_set_visible';
 		$args = array($seriesID, $boolVisible);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -137,10 +131,9 @@
 	 */
 	function seriesSetAdult($seriesID, $boolAdult){
 
-		global $connection;
 		$procedure_name = 'series_set_adult';
 		$args = array($seriesID, $boolAdult);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -155,10 +148,9 @@
 	 */
 	function seriesSetProjectManager($seriesID, $managerID){
 
-		global $connection;
 		$procedure_name = 'series_set_project_manager';
 		$args = array($seriesID, $managerID);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 		
 	}
@@ -171,9 +163,8 @@
 	 **/
 	function getProjectCount(){
 		
-		global $connection;
 		$procedure_name = 'get_project_count';
-		$row = executeFunction($procedure_name, null, $connection);
+		$row = executeFunction($procedure_name, null);
 
 		return $row[0];
 		
@@ -188,9 +179,8 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		global $connection;
 		$procedure_name = "get_series_by_id";
-		return executeStoredProcedure($procedure_name, $seriesID, $connection);
+		return executeStoredProcedure($procedure_name, $seriesID);
 
 	}
 
@@ -203,9 +193,8 @@
 	 **/
 	function getSeriesByLetter($character){
 
-		global $connection;
 		$procedure_name = "get_series_by_letter";
-		return executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
+		return executeStoredProcedure($procedure_name, "'" . $character . "'");
 
 	}
 
@@ -218,9 +207,8 @@
 	 **/
 	function getSeriesByStatus($character){
 
-		global $connection;
 		$procedure_name = "get_series_by_status";
-		return executeStoredProcedure($procedure_name, "'" . $character . "'", $connection);
+		return executeStoredProcedure($procedure_name, "'" . $character . "'");
 
 	}
 
@@ -233,9 +221,8 @@
 	 **/
 	function getSeriesStatus($seriesID){
 
-		global $connection;
 		$procedure_name = "get_series_status";
-		$result = executeFunction($procedure_name, $seriesID, $connection);
+		$result = executeFunction($procedure_name, $seriesID);
 		return getSeriesStatusFromChar($result[0]);
 
 	}
@@ -273,9 +260,8 @@
 	 * @return All series from the database.
 	 */
 	function getSeriesAll(){
-		global $connection;
 		$procedure_name = "get_series_all";
-		return executeStoredProcedure($procedure_name, null, $connection);
+		return executeStoredProcedure($procedure_name, null);
 	}
 
 ?>

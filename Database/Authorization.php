@@ -8,7 +8,7 @@
 *Purpose: Provides methods for determining user permissions
 **/ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	//Example usage:
 	//echo isAdmin(1);
@@ -17,10 +17,8 @@
 	//If the user is the webmaster, returns true
 	function isAdmin($userID){
 
-		global $connection;
 		$procedure_name = 'is_admin';
-		
-		$row = executeFunction($procedure_name, $userID, $connection);
+		$row = executeFunction($procedure_name, $userID);
 		return $row[0];
 		
 	}
@@ -28,10 +26,8 @@
 	//If the user is a mod, returns true
 	function isMod($userID){
 
-		global $connection;
 		$procedure_name = 'is_mod';
-		
-		$row = executeFunction($procedure_name, $userID, $connection);
+		$row = executeFunction($procedure_name, $userID);
 		return $row[0];
 		
 	}

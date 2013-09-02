@@ -1,6 +1,6 @@
 <?php
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	/**
 	 * Creates a new series genre.
@@ -11,9 +11,8 @@
 	 */
 	function addGenre($name){
 		
-		global $connection;
 		$procedure_name = 'insert_genre';
-		$result = executeFunction($procedure_name, $name, $connection);
+		$result = executeFunction($procedure_name, $name);
 		return $result[0];
 		
 	}

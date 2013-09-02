@@ -7,7 +7,7 @@
  *Purpose: Provides methods for interacting with SeriesGenre objects in the database
 */ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	/**
 	 * Adds a new Series/Genre pairing to the database.
@@ -55,9 +55,8 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getSeriesGenres($seriesID){
-		global $connection;
 		$procedure_name = 'series_get_genres';
-		return executeStoredProcedure($procedure_name, $seriesID, $connection);
+		return executeStoredProcedure($procedure_name, $seriesID);
 	}
 
 	/**
@@ -68,9 +67,8 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getSeriesByGenre($name){
-		global $connection;
 		$procedure_name = 'series_get_by_genre';
-		return executeStoredProcedure($procedure_name, $name, $connection);
+		return executeStoredProcedure($procedure_name, "'" . $name . "'");
 	}
 	
 	/**
@@ -84,10 +82,8 @@
 	 */
 	function seriesIOFunction($seriesID, $name, $procedure_name){
 
-		global $connection;
-
 		$array = array($seriesID, $name);
-		$row = executeFunction($procedure_name, $array, $connection);
+		$row = executeFunction($procedure_name, $array);
 		return $row[0];
 		
 	}
@@ -101,10 +97,8 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function seriesFunction($seriesID, $procedure_name){
-
-		global $connection;
 		
-		$row = executeFunction($procedure_name, $seriesID, $connection);
+		$row = executeFunction($procedure_name, $seriesID);
 		return $row[0];
 		
 	}

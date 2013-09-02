@@ -12,10 +12,9 @@
  *					Single connection now remains across function calls.
  *			1.05: Fix to BuildAndRun function. Comment refactoring/completion.
  *			1.06: Failed functions now return false in an array so calling classes process the result properly.
+ *			1.07: Restructured $connection calls and centralized them to this file.
  *Purpose: Establishes database connections and provides methods for interacting with the database. 
 */ 
-
-	//global $connection;
 	
 	/**
 	 * Attempts to connect to MySQL on the target machine with the credentials supplied.
@@ -29,16 +28,15 @@
 	 * */
 	function connect($mysql_host, $mysql_user, $mysql_password, $mysql_database){
 		
-		return @mysqli_connect($mysql_host, $mysql_user, $mysql_password, $mysql_database);
+		$connection = @mysqli_connect($mysql_host, $mysql_user, $mysql_password, $mysql_database);
 		
 	}
 
 	/**
 	 * Severs an existing MySQL database connection.
-	 * 
-	 * @param $connection Connection through which to execute the command.
 	 */
-	function disconnect($connection){
+	function disconnect(){
+		global $connection;
 		mysqli_close($connection);
 	}
 	
@@ -48,14 +46,13 @@
 	 * @param $procedure_name Name of the function to run WITHOUT the brackets. 
 	 * 					eg. function, not function() or function(integer)
 	 * @param $arr Array of arguments, or single argument, to pass into the function.
-	 * @param $connection Connection through which to execute the command.
 	 *
 	 * @return False if the connection failed, otherwise the output of the function is returned.
 	 * */
-	function executeFunction($procedure_name, $arr, $connection){
+	function executeFunction($procedure_name, $arr){
 		
 		$init = "select $procedure_name(";
-		$result = buildAndRunQuery($init, $arr, $connection);
+		$result = buildAndRunQuery($init, $arr);
 
 		if ($result === FALSE) {
 			//mysqli_close($connection);
@@ -81,10 +78,10 @@
 	 *
 	 * @return False if the command failed, otherwise returns the output of the command.
 	 */
-	function executeStoredProcedure($procedure_name, $arr, $connection){
+	function executeStoredProcedure($procedure_name, $arr){
 
 		$init = "call $procedure_name(";
-		$result = buildAndRunQuery($init, $arr, $connection);
+		$result = buildAndRunQuery($init, $arr);
 
 		if ($result === FALSE) {
 			//mysqli_close($connection);
@@ -114,8 +111,12 @@
 	 *
 	 * @return False if the command failed, otherwise returns the output of the command.
 	 */
-	function buildAndRunQuery($init, $arr, $connection){
+	function buildAndRunQuery($init, $arr){
 
+		global $connection;
+		if ($connection === FALSE || $connection === NULL){ 
+			$connection = connect('localhost', 'root', '', 'SPOTS');
+		}
 		if ($connection === FALSE || $connection === NULL){
 			echo 'Connection refused<br />';
 			return FALSE;

@@ -57,8 +57,10 @@ DELIMITER ;
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS user_get_by_role //
-CREATE PROCEDURE user_get_roles(IN name varchar(20))
+CREATE PROCEDURE user_get_by_role(IN name varchar(20))
 BEGIN 
-SELECT * FROM UserRole AS ur WHERE ur.name = name;
+SELECT * FROM ScanUser AS su 
+INNER JOIN UserRole AS ur ON su.userID = ur.userID
+WHERE ur.name = name;
 END // 
 DELIMITER ;

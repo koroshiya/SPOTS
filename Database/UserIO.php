@@ -10,7 +10,7 @@
  *Purpose: Provides methods for interacting with User objects in the database
 **/ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 	
 	/**
 	 * Inserts a new user into the database.
@@ -209,9 +209,8 @@
 	 * @return User specified by ID. False if function fails.
 	 */
 	function getUser($userID){
-		global $connection;
 		$procedure_name = 'get_user_by_id';
-		return executeStoredProcedure($procedure_name, $userID, $connection);
+		return executeStoredProcedure($procedure_name, $userID);
 	}
 
 	/**
@@ -220,9 +219,21 @@
 	 * @return All users stored in the DB. False if function fails.
 	 */
 	function getUsersAll(){
-		global $connection;
 		$procedure_name = 'get_users_all';
-		return executeStoredProcedure($procedure_name, null, $connection);
+		return executeStoredProcedure($procedure_name, null);
+	}
+
+	/**
+	 * Retrieves all users from the DB who belong to a certain title/status.
+	 *
+	 * @param $position Char representing the user's title/status.
+	 *
+	 * @return All users specified by query. If the position doesn't exist, all users in DB are returned.
+	 *			False if function fails.
+	 */
+	function getUsersByPosition($position){
+		$procedure_name = 'get_users_by_position';
+		return executeStoredProcedure($procedure_name, "'" . $position . "'");
 	}
 
 	/**
@@ -234,8 +245,7 @@
 	 * @return First row returned by the function. False if function fails.
 	 */
 	function executeUserFunction($procedure_name, $array){
-		global $connection;
-		$row = executeFunction($procedure_name, $array, $connection);
+		$row = executeFunction($procedure_name, $array);
 		return $row[0];
 	}
 

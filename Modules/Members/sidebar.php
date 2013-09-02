@@ -10,15 +10,29 @@
 		<input type="hidden" name="action" value="Members">
 		<select name="position" style="width:80%;">
 			<option value="">All Members</option>
-			<option>Administrators</option>
-			<option>Project Managers</option>
+			<option value="a">Administrators</option>
+			<option value="m">Moderators</option>
+			<option value="s">Staff</option>
+			<?php
+				$parent = dirname(dirname(dirname(__FILE__))) . '/Database/';
+				//echo "$parent";
+				include_once($parent . 'Connection.php');
+				global $connection;
+				if ($connection !== null && mysqli_ping($connection)){
+					include_once($parent . 'RoleIO.php');
+					foreach (getRolesAll() as $key) {
+						echo "<option value=\"$key[0]\">$key[0]</option>";
+					}
+				}
+			?>
+			<!--<option>Project Managers</option>
 			<option>Translators</option>
 			<option>Proofreaders</option>
 			<option>Cleaners</option>
 			<option>Redrawers</option>
 			<option>Typesetters</option>
 			<option>Editors</option>
-			<option>Quality Checkers</option>
+			<option>Quality Checkers</option>-->
 		</select><br>
 		<select name="status" style="width:80%;">
 			<option>Active</option>

@@ -1,6 +1,6 @@
 <?php
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	/**
 	 * Pushes the different parameters necessary to define a specific chapter into one array.
@@ -25,9 +25,8 @@
 	 */
 	function addChapter($args){
 		
-		global $connection;
 		$procedure_name = 'insert_chapter';
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -42,9 +41,8 @@
 	 */
 	function deleteChapter($args){
 		
-		global $connection;
 		$procedure_name = 'delete_chapter';
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -58,9 +56,8 @@
 	 */
 	function deleteChapterForce($args){
 		
-		global $connection;
 		$procedure_name = 'delete_chapter_force';
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -76,10 +73,9 @@
 	 */
 	function modifyChapterRevision($args, $revision){
 		
-		global $connection;
 		$procedure_name = 'chapter_revision_modify';
 		array_push($args, $revision);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -95,10 +91,9 @@
 	 **/
 	function attachGroup($args, $newGroupID){
 		
-		global $connection;
 		$procedure_name = 'chapter_add_group';
 		array_push($args, $newGroupID);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -112,9 +107,8 @@
 	 */
 	function isChapterVisible($args){
 
-		global $connection;
 		$procedure_name = 'is_visible_chapter';
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}
@@ -129,10 +123,9 @@
 	 */
 	function setChapterVisible($args, $visible){
 
-		global $connection;
 		$procedure_name = 'chapter_set_visible';
 		array_push($args, $visible);
-		$result = executeFunction($procedure_name, $args, $connection);
+		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 
 	}

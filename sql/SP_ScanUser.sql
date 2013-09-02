@@ -175,7 +175,20 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS get_users_all //
 CREATE PROCEDURE get_users_all()
 BEGIN 
-SELECT * FROM ScanUser AS s;
+SELECT * FROM ScanUser;
+END // 
+DELIMITER ;
+
+/*get_users_by_position*/
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_users_by_position //
+CREATE PROCEDURE get_users_by_position(newRole character)
+BEGIN 
+IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN /*s = staff, a = admin, m = mod*/
+SELECT * FROM ScanUser;
+END IF;
+SELECT * FROM ScanUser AS s WHERE s.title = newRole;
 END // 
 DELIMITER ;
 

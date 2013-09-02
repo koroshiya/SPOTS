@@ -42,17 +42,24 @@ $moduleDir = './Modules/'.$action.'/'.$sub;
 </header>
 <div id="userMenu">...</div>
 	<?php
-		$sidebarCheck = $actionDir.'/sidebar.html';
-		if (!file_exists($sidebarCheck) || !include($sidebarCheck)){
-			$marginFix = ' style="margin-left:0px;"';
+
+		//include_once($moduleDir.'/mindex.php');
+		include_once('./Database/Connection.php');
+		global $connection;
+		if ($connection === null || !mysqli_ping($connection)){
+			$connection = connect('localhost', 'root', '', 'SPOTS');
 		}
-		else {
+		
+		$sidebarCheck = $actionDir.'/sidebar.php';
+		if (!file_exists($sidebarCheck) || !include_once($sidebarCheck)){
+			$marginFix = ' style="margin-left:0px;"';
+		}else {
 			$marginFix = '';
 		}
 
 		echo '<div id="module"'.$marginFix.'>';
 		$mindexCheck = $moduleDir.'/mindex.php';
-		if (!file_exists($mindexCheck) || !include($mindexCheck)) {
+		if (!file_exists($mindexCheck) || !include_once($mindexCheck)) {
 			echo '<div style="margin-top:50px;">This page does not exist!</div>';
 		}
 		echo '</div>';

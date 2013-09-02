@@ -2,11 +2,19 @@
 
 //Dummy Data to be replaced with SQL calls later.
 $database_dir = './Database/';
-include($database_dir . 'UserIO.php');
-include_once($database_dir . 'Connection.php');
-$connection = connect('localhost', 'root', '', 'SPOTS');
+include_once($database_dir . 'UserIO.php');
+include_once($database_dir . 'UserRoleIO.php');
 
-$userList = getUsersAll();
+if (isset($_GET['position'])){
+	if (strlen($_GET['position']) == 1 && preg_match("/[a-z]/", $_GET['position'])){
+		$userList = getUsersByPosition($_GET['position']);
+	}else{
+		$userList = getUsersByRole($_GET['position']);
+	}	
+}else{
+	$userList = getUsersAll();
+}
+
 if ($userList === FALSE){
 	die('Database connection failed');
 }elseif (count($userList) == 0){

@@ -11,7 +11,7 @@
  *Purpose: Provides methods for interacting with Task objects in the database
 **/ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	//Example usage:
 	//echo getUserTaskCount(1);
@@ -256,8 +256,7 @@
 	 */
 	function executeChapterProcedure($userID, $procedure_name){
 
-		global $connection;
-		return executeStoredProcedure($procedure_name, $userID, $connection);
+		return executeStoredProcedure($procedure_name, $userID);
 
 	}
 
@@ -271,9 +270,8 @@
 	 * @return False if command failed, otherwise returns the result of the function.
 	 */
 	function executeChapterFunction($args, $procedure_name){
-
-		global $connection;
-		$row = executeFunction($procedure_name, $args, $connection);
+		
+		$row = executeFunction($procedure_name, $args);
 		return $row[0];
 		
 	}

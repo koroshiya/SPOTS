@@ -7,7 +7,7 @@
  *Purpose: Provides methods for interacting with UserRole objects in the database
 **/ 
 
-	include 'Connection.php';
+	include_once('Connection.php');
 
 	/**
 	 * Adds a new UserRole pairing to the database.
@@ -52,9 +52,7 @@
 	 * @return All roles pertaining to a specific user.
 	 */
 	function getUserRoles($userID){
-
-		global $connection;
-		return executeStoredProcedure('user_get_roles', $userID, $connection);
+		return executeStoredProcedure('user_get_roles', $userID);
 	}
 
 	/**
@@ -65,8 +63,7 @@
 	 * @return All users of a specific role.
 	 */
 	function getUsersByRole($name){
-		global $connection;
-		return executeStoredProcedure('user_get_by_role', $name, $connection);
+		return executeStoredProcedure('user_get_by_role', "'" . $name . "'");
 	}
 	
 	/**
@@ -77,9 +74,8 @@
 	 */
 	function userIOFunction($userID, $name, $procedure_name){
 
-		global $connection;
-		$array = ($userID, $name);
-		$row = executeFunction($procedure_name, $array, $connection);
+		$array = array($userID, $name);
+		$row = executeFunction($procedure_name, $array);
 		return $row[0];
 		
 	}
