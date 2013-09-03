@@ -56,14 +56,12 @@
 		$result = buildAndRunQuery($init, $arr);
 
 		if ($result === FALSE) {
-			//mysqli_close($connection);
 			echo "Func Failed<br />";
 			return array(false);
 		}
 
 		$row = mysqli_fetch_array($result);
 		mysqli_free_result($result);
-		//mysqli_close($connection);
 		return $row;
 		
 	}
@@ -85,7 +83,6 @@
 		$result = buildAndRunQuery($init, $arr);
 
 		if ($result === FALSE) {
-			//mysqli_close($connection);
 			echo "SP Failed<br />";
 			return array(false);
 		}
@@ -124,12 +121,16 @@
 
 		if (is_array($arr)){
 			$arrSize = count($arr);
-			foreach ($arr as $value) {
-				if ($value != null){
-					$query .= $value . ', ';
+			if ($arrSize > 0){
+				foreach ($arr as $value) {
+					if ($value != null){
+						$escaped = mysqli_real_escape_string($connection, $value);
+						if (gettype($escaped) === "string"){
+							$escaped = "'" . $escaped . "'";
+						}
+						$query .= $escaped . ', ';
+					}
 				}
-			}
-			if (substr($query, -2) == ','){
 				$query = substr($query, 0, -2);
 			}
 		}else if ($arr != null){

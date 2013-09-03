@@ -2,8 +2,8 @@
 
 //Dummy Data to be replaced with SQL calls later.
 $database_dir = './Database/';
-include_once($database_dir . 'UserIO.php');
-include_once($database_dir . 'UserRoleIO.php');
+require_once($database_dir . 'UserIO.php');
+require_once($database_dir . 'UserRoleIO.php');
 
 if (isset($_GET['position'])){
 	if (strlen($_GET['position']) == 1 && preg_match("/[a-z]/", $_GET['position'])){

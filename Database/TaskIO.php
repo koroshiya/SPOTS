@@ -11,7 +11,7 @@
  *Purpose: Provides methods for interacting with Task objects in the database
 **/ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	//Example usage:
 	//echo getUserTaskCount(1);

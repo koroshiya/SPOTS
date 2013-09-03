@@ -14,7 +14,7 @@
  * Purpose: Provides methods for interacting with Series objects in the database
 */ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	//Example usage:
 	//echo getProjectCount();
@@ -195,7 +195,7 @@
 	function getSeriesByLetter($character){
 
 		$procedure_name = "get_series_by_letter";
-		return executeStoredProcedure($procedure_name, "'" . $character . "'");
+		return executeStoredProcedure($procedure_name, $character);
 
 	}
 
@@ -209,7 +209,7 @@
 	function getSeriesByStatus($character){
 
 		$procedure_name = "get_series_by_status";
-		return executeStoredProcedure($procedure_name, "'" . $character . "'");
+		return executeStoredProcedure($procedure_name, $character);
 
 	}
 

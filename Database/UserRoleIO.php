@@ -7,7 +7,7 @@
  *Purpose: Provides methods for interacting with UserRole objects in the database
 **/ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	/**
 	 * Adds a new UserRole pairing to the database.
@@ -63,7 +63,7 @@
 	 * @return All users of a specific role.
 	 */
 	function getUsersByRole($name){
-		return executeStoredProcedure('user_get_by_role', "'" . $name . "'");
+		return executeStoredProcedure('user_get_by_role', $name);
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	/**
 	 * Creates a new user role.

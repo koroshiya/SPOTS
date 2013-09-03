@@ -101,6 +101,25 @@ RETURN password = sha1Password;
 END // 
 DELIMITER ;
 
+/*user_get_password_valid*/
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS user_get_password_valid_by_name //
+CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS boolean
+BEGIN 
+DECLARE sha1Password binary(20);
+DECLARE userEmail varchar(100);
+DECLARE userExists boolean;
+SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userName = userName);
+IF NOT userExists THEN
+RETURN false;
+END IF;
+SELECT ScanUser.email INTO userEmail FROM ScanUser WHERE ScanUser.userName = userName;
+SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
+RETURN password = sha1Password;
+END // 
+DELIMITER ;
+
 /*user_set_email*/
 
 DELIMITER // 

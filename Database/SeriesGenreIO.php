@@ -7,7 +7,7 @@
  *Purpose: Provides methods for interacting with SeriesGenre objects in the database
 */ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	/**
 	 * Adds a new Series/Genre pairing to the database.
@@ -68,7 +68,7 @@
 	 */
 	function getSeriesByGenre($name){
 		$procedure_name = 'series_get_by_genre';
-		return executeStoredProcedure($procedure_name, "'" . $name . "'");
+		return executeStoredProcedure($procedure_name, $name);
 	}
 	
 	/**

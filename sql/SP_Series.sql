@@ -30,7 +30,7 @@ SELECT COUNT(*) INTO totalSeries FROM Series;
 IF totalSeries = 65535 THEN
 RETURN false;
 END IF;
-INSERT INTO Series VALUES(seriesTitle, status, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
+INSERT INTO Series(seriesTitle, status, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult) VALUES(seriesTitle, status, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
 RETURN true;
 END // 
 DELIMITER ;

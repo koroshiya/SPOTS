@@ -10,7 +10,7 @@
  *Purpose: Provides methods for interacting with User objects in the database
 **/ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 	
 	/**
 	 * Inserts a new user into the database.
@@ -113,6 +113,20 @@
 		$arr = array($userID, $passwordAttempt);
 		return executeUserFunction($procedure_name, $arr);
 		
+	}
+
+	/**
+	 * Tests if the password entered is valid or not.
+	 *
+	 * @param $userID ID of the user to be affected by this function.
+	 * @param $passwordAttempt Password user input
+	 *
+	 * @return True if password is correct, otherwise false
+	 */
+	function userGetPasswordIsValidByName($name, $passwordAttempt){
+		$procedure_name = 'user_get_password_valid_by_name';
+		$arr = array($name, $passwordAttempt);
+		return executeUserFunction($procedure_name, $arr);
 	}
 
 	/**
@@ -233,7 +247,7 @@
 	 */
 	function getUsersByPosition($position){
 		$procedure_name = 'get_users_by_position';
-		return executeStoredProcedure($procedure_name, "'" . $position . "'");
+		return executeStoredProcedure($procedure_name, $position);
 	}
 
 	/**

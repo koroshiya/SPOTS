@@ -8,7 +8,7 @@
 *Purpose: Provides methods for determining user permissions
 **/ 
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	//Example usage:
 	//echo isAdmin(1);

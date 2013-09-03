@@ -1,6 +1,6 @@
 <?php
 
-	include_once('Connection.php');
+	require_once('Connection.php');
 
 	/**
 	 * Pushes the different parameters necessary to define a specific chapter into one array.

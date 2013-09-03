@@ -18,7 +18,7 @@ USE SPOTS;
 CREATE TABLE IF NOT EXISTS ScanGroup(
 
 	groupID smallint unsigned not null AUTO_INCREMENT,
-	groupName varchar(50) not null,
+	groupName varchar(50) not null unique,
 	URL varchar(255) null,
 	PRIMARY KEY (groupID)
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS ScanGroup(
 CREATE TABLE IF NOT EXISTS Series(
 
 	seriesID smallint unsigned not null AUTO_INCREMENT,
-	seriesTitle varchar(100) not null,
+	seriesTitle varchar(100) not null unique,
 	status character null,
 	description varchar(255) null,
 	thumbnailURL varchar(255) null,
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS ChapterGroup(
 CREATE TABLE IF NOT EXISTS ScanUser(
 
 	userID smallint unsigned not null AUTO_INCREMENT,
-	userName varchar(30) not null,
+	userName varchar(30) not null unique,
 	userPassword binary(20) not null,
 	email varchar(100) not null,
 	title character not null,
