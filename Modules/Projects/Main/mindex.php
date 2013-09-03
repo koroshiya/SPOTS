@@ -39,7 +39,7 @@ if (sizeof($seriesList) > 0){
 			$name = 'N/A';
 		}
 		
-		$projectModifyUrl = '?action=Projects&amp;sub=Modify_Project&amp;project='.str_replace('\0', '', $series[1]);
+		$projectModifyUrl = '?action=Projects&amp;sub=Modify_Project&amp;project='.$series[0];
 		echo '<tr class="projectListRow">
 				<td class="projectTitle"><a href="'.$projectModifyUrl.'">'.$series[1].'</a></td>
 				<td class="projectStatus">'. getSeriesStatusFromChar($series[2]) .'</td>

@@ -181,7 +181,8 @@
 	function getSeriesByID($seriesID){
 
 		$procedure_name = "get_series_by_id";
-		return executeStoredProcedure($procedure_name, $seriesID);
+		$row = executeStoredProcedure($procedure_name, $seriesID);
+		return $row[0];
 
 	}
 
@@ -272,7 +273,7 @@
 			return "Inactive";
 		} else if ($char === 'a') {
 			return "Active";
-		} else if ($char === 'a') {
+		} else if ($char === 's') {
 			return "Stalled";
 		} else if ($char === 'h') {
 			return "Hiatus";

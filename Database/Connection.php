@@ -117,35 +117,34 @@
 			return FALSE;
 		}
 
-		$query = $init;
-
 		if (is_array($arr)){
 			$arrSize = count($arr);
 			if ($arrSize > 0){
 				foreach ($arr as $value) {
 					if ($value != null){
-						$query .= getEscapedSQLParam($value) . ', ';
+						$init .= getEscapedSQLParam($value) . ', ';
 					}
 				}
-				$query = substr($query, 0, -2);
+				$init = substr($init, 0, -2);
 			}
 		}else if ($arr != null){
-			$query .= getEscapedSQLParam($arr);
+			$init .= getEscapedSQLParam($arr);
 		}
 
-		$query .= ");";
-		//echo "$query";
-		$result = mysqli_query($connection, $query);
+		$init .= ");";
+		//echo $init;
+		$result = mysqli_query($connection, $init);
 		return $result;
 	}
 
 	function getEscapedSQLParam($param){
 		global $connection;
-		$escaped = mysqli_real_escape_string($connection, $param);
-		if (gettype($escaped) === "string"){
-			$escaped = "'" . $escaped . "'";
+		if (gettype($param) === "string"){
+			$escaped = mysqli_real_escape_string($connection, $param);
+			return "'" . $escaped . "'";
+		}else{
+			return $param;
 		}
-		return $escaped;
 	}
 
 ?>

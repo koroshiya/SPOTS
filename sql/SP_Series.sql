@@ -207,7 +207,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS get_series_by_title //
 CREATE PROCEDURE get_series_by_title(IN title text)
 BEGIN 
-SELECT * FROM Series AS s WHERE s.name LIKE CONCAT('%', title, '%');
+SELECT * FROM Series AS s WHERE s.seriesTitle LIKE CONCAT('%', title, '%');
 END // 
 DELIMITER ;
 
@@ -217,7 +217,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS get_series_by_status_and_title //
 CREATE PROCEDURE get_series_by_status_and_title(IN status character, IN title text)
 BEGIN 
-SELECT * FROM Series AS s WHERE s.status = status AND s.name LIKE CONCAT('%', title, '%');
+SELECT * FROM Series AS s WHERE s.status = status AND s.seriesTitle LIKE CONCAT('%', title, '%');
 END // 
 DELIMITER ;
 
