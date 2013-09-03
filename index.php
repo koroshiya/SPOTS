@@ -5,12 +5,7 @@ if (!isset($_GET['action'])) {
 	$action = 'Tasks';
 } else {
 	$action = str_replace('\0', '', $_GET['action']);
-	
-	if (isset($_GET['sub'])) {
-		$sub = str_replace('\0', '', $_GET['sub']);
-	} else {
-		$sub = 'Main';
-	}
+	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
 }
 
 //Declare SPOTS variables

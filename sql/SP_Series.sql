@@ -9,7 +9,8 @@
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
-	PRIMARY KEY (seriesID)
+	PRIMARY KEY (seriesID),
+	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 */
 
 /*

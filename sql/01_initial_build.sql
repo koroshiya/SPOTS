@@ -24,6 +24,32 @@ CREATE TABLE IF NOT EXISTS ScanGroup(
 
 );
 
+/*May be phased out later and replaced by SeriesGenre*/
+CREATE TABLE IF NOT EXISTS Genre(
+
+	name varchar(20) not null unique,
+	PRIMARY KEY (name)
+
+);
+
+CREATE TABLE IF NOT EXISTS Role(
+
+	name varchar(20) not null unique,
+	PRIMARY KEY (name)
+
+);
+
+CREATE TABLE IF NOT EXISTS ScanUser(
+
+	userID smallint unsigned not null AUTO_INCREMENT,
+	userName varchar(30) not null unique,
+	userPassword binary(20) not null,
+	email varchar(100) not null,
+	title character not null,
+	PRIMARY KEY (userID)
+
+);
+
 /*Status - I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete*/
 CREATE TABLE IF NOT EXISTS Series(
 
@@ -35,15 +61,8 @@ CREATE TABLE IF NOT EXISTS Series(
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
-	PRIMARY KEY (seriesID)
-
-);
-
-/*May be phased out later and replaced by SeriesGenre*/
-CREATE TABLE IF NOT EXISTS Genre(
-
-	name varchar(20) not null unique,
-	PRIMARY KEY (name)
+	PRIMARY KEY (seriesID),
+	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 
 );
 
@@ -56,13 +75,6 @@ CREATE TABLE IF NOT EXISTS SeriesGenre(
 	PRIMARY KEY (seriesID, name),
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID),
 	FOREIGN KEY (name) REFERENCES Genre(name)
-
-);
-
-CREATE TABLE IF NOT EXISTS Role(
-
-	name varchar(20) not null unique,
-	PRIMARY KEY (name)
 
 );
 
@@ -88,17 +100,6 @@ CREATE TABLE IF NOT EXISTS ChapterGroup(
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, groupID),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
 	FOREIGN KEY (groupID) REFERENCES ScanGroup(groupID)
-
-);
-
-CREATE TABLE IF NOT EXISTS ScanUser(
-
-	userID smallint unsigned not null AUTO_INCREMENT,
-	userName varchar(30) not null unique,
-	userPassword binary(20) not null,
-	email varchar(100) not null,
-	title character not null,
-	PRIMARY KEY (userID)
 
 );
 

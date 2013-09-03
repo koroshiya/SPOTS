@@ -2,8 +2,8 @@
 if (!$fromIndex){die('You must access this through the root index!');}
 
 $parent = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
-include_once($parent . 'SeriesIO.php');
-include_once($parent . 'UserIO.php');
+require_once($parent . 'SeriesIO.php');
+require_once($parent . 'UserIO.php');
 
 if (isset($_GET['series_search']) && isset($_GET['status'])) {
 	$seriesList = getSeriesByStatusAndTitle($_GET['status'], $_GET['series_search']);
@@ -15,6 +15,8 @@ if (isset($_GET['series_search']) && isset($_GET['status'])) {
 	$seriesList = getSeriesAll();
 }
 
+if (sizeof($seriesList) > 0){
+
 ?>
 <span style="font-style:italic; font-size:10pt;">Click on a title to edit the series</span><br>
 <table id="projectList">
@@ -25,24 +27,27 @@ if (isset($_GET['series_search']) && isset($_GET['status'])) {
 </tr>
 <?php
 
-foreach ($seriesList as $series) {
-	if ($series[5] !== null){
-		$projectManager = getUser($series[5]);
-		if (is_array($projectManager) && sizeof($projectManager) > 1){
-			$name = $projectManager[1];
+	foreach ($seriesList as $series) {
+		if ($series[5] !== null){
+			$projectManager = getUser($series[5]);
+			if (is_array($projectManager) && sizeof($projectManager) > 1){
+				$name = $projectManager[1];
+			}else{
+				$name = 'N/A';
+			}
 		}else{
 			$name = 'N/A';
 		}
-	}else{
-		$name = 'N/A';
+		
+		$projectModifyUrl = '?action=Projects&amp;sub=Modify_Project&amp;project='.str_replace('\0', '', $series[1]);
+		echo '<tr class="projectListRow">
+				<td class="projectTitle"><a href="'.$projectModifyUrl.'">'.$series[1].'</a></td>
+				<td class="projectStatus">'. getSeriesStatusFromChar($series[2]) .'</td>
+				<td class="projectManager">'. $name .'</td>
+			</tr>';
 	}
-	
-	$projectModifyUrl = '?action=Projects&amp;sub=Modify_Project&amp;project='.str_replace('\0', '', $series[1]);
-	echo '<tr class="projectListRow">
-			<td class="projectTitle"><a href="'.$projectModifyUrl.'">'.$series[1].'</a></td>
-			<td class="projectStatus">'. getSeriesStatusFromChar($series[2]) .'</td>
-			<td class="projectManager">'. $name .'</td>
-		</tr>';
+}else{
+	echo 'No series found';
 }
 ?>
 

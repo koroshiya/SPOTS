@@ -2,9 +2,9 @@
 
 require_once('./header.html');
 
-echo "<div style=\"margin:auto; left:150px; top:150px; position:absolute;\">";
+echo "<div style=\"margin: -75px 0 0 -150px; position:relative; left:50%; top:50%;\">";
 
-if (false){ //session_is_registered(username)
+if (isset($_SESSION['username'])){ //session_is_registered(username)
 	echo "Login successful";
 }else{
 
@@ -25,9 +25,9 @@ if (false){ //session_is_registered(username)
 			if ($valid){
 				session_register("username");
 				session_register("password");
-				echo "Login successful";
+				echo "Login successful<br />";
 			}else{
-				echo "Wrong Username or Password";
+				echo "Wrong Username or Password<br />";
 			}
 		}
 
@@ -41,20 +41,17 @@ if (false){ //session_is_registered(username)
 			<td>
 				<table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
 					<tr>
-						<td colspan="3"><strong>Member Login </strong></td>
+						<td colspan="2"><strong>Member Login</strong></td>
 					</tr>
 					<tr>
-						<td width="78">Username</td>
-						<td width="6">:</td>
-						<td width="294"><input name="username" type="text" id="myusername"></td>
+						<td width="78">Username:</td>
+						<td width="294"><input name="username" type="text" id="username" maxlength="30"  size="35"></td>
 					</tr>
 					<tr>
-						<td>Password</td>
-						<td>:</td>
-						<td><input name="password" type="text" id="mypassword"></td>
+						<td>Password:</td>
+						<td><input name="password" type="password" id="password" maxlength="20" size="35"></td>
 					</tr>
 					<tr>
-						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td><input type="submit" name="Submit" value="Login"></td>
 					</tr>
