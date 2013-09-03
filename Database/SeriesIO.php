@@ -10,6 +10,7 @@
  *				1.03: Removed genre inputs to reflect changes to DB
  *				1.04: Added missing connection params
  *				1.05: Updated to reflect changes to DB
+ *				1.06: Implemented getSeriesByTitle commands
  * Purpose: Provides methods for interacting with Series objects in the database
 */ 
 
@@ -209,6 +210,37 @@
 
 		$procedure_name = "get_series_by_status";
 		return executeStoredProcedure($procedure_name, "'" . $character . "'");
+
+	}
+
+	/**
+	 * Returns all series with a title similar to the string provided.
+	 * eg. A search string of "love" would return results such as "1 love 9", "gun x clover", etc.
+	 *
+	 * @param $searchString Title to query against the database.
+	 *
+	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
+	 */
+	function getSeriesByTitle($searchString){
+
+		$procedure_name = "get_series_by_title";
+		return executeStoredProcedure($procedure_name, $searchString);
+		
+	}
+
+	/**
+	 * Returns all series with a title similar to the string provided, and of the entered status.
+	 *
+	 * @param $searchString Title to query against the database.
+	 * @param $character Char representing the status of a series. eg. 'd' for Dropped.
+	 *
+	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
+	 */
+	function getSeriesByStatusAndTitle($character, $searchString){
+
+		$procedure_name = "get_series_by_status_and_title";
+		$args = array("'" . $character . "'", $searchString);
+		return executeStoredProcedure($procedure_name, $args);
 
 	}
 

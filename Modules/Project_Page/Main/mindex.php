@@ -6,31 +6,42 @@
 			
 			<?php
 
-				include 'Database/SeriesIO.php';
-				$arrayOfSeries = getSeriesAll();
+				$parent = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
+				include_once($parent . 'SeriesIO.php');
 
-				for($i = 0; $i < count($arrayOfSeries); $i++) {
-					$project = $arrayOfSeries[$i];
-					$title = $project[1];
-					$status = getSeriesStatusFromChar($project[2]);
-					$desc  = $project[3]; //Scrollover?
-					$thumb  = $project[4];
-					$adult  = $project[7]; //adult warning underneath
-					//echo "Title: $title<br />";
+				if (isset($_GET['status']) && strlen($_GET['status']) == 1 && preg_match("/[a-z]/", $_GET['status'])){
+					$arrayOfSeries = getSeriesByStatus($_GET['status']);
+				}else{
+					$arrayOfSeries = getSeriesAll();
+				}
 
-							/*HTML5 tooltip
-							data-tip=\"$mouseText\"
-							class=\"tooltip\"
-							*/
+				if (sizeof($arrayOfSeries) > 0){
 
-					$mouseText = mouseover($title, $status, $desc);
-					echo "<a id=\"imgDiv\" 
-							href=\"\" 
-							onmouseover=\"$mouseText\">
-						
-							<img src=\"thumbs/$thumb\" />
-						
-						</a>";
+					foreach ($arrayOfSeries as $series) {
+						$title = $series[1];
+						$status = getSeriesStatusFromChar($series[2]);
+						$desc = $series[3];
+						$thumb  = $series[4];
+						$adult  = $series[7];
+
+						//echo "Title: $title<br />";
+
+								/*HTML5 tooltip
+								data-tip=\"$mouseText\"
+								class=\"tooltip\"
+								*/
+
+						$mouseText = mouseover($title, $status, $desc);
+						echo '<a id="imgDiv" 
+								href="\"
+								onmouseover="' . $mouseText . '">
+								<img src="thumbs/' . $thumb . '" />
+							
+							</a>';
+					}
+
+				}else{
+					echo 'No series found';
 				}
 
 				function mouseover($title, $status, $desc){

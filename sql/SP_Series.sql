@@ -16,6 +16,7 @@
 Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_project_manager
 			1.02: Removed genre instances to reflect changes to DB, implemented get_series_by_genre
 			1.03: Finished series_set_thumbnail, updated varchar fields
+			1.04: Fixed insert_series, implemented searching by title
 */
 
 --insert_series
@@ -29,7 +30,7 @@ SELECT COUNT(*) INTO totalSeries FROM Series;
 IF totalSeries = 65535 THEN
 RETURN false;
 END IF;
-INSERT INTO Series VALUES(seriesTitle, character, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
+INSERT INTO Series VALUES(seriesTitle, status, description, thumbnailURL, projectManagerID, visibleToPublic, isAdult);
 RETURN true;
 END // 
 DELIMITER ;
@@ -196,6 +197,26 @@ DROP PROCEDURE IF EXISTS get_series_by_status //
 CREATE PROCEDURE get_series_by_status(IN status character)
 BEGIN 
 SELECT * FROM Series AS s WHERE s.status = status;
+END // 
+DELIMITER ;
+
+--get_series_by_title
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_by_title //
+CREATE PROCEDURE get_series_by_title(IN title text)
+BEGIN 
+SELECT * FROM Series AS s WHERE s.name LIKE CONCAT('%', title, '%');
+END // 
+DELIMITER ;
+
+--get_series_by_status_and_title
+
+DELIMITER // 
+DROP PROCEDURE IF EXISTS get_series_by_status_and_title //
+CREATE PROCEDURE get_series_by_status_and_title(IN status character, IN title text)
+BEGIN 
+SELECT * FROM Series AS s WHERE s.status = status AND s.name LIKE CONCAT('%', title, '%');
 END // 
 DELIMITER ;
 
