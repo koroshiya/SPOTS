@@ -1,13 +1,13 @@
---ScanGroupIO
-
 /*
+	ScanGroupIO
+
 	groupID smallint unsigned not null AUTO_INCREMENT,
 	groupName varchar(50) not null,
 	URL varchar(255) null,
 	PRIMARY KEY (groupID)
 */
 
---insert_scangroup
+/*insert_scangroup*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_scangroup //
@@ -23,7 +23,8 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_scangroup --TODO: check if group is home group
+/*delete_scangroup 
+--TODO: check if group is home group*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_scangroup //
@@ -34,24 +35,25 @@ SELECT COUNT(*) INTO totalChapters FROM ChapterGroup AS cg WHERE cg.groupID = gr
 IF totalChapters > 0 THEN
 RETURN false;
 END IF;
-DELETE FROM ScanGroup AS sg WHERE sg.groupID = groupID;
+DELETE FROM ScanGroup WHERE ScanGroup.groupID = groupID;
 RETURN true;
 END // 
 DELIMITER ;
 
---delete_scangroup_force --TODO: check if group is home group
+/*delete_scangroup_force 
+--TODO: check if group is home group*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_scangroup_force //
 CREATE FUNCTION delete_scangroup_force(groupID smallint unsigned) RETURNS boolean
 BEGIN 
-DELETE FROM ChapterGroup AS cg WHERE cg.groupID = groupID
-DELETE FROM ScanGroup AS sg WHERE sg.groupID = groupID;
+DELETE FROM ChapterGroup WHERE ChapterGroup.groupID = groupID;
+DELETE FROM ScanGroup WHERE ScanGroup.groupID = groupID;
 RETURN true;
 END // 
 DELIMITER ;
 
---modify_scangroup
+/*modify_scangroup*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS modify_scangroup //

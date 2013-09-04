@@ -1,6 +1,6 @@
---ChapterIO
-
 /*
+	ChapterIO
+
 	seriesID smallint unsigned not null,
 	chapterNumber smallint unsigned not null,
 	chapterSubNumber tinyint unsigned not null,
@@ -15,9 +15,10 @@
 Changelog:	1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
 			1.02: Added visible param. Implemented is_visible_chapter, chapter_revision_modify, chapter_set_visible
 			1.03: Updated to reflect new ChapterGroup table
+			1.04: Fixed is_visible_chapter, implemented chapter_remove_group*
 */
 
---insert_chapter
+/*insert_chapter*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_chapter //
@@ -36,8 +37,8 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_chapter
---If the chapter has any tasks associated with it, nothing is deleted and returns false.
+/*delete_chapter
+If the chapter has any tasks associated with it, nothing is deleted and returns false.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter //
@@ -54,8 +55,8 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_chapter_force
---Deletes a chapter and all associated tasks
+/*delete_chapter_force
+Deletes a chapter and all associated tasks*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter_force //
@@ -68,16 +69,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---modify_chapter
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS ******** //
-CREATE FUNCTION ********() RETURNS ********
-BEGIN 
-END // 
-DELIMITER ;
-
---chapter_revision_modify
+/*chapter_revision_modify*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_revision_modify //
@@ -88,8 +80,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---chapter_add_group --If all three groups are occupied, return false
---TODO: need to test if working
+/*chapter_add_group*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_add_group //
@@ -100,9 +91,29 @@ RETURN true;
 END // 
 DELIMITER ;
 
---chapter_remove_group
+/*chapter_remove_group*/
 
---chapter_set_visible
+DELIMITER // 
+DROP FUNCTION IF EXISTS chapter_remove_group //
+CREATE FUNCTION chapter_remove_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, groupID smallint unsigned) RETURNS boolean
+BEGIN 
+DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber AND ChapterGroup.groupID = groupID;
+RETURN true;
+END // 
+DELIMITER ;
+
+/*chapter_remove_group_all*/
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS chapter_remove_group_all //
+CREATE FUNCTION chapter_remove_group_all(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+BEGIN 
+DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
+RETURN true;
+END // 
+DELIMITER ;
+
+/*chapter_set_visible*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_set_visible //
@@ -114,20 +125,14 @@ END //
 DELIMITER ;
 
 
-
-
-
-
-
-
---is_visible_chapter
+/*is_visible_chapter*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_visible_chapter //
 CREATE FUNCTION is_visible_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
 BEGIN 
 DECLARE visible boolean;
-SELECT c.visible INTO visible WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+SELECT c.visible INTO visible FROM Series AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
 RETURN visible;
 END // 
 DELIMITER ;

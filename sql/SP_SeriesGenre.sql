@@ -1,4 +1,4 @@
---series_add_genre
+/*series_add_genre*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_add_genre //
@@ -9,7 +9,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_remove_genre
+/*series_remove_genre*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_remove_genre //
@@ -20,7 +20,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_remove_genre_all
+/*series_remove_genre_all*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_remove_genre_all //
@@ -31,7 +31,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_get_genres
+/*series_get_genres*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS series_get_genres //
@@ -41,11 +41,11 @@ SELECT sg.name FROM SeriesGenre AS sg WHERE sg.seriesID = seriesID;
 END // 
 DELIMITER ;
 
---series_get_by_genre
+/*series_get_by_genre*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS series_get_by_genre //
-CREATE PROCEDURE user_get_roles(IN name varchar(20))
+CREATE PROCEDURE series_get_by_genre(IN name varchar(20))
 BEGIN 
 SELECT * FROM SeriesGenre AS sg WHERE sg.name = name;
 END // 

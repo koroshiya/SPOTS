@@ -144,7 +144,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_email //
-CREATE FUNCTION user_set_email(userID smallint unsigned) RETURNS varchar(100)
+CREATE FUNCTION user_get_email(userID smallint unsigned) RETURNS varchar(100)
 BEGIN 
 DECLARE email varchar(100);
 SELECT s.email INTO email FROM ScanUser AS s WHERE s.userID = userID;

@@ -1,6 +1,6 @@
---SeriesIO
-
 /*
+	SeriesIO
+	
 	seriesID smallint unsigned not null AUTO_INCREMENT,
 	seriesTitle varchar(100) not null,
 	status character null,
@@ -18,9 +18,10 @@ Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_pr
 			1.02: Removed genre instances to reflect changes to DB, implemented get_series_by_genre
 			1.03: Finished series_set_thumbnail, updated varchar fields
 			1.04: Fixed insert_series, implemented searching by title
+			1.05: Misc fixes to various procs/functs
 */
 
---insert_series
+/*insert_series*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_series //
@@ -36,8 +37,8 @@ RETURN true;
 END // 
 DELIMITER ;
 
---delete_series
---If the series has any chapters associated with it, nothing is deleted and returns false.
+/*delete_series
+If the series has any chapters associated with it, nothing is deleted and returns false.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_series //
@@ -48,38 +49,40 @@ SELECT COUNT(*) INTO totalChapters FROM Chapter AS c WHERE c.seriesID = seriesID
 IF totalChapters > 0 THEN
 RETURN false;
 END IF;
-DELETE FROM Series As s WHERE s.seriesID = seriesID;
+DELETE FROM Series WHERE Series.seriesID = seriesID;
 END // 
 DELIMITER ;
 
---delete_series_force
---Deletes a series and all associated chapters & tasks.
+/*delete_series_force
+Deletes a series and all associated chapters & tasks.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_series_force //
 CREATE FUNCTION delete_series_force(seriesID smallint unsigned) RETURNS boolean
 BEGIN 
-DELETE FROM Task AS t WHERE t.seriesID = seriesID;
-DELETE FROM Chapter AS c WHERE c.seriesID = seriesID;
-DELETE FROM Series As s WHERE s.seriesID = seriesID;
-END // 
-DELIMITER ;
-
---series_set_status
---I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete
-
-DROP FUNCTION IF EXISTS series_set_status //
-CREATE FUNCTION series_set_status(seriesID smallint unsigned, status character) RETURNS boolean
-BEGIN 
-IF NOT (character = 'I' OR character = 'A' OR character = 'S' OR character = 'H' OR character = 'D' OR character = 'C') THEN
-RETURN false;
-END IF;
-UPDATE Series AS s SET s.status = character WHERE s.seriesID = seriesID;
+DELETE FROM Task WHERE Task.seriesID = seriesID;
+DELETE FROM Chapter WHERE Chapter.seriesID = seriesID;
+DELETE FROM Series WHERE Series.seriesID = seriesID;
 RETURN true;
 END // 
 DELIMITER ;
 
---series_set_thumbnail
+/*series_set_status
+I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete*/
+
+DELIMITER // 
+DROP FUNCTION IF EXISTS series_set_status //
+CREATE FUNCTION series_set_status(seriesID smallint unsigned, status character) RETURNS boolean
+BEGIN 
+IF NOT status = 'I' OR status = 'A' OR status = 'S' OR status = 'H' OR status = 'D' OR status = 'C' THEN
+RETURN false;
+END IF;
+UPDATE Series AS s SET s.status = status WHERE s.seriesID = seriesID;
+RETURN true;
+END // 
+DELIMITER ;
+
+/*series_set_thumbnail*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_thumbnail //
@@ -90,7 +93,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_set_project_manager
+/*series_set_project_manager*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_project_manager //
@@ -101,7 +104,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_set_visible
+/*series_set_visible*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_visible //
@@ -112,7 +115,7 @@ RETURN true;
 END // 
 DELIMITER ;
 
---series_set_adult
+/*series_set_adult*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_adult //
@@ -123,43 +126,43 @@ RETURN true;
 END // 
 DELIMITER ;
 
---is_visible_series
+/*is_visible_series*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_visible_series //
-CREATE FUNCTION is_visible_series() RETURNS boolean
+CREATE FUNCTION is_visible_series(seriesID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE boolAdult boolean;
-SELECT s.visibleToPublic FROM Series AS s INTO boolAdult WHERE s.seriesID = seriesID;
+SELECT s.visibleToPublic INTO boolAdult FROM Series AS s WHERE s.seriesID = seriesID;
 RETURN boolAdult;
 END // 
 DELIMITER ;
 
---is_adult_series
+/*is_adult_series*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_adult_series //
 CREATE FUNCTION is_adult_series(seriesID smallint unsigned) RETURNS boolean
 BEGIN 
 DECLARE boolAdult boolean;
-SELECT s.isAdult FROM Series AS s INTO boolAdult WHERE s.seriesID = seriesID;
+SELECT s.isAdult INTO boolAdult FROM Series AS s WHERE s.seriesID = seriesID;
 RETURN boolAdult;
 END // 
 DELIMITER ;
 
---get_project_count
+/*get_project_count*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_project_count //
 CREATE FUNCTION get_project_count() RETURNS smallint unsigned
 BEGIN
-	DECLARE total smallint unsigned;
-	SELECT COUNT(*) INTO total FROM Series;
-	RETURN total;
+DECLARE total smallint unsigned;
+SELECT COUNT(*) INTO total FROM Series;
+RETURN total;
 END // 
 DELIMITER ;
 
---get_series_status
+/*get_series_status*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_series_status //
@@ -171,7 +174,7 @@ RETURN status;
 END // 
 DELIMITER ;
 
---get_series_by_id
+/*get_series_by_id*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_id //
@@ -181,7 +184,7 @@ SELECT * FROM Series AS s WHERE s.seriesID = seriesID;
 END // 
 DELIMITER ;
 
---get_series_by_letter
+/*get_series_by_letter*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_letter //
@@ -191,7 +194,7 @@ SELECT * FROM Series AS s WHERE s.seriesTitle LIKE CONCAT(startLetter, '%');
 END // 
 DELIMITER ;
 
---get_series_by_status
+/*get_series_by_status*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_status //
@@ -201,7 +204,7 @@ SELECT * FROM Series AS s WHERE s.status = status;
 END // 
 DELIMITER ;
 
---get_series_by_title
+/*get_series_by_title*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_title //
@@ -211,7 +214,7 @@ SELECT * FROM Series AS s WHERE s.seriesTitle LIKE CONCAT('%', title, '%');
 END // 
 DELIMITER ;
 
---get_series_by_status_and_title
+/*get_series_by_status_and_title*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_status_and_title //
@@ -221,19 +224,20 @@ SELECT * FROM Series AS s WHERE s.status = status AND s.seriesTitle LIKE CONCAT(
 END // 
 DELIMITER ;
 
---get_series_by_genre
+/*get_series_by_genre*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_by_genre //
 CREATE PROCEDURE get_series_by_genre(IN genre text)
 BEGIN 
-SELECT * FROM SERIES AS s WHERE s.seriesID = sg.seriesID
+SELECT * FROM SERIES AS s
 INNER JOIN SeriesGenre AS sg
-ON sg.name = genre;
+ON sg.name = genre 
+WHERE s.seriesID = sg.seriesID;
 END // 
 DELIMITER ;
 
---get_series_all
+/*get_series_all*/
 
 DELIMITER // 
 DROP PROCEDURE IF EXISTS get_series_all //

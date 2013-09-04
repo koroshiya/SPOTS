@@ -62,6 +62,10 @@
 
 	}
 
+	function modifyChapter($args, $newArgs){
+		//TODO: delete old, attempt to create new. If new fails, recreate old.
+	}
+
 	/**
 	 * Sets the revision number of the chapter.
 	 * eg. If the chapter has been revised once since release, revision number would be 1.
@@ -93,6 +97,39 @@
 		
 		$procedure_name = 'chapter_add_group';
 		array_push($args, $newGroupID);
+		$result = executeFunction($procedure_name, $args);
+		return $result[0];
+
+	}
+
+	/**
+	 * Removes an existing group from the chapter.
+	 * If the group isn't attached, function returns false.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 * @param $newGroupID ID of the group to remove from a chapter.
+	 *
+	 * @return True or false, depending on success.
+	 **/
+	function removeGroup($args, $newGroupID){
+		
+		$procedure_name = 'chapter_remove_group';
+		array_push($args, $newGroupID);
+		$result = executeFunction($procedure_name, $args);
+		return $result[0];
+
+	}
+
+	/**
+	 * Removes all groups attached to a chapter.
+	 * 
+	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
+	 *
+	 * @return True or false, depending on success.
+	 **/
+	function removeGroupAll($args){
+		
+		$procedure_name = 'chapter_remove_group_all';
 		$result = executeFunction($procedure_name, $args);
 		return $result[0];
 

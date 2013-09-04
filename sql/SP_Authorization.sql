@@ -7,9 +7,9 @@
  			1.02: Removed old references to Config table
 */
 
---Authentication
+/*Authentication*/
 
---is_admin
+/*is_admin*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_admin //
@@ -21,8 +21,8 @@ RETURN suUserRole = 'A';
 END // 
 DELIMITER ;
 
---is_mod
---or is_webmaster, however the implementation is decided
+/*is_mod
+or is_webmaster, however the implementation is decided*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_mod //
