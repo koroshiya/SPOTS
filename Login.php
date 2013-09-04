@@ -2,7 +2,8 @@
 
 require_once('./header.html');
 
-echo "<div style=\"margin: -75px 0 0 -150px; position:relative; left:50%; top:50%;\">";
+echo "<div style=\"overflow-x:hidden;top:50%;margin: -75px 0 0 0px;position:relative;\">
+		<div style=\"margin: 0px 0 0 -150px; position:relative; left:50%; \">";
 
 if (isset($_SESSION['username'])){ //session_is_registered(username)
 	echo "Login successful";
@@ -65,7 +66,7 @@ if (isset($_SESSION['username'])){ //session_is_registered(username)
 
 }
 
-echo "</div>";
+echo "</div></div>";
 
 require_once('./footer.html');
 
