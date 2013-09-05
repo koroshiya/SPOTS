@@ -17,9 +17,10 @@
 				$parent = dirname(dirname(dirname(__FILE__))) . '/Database/';
 				//echo "$parent";
 				//include_once($parent . 'Connection.php');
+				
 				global $connection;
 				if ($connection !== null && mysqli_ping($connection)){
-					include_once($parent . 'RoleIO.php');
+					require_once($parent . 'RoleIO.php');
 					foreach (getRolesAll() as $key) {
 						echo "<option value=\"$key[0]\">$key[0]</option>";
 					}

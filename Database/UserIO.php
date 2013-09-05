@@ -7,6 +7,7 @@
  *			1.02: Implemented other IO and validation methods
  *			1.03: Grouped similar functions
  *			1.04: Fixed invalid connection passing, implemented getUser functions
+ *			1.05: Fix for insertUser function
  *Purpose: Provides methods for interacting with User objects in the database
 **/ 
 
@@ -27,13 +28,7 @@
 		
 		$procedure_name = 'delete_user';
 		
-		$array = [
-				"userName" => $userName,
-				"userPassword" => $userPassword,
-				"userRole" => $userRole,
-				"email" => $email,
-				"title" => $title,
-		];
+		$array = array($userName, $userPassword, $userRole, $email, $title);
 		return executeUserFunction($procedure_name, $array);
 		
 	}

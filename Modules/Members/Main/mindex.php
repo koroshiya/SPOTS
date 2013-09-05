@@ -13,13 +13,11 @@ if (isset($_GET['position'])){
 }else{
 	$userList = getUsersAll();
 }
-
 if ($userList === FALSE){
 	die('Database connection failed');
 }elseif (count($userList) == 0){
 	die('No users in database');
 }
-
 /*$memberList = array(
 	'Daktyl198', 'Administrator', '2 days ago',
 	'Koro', 'Administrator', '1 week ago', 
