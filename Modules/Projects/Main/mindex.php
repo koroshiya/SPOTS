@@ -1,9 +1,8 @@
 <?php
 if (!$fromIndex){die('You must access this through the root index!');}
 
-$parent = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
-require_once($parent . 'SeriesIO.php');
-require_once($parent . 'UserIO.php');
+require_once($databaseDir . 'SeriesIO.php');
+require_once($databaseDir . 'UserIO.php');
 
 if (isset($_GET['series_search']) && isset($_GET['status'])) {
 	$seriesList = getSeriesByStatusAndTitle($_GET['status'], $_GET['series_search']);
@@ -19,7 +18,7 @@ if (sizeof($seriesList) > 0){
 
 ?>
 <span style="font-style:italic; font-size:10pt;">Click on a title to edit the series</span><br>
-<table id="projectList">
+<table id="projectList" class="list">
 <tr class="projectListRow" id="projectListHeader">
 	<td class="projectTitle">Project Title</td>
 	<td class="projectStatus">Status</td>

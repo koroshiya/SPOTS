@@ -1,9 +1,8 @@
 <?php
 
 //Dummy Data to be replaced with SQL calls later.
-$database_dir = './Database/';
-require_once($database_dir . 'UserIO.php');
-require_once($database_dir . 'UserRoleIO.php');
+require_once($databaseDir . 'UserIO.php');
+require_once($databaseDir . 'UserRoleIO.php');
 
 if (isset($_GET['position'])){
 	if (strlen($_GET['position']) == 1 && preg_match("/[a-z]/", $_GET['position'])){
@@ -32,7 +31,7 @@ $count = 0;*/
 
 ?>
 	<span style="font-style:italic; font-size:10pt;">Click on a title to view the member's details</span><br />
-	<table id="memberList">
+	<table id="memberList" class="list">
 	<tr class="memberListRow" id="memberListHeader">
 		<td class="memberName">Member Name</td>
 		<td class="memberPositionMain">Position (Main)</td>

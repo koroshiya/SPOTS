@@ -3,6 +3,7 @@
 //Get Module names
 if (!isset($_GET['action'])) {
 	$action = 'Tasks';
+	$sub = 'Main';
 } else {
 	$action = str_replace('\0', '', $_GET['action']);
 	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
@@ -12,14 +13,15 @@ if (!isset($_GET['action'])) {
 $fromIndex = TRUE;
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
-
-require_once('./header.html');
+$databaseDir = dirname(__FILE__).'/Database/';
 
 require_once('./Database/Connection.php');
 global $connection;
 if ($connection === null || !mysqli_ping($connection)){
 	connect('localhost', 'root', '', 'SPOTS');
 }
+
+require_once('./header.php');
 
 $sidebarCheck = $actionDir.'/sidebar.php';
 if (!file_exists($sidebarCheck) || !include_once($sidebarCheck)){

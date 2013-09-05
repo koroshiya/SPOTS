@@ -1,6 +1,6 @@
 <?php
 
-require_once('./header.html');
+require_once('./header.php');
 
 echo "<div style=\"overflow-x:hidden;top:50%;margin: -75px 0 0 0px;position:relative;\">
 		<div style=\"margin: 0px 0 0 -150px; position:relative; left:50%; \">";
