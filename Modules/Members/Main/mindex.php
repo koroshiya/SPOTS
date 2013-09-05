@@ -1,7 +1,9 @@
 <?php
 
 //Dummy Data to be replaced with SQL calls later.
-$database_dir = './Database/';
+
+$database_dir = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
+
 require_once($database_dir . 'UserIO.php');
 require_once($database_dir . 'UserRoleIO.php');
 
@@ -14,13 +16,11 @@ if (isset($_GET['position'])){
 }else{
 	$userList = getUsersAll();
 }
-
 if ($userList === FALSE){
 	die('Database connection failed');
 }elseif (count($userList) == 0){
 	die('No users in database');
 }
-
 /*$memberList = array(
 	'Daktyl198', 'Administrator', '2 days ago',
 	'Koro', 'Administrator', '1 week ago', 

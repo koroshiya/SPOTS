@@ -243,6 +243,6 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS get_series_all //
 CREATE PROCEDURE get_series_all()
 BEGIN 
-SELECT * FROM Series AS s;
+SELECT * FROM Series;
 END // 
 DELIMITER ;
