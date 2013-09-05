@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null unique,
-	userPassword binary(20) not null,
+	userPassword char(40) not null,
 	email varchar(100) not null,
 	title character not null,
 	PRIMARY KEY (userID)

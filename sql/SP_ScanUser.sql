@@ -1,7 +1,7 @@
 /*ScanUserIO
 	userID smallint unsigned not null AUTO_INCREMENT,
 	userName varchar(30) not null,
-	userPassword binary(20) not null,
+	userPassword char(40) not null,
 	email varchar(100) not null,
 	title character not null,
 	PRIMARY KEY (userID)
@@ -66,15 +66,16 @@ DELIMITER //
 DROP FUNCTION IF EXISTS user_set_password //
 CREATE FUNCTION user_set_password(userID smallint unsigned, newPassword varchar(20)) RETURNS boolean
 BEGIN 
-DECLARE sha1Password binary(20);
+DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
 DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
+DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.userName, ScanUser.email INTO userName, userEmail FROM ScanUser WHERE ScanUser.userID = userID;
+SELECT su.userName, su.email, su.userPass INTO userName, userEmail, userPass FROM ScanUser AS su WHERE su.userID = userID;
 SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
 Update ScanUser SET ScanUser.userPassword = sha1Password;
 RETURN true;
@@ -87,17 +88,18 @@ DELIMITER //
 DROP FUNCTION IF EXISTS user_get_password_valid //
 CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS boolean
 BEGIN 
-DECLARE sha1Password binary(20);
+DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
 DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
+DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.userName, ScanUser.email INTO userName, userEmail FROM ScanUser WHERE ScanUser.userID = userID;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
-RETURN password = sha1Password;
+SELECT su.userName, su.email, su.userPassword INTO userName, userEmail, userPass FROM ScanUser AS su WHERE su.userID = userID;
+SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
+RETURN userPass = sha1Password;
 END // 
 DELIMITER ;
 
@@ -107,15 +109,16 @@ DELIMITER //
 DROP FUNCTION IF EXISTS user_get_password_valid_by_name //
 CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS boolean
 BEGIN 
-DECLARE sha1Password binary(20);
+DECLARE sha1Password char(40);
 DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
+DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userName = userName);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.email INTO userEmail FROM ScanUser WHERE ScanUser.userName = userName;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
+SELECT su.email, su.userPassword INTO userEmail, userPass FROM ScanUser AS su WHERE su.userName = userName;
+SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
 RETURN password = sha1Password;
 END // 
 DELIMITER ;
@@ -126,14 +129,15 @@ DELIMITER //
 DROP FUNCTION IF EXISTS user_set_email //
 CREATE FUNCTION user_set_email(userID smallint unsigned, newEmail varchar(100)) RETURNS boolean
 BEGIN 
-DECLARE sha1Password binary(20);
+DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
 DECLARE userExists boolean;
+DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT ScanUser.userName INTO userName FROM ScanUser WHERE ScanUser.userID = userID;
+SELECT su.userName, su.userPass INTO userName, userPass FROM ScanUser AS su WHERE su.userID = userID;
 SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
 Update ScanUser SET ScanUser.userPassword = sha1Password, ScanUser.email = newEmail;
 RETURN true;
