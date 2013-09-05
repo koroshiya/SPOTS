@@ -29,7 +29,7 @@
 	function connect($mysql_host, $mysql_user, $mysql_password, $mysql_database){
 		
 		global $connection;
-		$connection = mysqli_connect('p:'.$mysql_host, $mysql_user, $mysql_password, $mysql_database);
+		$connection = @mysqli_connect('p:'.$mysql_host, $mysql_user, $mysql_password, $mysql_database);
 		
 	}
 
