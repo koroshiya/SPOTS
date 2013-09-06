@@ -52,7 +52,9 @@
 	 * @return All roles pertaining to a specific user.
 	 */
 	function getUserRoles($userID){
-		return executeStoredProcedure('user_get_roles', $userID);
+		$userID = getEscapedSQLParam($userID);
+		$proc = "SELECT ur.name FROM UserRole AS ur WHERE ur.userID = $userID;";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -63,7 +65,9 @@
 	 * @return All users of a specific role.
 	 */
 	function getUsersByRole($name){
-		return executeStoredProcedure('user_get_by_role', $name);
+		$name = getEscapedSQLParam($name);
+		$proc = "SELECT * FROM ScanUser AS su INNER JOIN UserRole AS ur ON su.userID = ur.userID WHERE ur.name = $name;";
+		return executeStoredProcedure($proc);
 	}
 	
 	/**

@@ -54,25 +54,3 @@ DELETE FROM UserRole WHERE UserRole.userID = userID;
 RETURN true;
 END // 
 DELIMITER ;
-
-/*user_get_roles*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS user_get_roles //
-CREATE PROCEDURE user_get_roles(IN userID smallint unsigned)
-BEGIN 
-SELECT ur.name FROM UserRole AS ur WHERE ur.userID = userID;
-END // 
-DELIMITER ;
-
-/*user_get_by_role*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS user_get_by_role //
-CREATE PROCEDURE user_get_by_role(IN name varchar(20))
-BEGIN 
-SELECT * FROM ScanUser AS su 
-INNER JOIN UserRole AS ur ON su.userID = ur.userID
-WHERE ur.name = name;
-END // 
-DELIMITER ;

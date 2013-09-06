@@ -23,7 +23,6 @@
 	//echo getSeriesByStatus('d');
 	//echo getSeriesByID(4);
 
-
 	/**
 	 * Adds a new series to the database.
 	 * 
@@ -180,8 +179,9 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		$procedure_name = "get_series_by_id";
-		$row = executeStoredProcedure($procedure_name, $seriesID);
+		$seriesID = getEscapedSQLParam($seriesID);
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
+		$row = executeStoredProcedure($procedure_name);
 		return $row[0];
 
 	}
@@ -195,8 +195,9 @@
 	 **/
 	function getSeriesByLetter($character){
 
-		$procedure_name = "get_series_by_letter";
-		return executeStoredProcedure($procedure_name, $character);
+		$character = getEscapedSQLParam($character) . '%';
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $character;";
+		return executeStoredProcedure($procedure_name);
 
 	}
 
@@ -209,9 +210,23 @@
 	 **/
 	function getSeriesByStatus($character){
 
-		$procedure_name = "get_series_by_status";
-		return executeStoredProcedure($procedure_name, $character);
+		$character = getEscapedSQLParam($character);
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.status = $character;";
+		return executeStoredProcedure($procedure_name);
 
+	}
+
+	/**
+	 * Returns all series adhering to the specified genre.
+	 *
+	 * @param $genre Name of the genre to search against.
+	 *
+	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
+	 */
+	function getSeriesByGenre($genre){
+		$genre = getEscapedSQLParam($genre);
+		$proc = "SELECT * FROM SERIES AS s INNER JOIN SeriesGenre AS sg ON sg.name = $genre WHERE s.seriesID = sg.seriesID;";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -224,8 +239,9 @@
 	 */
 	function getSeriesByTitle($searchString){
 
-		$procedure_name = "get_series_by_title";
-		return executeStoredProcedure($procedure_name, $searchString);
+		$searchString = '%' . getEscapedSQLParam($searchString) . '%';
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $searchString;";
+		return executeStoredProcedure($procedure_name);
 		
 	}
 
@@ -239,9 +255,10 @@
 	 */
 	function getSeriesByStatusAndTitle($character, $searchString){
 
-		$procedure_name = "get_series_by_status_and_title";
-		$args = array("'" . $character . "'", $searchString);
-		return executeStoredProcedure($procedure_name, $args);
+		$character = getEscapedSQLParam($character);
+		$searchString = '%' . getEscapedSQLParam($searchString) . '%';
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.status = $character AND s.seriesTitle LIKE $searchString;";
+		return executeStoredProcedure($procedure_name);
 
 	}
 
@@ -293,8 +310,8 @@
 	 * @return All series from the database.
 	 */
 	function getSeriesAll(){
-		$procedure_name = "get_series_all";
-		return executeStoredProcedure($procedure_name, null);
+		$procedure_name = "SELECT * FROM Series;";
+		return executeStoredProcedure($procedure_name);
 	}
 
 ?>

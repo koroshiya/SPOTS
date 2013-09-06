@@ -97,36 +97,6 @@ RETURN total;
 END // 
 DELIMITER ;
 
-/*get_user_tasks*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_user_tasks //
-CREATE PROCEDURE get_user_tasks(IN userID smallint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.userID = userID;
-END // 
-DELIMITER ;
-
-/*get_user_tasks_active*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_user_tasks_active //
-CREATE PROCEDURE get_user_tasks_active(IN userID smallint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.userID = userID AND NOT t.status = 'C';
-END // 
-DELIMITER ;
-
-/*get_user_tasks_complete*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_user_tasks_complete //
-CREATE PROCEDURE get_user_tasks_complete(IN userID smallint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.userID = userID AND t.status = 'C';
-END // 
-DELIMITER ;
-
 /*get_task_status*/
 
 DELIMITER // 
@@ -172,35 +142,5 @@ BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
 RETURN total;
-END // 
-DELIMITER ;
-
-/*get_chapter_tasks*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_chapter_tasks //
-CREATE PROCEDURE get_chapter_tasks(IN seriesID smallint unsigned, IN chapterNumber smallint unsigned, IN chapterSubNumber tinyint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-END // 
-DELIMITER ;
-
-/*get_chapter_tasks_active*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_chapter_tasks_active //
-CREATE PROCEDURE get_chapter_tasks_active(IN seriesID smallint unsigned, IN chapterNumber smallint unsigned, IN chapterSubNumber tinyint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-END // 
-DELIMITER ;
-
-/*get_chapter_tasks_complete*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_chapter_tasks_complete //
-CREATE PROCEDURE get_chapter_tasks_complete(IN seriesID smallint unsigned, IN chapterNumber smallint unsigned, IN chapterSubNumber tinyint unsigned)
-BEGIN 
-SELECT * FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
 END // 
 DELIMITER ;

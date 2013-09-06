@@ -99,7 +99,7 @@ RETURN false;
 END IF;
 SELECT su.userName, su.email, su.userPassword INTO userName, userEmail, userPass FROM ScanUser AS su WHERE su.userID = userID;
 SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
-RETURN userPass = sha1Password;
+RETURN STRCMP(userPass, sha1Password) = 0;
 END // 
 DELIMITER ;
 
@@ -119,7 +119,7 @@ RETURN false;
 END IF;
 SELECT su.email, su.userPassword INTO userEmail, userPass FROM ScanUser AS su WHERE su.userName = userName;
 SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
-RETURN password = sha1Password;
+RETURN STRCMP(userPass, sha1Password) = 0;
 END // 
 DELIMITER ;
 
@@ -181,42 +181,6 @@ SELECT u.title INTO title FROM ScanUser AS u WHERE u.userID = userID;
 RETURN title;
 END // 
 DELIMITER ;
-
-/*get_user_by_id*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_user_by_id //
-CREATE PROCEDURE get_user_by_id(userID smallint unsigned)
-BEGIN 
-SELECT * FROM ScanUser AS s WHERE s.userID = userID;
-END // 
-DELIMITER ;
-
-/*get_users_all*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_users_all //
-CREATE PROCEDURE get_users_all()
-BEGIN 
-SELECT * FROM ScanUser;
-END // 
-DELIMITER ;
-
-/*get_users_by_position*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS get_users_by_position //
-CREATE PROCEDURE get_users_by_position(newRole character)
-BEGIN 
-IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN /*s = staff, a = admin, m = mod*/
-SELECT * FROM ScanUser;
-END IF;
-SELECT * FROM ScanUser AS s WHERE s.title = newRole;
-END // 
-DELIMITER ;
-
-
-
 
 /*is_project_manager
 Tests if the user is a project manager for ANY series, not one in particular.*/

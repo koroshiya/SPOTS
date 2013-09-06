@@ -55,8 +55,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getSeriesGenres($seriesID){
-		$procedure_name = 'series_get_genres';
-		return executeStoredProcedure($procedure_name, $seriesID);
+		$seriesID = getEscapedSQLParam($seriesID);
+		$procedure_name = "SELECT sg.name FROM SeriesGenre AS sg WHERE sg.seriesID = $seriesID;";
+		return executeStoredProcedure($procedure_name);
 	}
 
 	/**
@@ -67,8 +68,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getSeriesByGenre($name){
-		$procedure_name = 'series_get_by_genre';
-		return executeStoredProcedure($procedure_name, $name);
+		$name = getEscapedSQLParam($name);
+		$procedure_name = "SELECT * FROM SERIES AS s INNER JOIN SeriesGenre AS sg ON sg.name = $name;";
+		return executeStoredProcedure($procedure_name);
 	}
 	
 	/**

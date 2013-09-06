@@ -69,21 +69,17 @@
 	/**
 	 * Executes a stored procedure, passing in a list of arguments (or single argument).
 	 *
-	 * @param $procedure_name Name of the stored procedure to run WITHOUT the brackets. 
-	 * 					eg. function, not function() or function(integer)
-	 * @param $arr Array of arguments to pass into the function.
-	 *			Can also be a single argument or null, depending on the procedure to run.
-	 * @param $connection Connection through which to execute the command.
+	 * @param $procedure Statement to run, params and all included.
 	 *
 	 * @return False if the command failed, otherwise returns the output of the command.
 	 */
-	function executeStoredProcedure($procedure_name, $arr){
-
-		$init = "call $procedure_name(";
-		$result = buildAndRunQuery($init, $arr);
+	function executeStoredProcedure($procedure){
+		
+		global $connection;
+		$result = mysqli_query($connection, $procedure);
 
 		if ($result === FALSE) {
-			echo "SP Failed: $procedure_name<br />";
+			echo "SP Failed: $procedure<br />"; //TODO: remove when moving to production
 			return array(false);
 		}
 
@@ -105,7 +101,6 @@
 	 *			eg. "call $procedure_name(" for a stored procedure.
 	 * @param $arr Array of arguments to pass into the function.
 	 *			Can also be a single argument or null, depending on the procedure to run.
-	 * @param $connection Connection through which to execute the command.
 	 *
 	 * @return False if the command failed, otherwise returns the output of the command.
 	 */
@@ -141,9 +136,10 @@
 		global $connection;
 		if (gettype($param) === "string"){
 			$escaped = mysqli_real_escape_string($connection, $param);
+			//$escaped = addcslashes($escaped, '%_'); //currently unnecessary; LIKE is only used for searching series
 			return "'" . $escaped . "'";
 		}else{
-			return $param;
+			return $param; //Only strings can contain misc characters AFAIK, so integers and such don't need escaping
 		}
 	}
 

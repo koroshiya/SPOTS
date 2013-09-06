@@ -30,23 +30,3 @@ DELETE FROM SeriesGenre WHERE SeriesGenre.seriesID = seriesID;
 RETURN true;
 END // 
 DELIMITER ;
-
-/*series_get_genres*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS series_get_genres //
-CREATE PROCEDURE series_get_genres(IN seriesID smallint unsigned)
-BEGIN 
-SELECT sg.name FROM SeriesGenre AS sg WHERE sg.seriesID = seriesID;
-END // 
-DELIMITER ;
-
-/*series_get_by_genre*/
-
-DELIMITER // 
-DROP PROCEDURE IF EXISTS series_get_by_genre //
-CREATE PROCEDURE series_get_by_genre(IN name varchar(20))
-BEGIN 
-SELECT * FROM SeriesGenre AS sg WHERE sg.name = name;
-END // 
-DELIMITER ;

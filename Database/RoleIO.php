@@ -57,8 +57,8 @@
 	 */
 	function getRolesAll(){
 
-		$procedure_name = 'get_roles';
-		return executeStoredProcedure($procedure_name, null);
+		$procedure_name = "SELECT r.name FROM Role AS r;";
+		return executeStoredProcedure($procedure_name);
 	}
 
 ?>

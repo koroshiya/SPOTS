@@ -123,7 +123,9 @@
 	 * @return Returns all tasks pertaining to a specific user.
 	 */
 	function getUserTasks($userID){
-		return executeChapterProcedure($userID, 'get_user_tasks');
+		$userID = getEscapedSQLParam($userID);
+		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID;";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -134,7 +136,9 @@
 	 * @return Returns all tasks that a specific user has started, but not completed.
 	 */
 	function getUserActiveTasks($userID){
-		return executeChapterProcedure($userID, 'get_user_tasks_active');
+		$userID = getEscapedSQLParam($userID);
+		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND NOT t.status = 'C';";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -145,7 +149,9 @@
 	 * @return Returns all tasks that a specific user has completed.
 	 */
 	function getUserCompleteTasks($userID){
-		return executeChapterProcedure($userID, 'get_user_tasks_complete');
+		$userID = getEscapedSQLParam($userID);
+		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND t.status = 'C';";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -193,7 +199,11 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterTasks($args){
-		return executeChapterFunction($args, 'get_chapter_tasks');
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$args[2] = getEscapedSQLParam($args[2]);
+		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -205,7 +215,11 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterActiveTasks($args){
-		return executeChapterFunction($args, 'get_chapter_tasks_active');
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$args[2] = getEscapedSQLParam($args[2]);
+		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -217,7 +231,11 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterCompleteTasks($args){
-		return executeChapterFunction($args, 'get_chapter_tasks_complete');
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$args[2] = getEscapedSQLParam($args[2]);
+		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
+		return executeStoredProcedure($proc);
 	}
 
 	/**
@@ -243,20 +261,6 @@
 		}else {
 			return 'N/A';
 		}
-
-	}
-
-	/**
-	 * Executes a stored procedure using a user's ID as the sole argument.
-	 *
-	 * @param $userID ID of the user whom the function pertains to.
-	 * @param $procedure_name Name of the procedure to execute.
-	 *
-	 * @return False if command failed, otherwise returns the result of the procedure.
-	 */
-	function executeChapterProcedure($userID, $procedure_name){
-
-		return executeStoredProcedure($procedure_name, $userID);
 
 	}
 

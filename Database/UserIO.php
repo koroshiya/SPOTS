@@ -218,8 +218,9 @@
 	 * @return User specified by ID. False if function fails.
 	 */
 	function getUser($userID){
-		$procedure_name = 'get_user_by_id';
-		return executeStoredProcedure($procedure_name, $userID);
+		$userID = getEscapedSQLParam($userID);
+		$procedure_name = "SELECT * FROM ScanUser AS s WHERE s.userID = $userID;";
+		return executeStoredProcedure($procedure_name);
 	}
 
 	/**
@@ -228,8 +229,8 @@
 	 * @return All users stored in the DB. False if function fails.
 	 */
 	function getUsersAll(){
-		$procedure_name = 'get_users_all';
-		return executeStoredProcedure($procedure_name, null);
+		$procedure_name = "SELECT * FROM ScanUser;";
+		return executeStoredProcedure($procedure_name);
 	}
 
 	/**
@@ -241,8 +242,13 @@
 	 *			False if function fails.
 	 */
 	function getUsersByPosition($position){
-		$procedure_name = 'get_users_by_position';
-		return executeStoredProcedure($procedure_name, $position);
+		if ($position === 'S' OR $position === 'A' OR $position === 'M'){ /*s = staff, a = admin, m = mod*/
+			$position = getEscapedSQLParam($position);
+			$procedure_name = "SELECT * FROM ScanUser AS s WHERE s.title = $position;";
+			return executeStoredProcedure($procedure_name);
+		}else{
+			return getUsersAll();
+		}
 	}
 
 	/**
