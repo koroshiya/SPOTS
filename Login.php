@@ -2,8 +2,8 @@
 
 require_once('./header.php');
 
-echo "<div style=\"overflow-x:hidden;top:50%;margin: -75px 0 0 0px;position:relative;\">
-		<div style=\"margin: 0px 0 0 -150px; position:relative; left:50%; \">";
+echo "<div style=\"overflow-x:hidden;top:50%;margin: -75px 0 0 0px;position:fixed;\">
+		<div style=\"margin: 0px 0 0 -150px; position:fixed; left:50%; \">";
 
 if (isset($_SESSION['username'])){ //session_is_registered(username)
 	echo "Login successful";
