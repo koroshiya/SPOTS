@@ -3,7 +3,7 @@
 		<input type="hidden" name="action" value="Members">
 		<input type="text" name="memberSearch" id="memberSearch" value="Search..." onfocus="if (this.value == 'Search...'){this.value=''}" onblur="if (this.value == ''){this.value='Search...'}" style="width:85%">
 	</form>
-	<a class="sidebar_item" href="?action=Members&amp;sub=Add_Member">Add Member</a><br>
+	<a class="sidebar_item" href="?action=Members&amp;sub=Add">Add Member</a><br>
 
 	<div class="sidebar_heading">Sort:</div>
 	<form method="GET" style="text-align:center;">

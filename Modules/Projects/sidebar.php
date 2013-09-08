@@ -3,7 +3,7 @@
 		<input type="hidden" name="action" value="Projects">
 		<input type="text" name="series_search" id="projectSearch" value="Search..." onfocus="if (this.value == 'Search...'){this.value=''}" onblur="if (this.value == ''){this.value='Search...'}" style="width:85%">
 	</form>
-	<a class="sidebar_item" href="?action=Projects&amp;sub=Add_Project">Add Project</a><br />
+	<a class="sidebar_item" href="?action=Projects&amp;sub=Add">Add Project</a><br />
 
 	<div class="sidebar_heading">Sort:</div>
 	<form method="GET" style="text-align:center;">

@@ -19,10 +19,10 @@ if (sizeof($seriesList) > 0){
 ?>
 <span style="font-style:italic; font-size:10pt;">Click on a title to edit the series</span><br>
 <table id="projectList" class="list">
-<tr class="projectListRow" id="projectListHeader">
-	<td class="projectTitle">Project Title</td>
-	<td class="projectStatus">Status</td>
-	<td class="projectManager">Project Manager</td>
+<tr class="projectListRow">
+	<th class="projectTitle">Project Title</th>
+	<th class="projectStatus">Status</th>
+	<th class="projectManager">Project Manager</th>
 </tr>
 <?php
 
