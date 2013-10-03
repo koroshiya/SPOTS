@@ -4,6 +4,7 @@ html, body {
 	text-rendering:optimizeLegibility;
 	image-rendering:optimizeSpeed;
 	width:100%;
+	font-family:Ubuntu Light;
 }
 header {
 	width:100%;
@@ -11,8 +12,8 @@ header {
 	margin:0px;
 	top:0px;
 	background-color:#0099cc;
-	border-bottom:2px solid black;
 	color:white;
+	font-family:Ubuntu;
 	line-height:40px;
 	text-align:center;
 	position:fixed;
@@ -27,18 +28,22 @@ table {
 tr {
 	height:35px;
 }
-input[type="text"], input[type="password"], input[type="checkbox"], textarea {
+th {
+	color:white;
+	background-color:#0099cc;
+}
+input[type="text"], input[type="password"], input[type="checkbox"], input[type="email"], textarea {
 	border:2px solid #999;
-	border-radius:5px;
+	border-radius:0px;
 	transition:0.25s;
 }
-input[type="text"]:focus, input[type="password"]:focus, input[type="checkbox"]:checked, textarea:focus {
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="checkbox"]:checked, textarea:focus {
 	box-shadow:0 0 5px #008bc0;
 	border-color:#008bc0;
 	outline:none;
 	color:#008bc0;
 }
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"] {
 	height:18px;
 	width:250px;
 	text-indent:5px;
@@ -46,6 +51,7 @@ input[type="text"], input[type="password"] {
 input[type="checkbox"] {
 	width:15px;
 	height:15px;
+	border:1px solid #999;
 }
 input[type="submit"] {
 	width:100px;
@@ -56,26 +62,23 @@ input[type="file"] {
 	font-size:10pt;
 }
 select {
-	width:100px;
+	width:130px;
 	height:25px;
-	font-size:10pt;
-}
-select:focus {
-	box-shadow:0 0 3px #008bc0;
+	font-size:12pt;
 }
 
 #header_title {
-	margin-right:40px;
+	margin-right:30px;
+	font-size:18pt;
 }
 .header_nav, #header_title {
 	padding-left:8px;
 	padding-right:8px;
 	float:left;
 	color:white;
-	font-size:14pt;
 }
-.header_nav:hover {
-	background-color:#00688B;
+.header_nav:hover, #header_user:hover {
+	background-color:#0088C0;
 }
 #header_user {
 	float:right;
@@ -89,33 +92,32 @@ select:focus {
 	cursor:pointer;
 	color:white;
 }
-#header_user:hover {
-	background-color:#00688B;
-}
 #userMenu {
 	position:fixed;
 	margin:0px;
-	top:42px;
+	top:40px;
 	right:10px;
-	width:160px;
-	height:180px;
+	width:180px;
+	height:140px;
 	background-color:white;
 	visibility:hidden;
-	border-bottom-right-radius:5px;
-	border-bottom-left-radius:5px;
-	border:1px solid black;
+	border:2px solid lightgrey;
 	border-top:0px;
+	text-align:center;
+}
+#loginUser, #loginPass {
+	width:170px;
 }
 
 #sidebar {
 	height:100%;
 	width:235px;
-	top:42px;
+	top:40px;
 	padding-top:10px;
 	margin:0px;
 	position:fixed;
 	background-color:#ededed;
-	border-right:3px solid black;
+	border-right:3px solid lightgrey;
 	line-height:40px;
 }
 .sidebar_heading {
@@ -137,7 +139,7 @@ select:focus {
 }
 .sidebar_item:hover {
 	color:white;
-	background-color:#00688B;
+	background-color:#0088C0;
 }
 
 #module {
@@ -149,6 +151,7 @@ select:focus {
 .sectionTitle {
 	color:#008BC0;
 	font-size:24pt;
+	font-family:Ubuntu;
 }
 .subTitle {
 	color:#008BC0;
@@ -156,7 +159,7 @@ select:focus {
 }
 
 .list {
-	background-color:#ededed;
+	background-color:white;
 	border-collapse:collapse;
 	border:1px solid black;
 }

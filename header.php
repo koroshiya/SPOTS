@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
 	<title><?php echo str_replace('_', ' ', $action); ?> | SPOTS</title>
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,300italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="style.css" type="text/css">
 	<?php
 		if (isset($moduleDir) && file_exists($moduleDir.'/style.css')) {
@@ -23,4 +24,8 @@
 	</nav>
     <span id="header_user">Guest</span>
 </header>
-<div id="userMenu">...</div>
+<div id="userMenu">
+	Username:<br /><input type="text" id="loginUser" /><br />
+	Password:<br /><input type="password" id="loginPass" /><br />
+	<input type="submit" value="Login" style="margin-top:12px;" />
+</div>

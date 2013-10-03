@@ -17,6 +17,7 @@ if (isset($_GET['series_search']) && isset($_GET['status'])) {
 if (sizeof($seriesList) > 0){
 
 ?>
+
 <span style="font-style:italic; font-size:10pt;">Click on a title to edit the series</span><br>
 <table id="projectList" class="list">
 <tr class="projectListRow">

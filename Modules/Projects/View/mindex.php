@@ -1,11 +1,11 @@
 <?php
 
-$projectImage = 'http://psylockescans.files.wordpress.com/2012/11/i155391.jpg?w=210&amp;h=300';
-$projectTitle = 'Comic Studio';
+$projectImage = 'http://orinjido.info/myimages/project_images/shurabara!.jpg';
+$projectTitle = 'Shurabara!';
 $projectAuthor = 'Author';
 $projectArtist = 'Artist';
 $projectGenres = [
-	'Comedy', 'Romance', 'Seinen'
+	'Comedy', 'Harem', 'Romance', 'School Life', 'Shounen'
 ];
 
 ?>
@@ -15,14 +15,17 @@ $projectGenres = [
 		<?php 
 
 		echo '
-			<div id="project_title">'.$projectTitle.'</div> <br />
+			<span id="project_title">'.$projectTitle.'</span> <br />
 			<img id="project_img" src="'.$projectImage.'" alt="'.$projectTitle.'" />
 			<div id="project_info">
 				<span id="project_author">'.$projectAuthor.'</span>
 				<span id="project_artist">'.$projectArtist.'</span> <br />
 
-				<ul id="project_genres">
-				</ul>
+				<ul id="project_genres">'
+					foreach($projectGenres as $projectGenre) {
+						echo('<li>'.$projectGenre.'</li>');
+					}
+				'</ul>
 			</div>
 		';
 

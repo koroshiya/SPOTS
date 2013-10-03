@@ -23,16 +23,16 @@ if ($connection === null || !mysqli_ping($connection)){
 
 require_once('./header.php');
 
-$sidebarCheck = $actionDir.'/sidebar.php';
-if (!file_exists($sidebarCheck) || !include_once($sidebarCheck)){
+$sidebar = $actionDir.'/sidebar.php';
+if (!file_exists($sidebar) || !include_once($sidebar)){
 	$marginFix = ' style="margin-left:0px;"';
 }else {
 	$marginFix = '';
 }
 
 echo '<div id="module"'.$marginFix.'>';
-$mindexCheck = $moduleDir.'/mindex.php';
-if (!file_exists($mindexCheck) || !include_once($mindexCheck)) {
+$mindex = $moduleDir.'/mindex.php';
+if (!file_exists($mindex) || !include_once($mindex)) {
 	echo '<div style="margin-top:50px;">This page does not exist!</div>';
 }
 echo '</div>';
