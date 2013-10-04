@@ -36,14 +36,7 @@ if (!file_exists($mindex) || !include_once($mindex)) {
 	echo '<div style="margin-top:50px;">This page does not exist!</div>';
 }
 echo '</div>';
-echo '<script src="index.js"></script>';
-
-if (file_exists($moduleDir.'/script.js')) {
-	echo '<script src="'.$moduleDir.'/index.js"></script>';
-}
-if (file_exists($actionDir.'/script.js')) {
-	echo '<script src="'.$actionDir.'/index.js"></script>';
-}
 
 require_once('./footer.html');
+
 ?>

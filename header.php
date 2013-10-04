@@ -25,7 +25,15 @@
     <span id="header_user">Guest</span>
 </header>
 <div id="userMenu">
+<?php
+	if (!isset($_SESSION['authorized'])){
+?>
 	Username:<br /><input type="text" id="loginUser" /><br />
 	Password:<br /><input type="password" id="loginPass" /><br />
 	<input type="submit" value="Login" style="margin-top:12px;" />
+<?php
+	}else{
+		//TODO: display relevant user info? Don't show this div at all?
+	}
+?>
 </div>

@@ -100,7 +100,7 @@ select {
 	width:180px;
 	height:140px;
 	background-color:white;
-	visibility:hidden;
+	visibility:visible;
 	border:2px solid lightgrey;
 	border-top:0px;
 	text-align:center;
