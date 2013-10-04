@@ -1,5 +1,13 @@
 <?php
 
+$fromIndex = TRUE;
+
+session_start();
+if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
+    require_once('./Login.php');
+    //exit;
+}
+
 //Get Module names
 if (!isset($_GET['action'])) {
 	$action = 'Tasks';
@@ -10,7 +18,6 @@ if (!isset($_GET['action'])) {
 }
 
 //Declare SPOTS variables
-$fromIndex = TRUE;
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
 $databaseDir = dirname(__FILE__).'/Database/';
@@ -18,7 +25,7 @@ $databaseDir = dirname(__FILE__).'/Database/';
 require_once('./Database/Connection.php');
 global $connection;
 if ($connection === null || !mysqli_ping($connection)){
-	connect('localhost', 'root', '', 'SPOTS');
+	connect();
 }
 
 require_once('./header.php');

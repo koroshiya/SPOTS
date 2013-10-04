@@ -18,19 +18,13 @@
 	
 	/**
 	 * Attempts to connect to MySQL on the target machine with the credentials supplied.
-	 * 
-	 * @param $mysql_host Host on which the database resides. Can be 'localhost'.
-	 * @param $mysql_user MySQL username of the user through whom a database connection will be established.
-	 * @param $mysql_password Password of the user through whom a database connection will be established.
-	 * @param $mysql_database Name of the database for which to create a connection.
 	 *
 	 * @return False if the connection failed, otherwise returns the established connection.
 	 * */
-	function connect($mysql_host, $mysql_user, $mysql_password, $mysql_database){
-		
+	function connect(){
+    	require_once('./Database/Settings.php');
 		global $connection;
-		$connection = @mysqli_connect('p:'.$mysql_host, $mysql_user, $mysql_password, $mysql_database);
-		
+		$connection = @mysqli_connect('p:'.host, dbUser, dbPass, dbName);
 	}
 
 	/**

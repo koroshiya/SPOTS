@@ -28,9 +28,11 @@
 <?php
 	if (!isset($_SESSION['authorized'])){
 ?>
-	Username:<br /><input type="text" id="loginUser" /><br />
-	Password:<br /><input type="password" id="loginPass" /><br />
-	<input type="submit" value="Login" style="margin-top:12px;" />
+	<form id="loginForm" name="loginForm" method="post">
+		Username:<br /><input type="text" id="loginUser" name="loginUser" /><br />
+		Password:<br /><input type="password" id="loginPass" name="loginPass" /><br />
+		<input action="index.php" type="submit" value="login" style="margin-top:12px;" />
+	</form>
 <?php
 	}else{
 		//TODO: display relevant user info? Don't show this div at all?
