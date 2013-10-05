@@ -9,7 +9,7 @@
 
 DEFINE(host, 'localhost');
 DEFINE(dbUser, 'root');
-DEFINE(dbPass, 'toor');
+DEFINE(dbPass, '');
 DEFINE(dbName, 'SPOTS');
 
 ?>

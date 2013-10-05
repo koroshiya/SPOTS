@@ -18,14 +18,17 @@ $projectGenres = [
 			<span id="project_title">'.$projectTitle.'</span> <br />
 			<img id="project_img" src="'.$projectImage.'" alt="'.$projectTitle.'" />
 			<div id="project_info">
+				<span class="subTitle">Author</span>
 				<span id="project_author">'.$projectAuthor.'</span>
 				<span id="project_artist">'.$projectArtist.'</span> <br />
 
-				<ul id="project_genres">'
+				<ul id="project_genres">';
+
 					foreach($projectGenres as $projectGenre) {
-						echo('<li>'.$projectGenre.'</li>');
+						echo('<li class="project_genre">'.$projectGenre.'</li>');
 					}
-				'</ul>
+
+				echo '</ul>
 			</div>
 		';
 

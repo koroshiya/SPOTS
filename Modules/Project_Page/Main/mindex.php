@@ -15,7 +15,7 @@
 					$arrayOfSeries = getSeriesAll();
 				}
 
-				if (sizeof($arrayOfSeries) > 0){
+				if ($arrayOfSeries !== false && sizeof($arrayOfSeries) > 0){
 
 					foreach ($arrayOfSeries as $series) {
 						$title = $series[1];

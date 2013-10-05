@@ -1,6 +1,17 @@
 <?php
 
 $fromIndex = TRUE;
+$databaseDir = dirname(__FILE__).'/Database/';
+
+require_once($databaseDir.'Connection.php');
+global $connection;
+if ($connection === null || !mysqli_ping($connection)){
+	connect();
+}
+else {
+	// No point in checking anything else if we can't connect to the database.
+	die('Failure to connect to database.');
+}
 
 session_start();
 if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
@@ -17,16 +28,8 @@ if (!isset($_GET['action'])) {
 	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
 }
 
-//Declare SPOTS variables
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
-$databaseDir = dirname(__FILE__).'/Database/';
-
-require_once('./Database/Connection.php');
-global $connection;
-if ($connection === null || !mysqli_ping($connection)){
-	connect();
-}
 
 require_once('./header.php');
 
@@ -39,7 +42,7 @@ if (!file_exists($sidebar) || !include_once($sidebar)){
 
 echo '<div id="module"'.$marginFix.'>';
 $mindex = $moduleDir.'/mindex.php';
-if (!file_exists($mindex) || !include_once($mindex)) {
+if (!include_once($mindex)) {
 	echo '<div style="margin-top:50px;">This page does not exist!</div>';
 }
 echo '</div>';

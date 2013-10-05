@@ -14,7 +14,7 @@ if (isset($_GET['series_search']) && isset($_GET['status'])) {
 	$seriesList = getSeriesAll();
 }
 
-if (sizeof($seriesList) > 0){
+if ($seriesList !== false && sizeof($seriesList) > 0){
 
 ?>
 

@@ -22,7 +22,7 @@
 	 * @return False if the connection failed, otherwise returns the established connection.
 	 * */
 	function connect(){
-    	require_once('./Database/Settings.php');
+    	require_once($databaseDir.'Settings.php');
 		global $connection;
 		$connection = @mysqli_connect('p:'.host, dbUser, dbPass, dbName);
 	}

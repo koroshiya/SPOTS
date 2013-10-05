@@ -13,11 +13,6 @@ if (isset($_GET['position'])){
 }else{
 	$userList = getUsersAll();
 }
-if ($userList === FALSE){
-	die('Database connection failed');
-}elseif (count($userList) == 0){
-	die('No users in database');
-}
 /*$memberList = array(
 	'Daktyl198', 'Administrator', '2 days ago',
 	'Koro', 'Administrator', '1 week ago', 
@@ -37,13 +32,19 @@ $count = 0;*/
 	</tr>
 <?php
 
-foreach($userList as $user){
-	$memberViewUrl = '?action=Members&amp;sub=View&amp;member='.str_replace('\0', '', $user[0]);
-	echo '<tr class="memberListRow">
-			<td class="memberName"><a href="'.$memberViewUrl.'">'.$user[1].'</a></td>
-			<td class="memberPositionMain">'.$user[4].'</td>
-			<td class="lastActive">'.'N/A'.'</td>
-		</tr>';
+if ($userList === FALSE){
+	echo('Database connection failed' . "<br />");
+}elseif (count($userList) == 0){
+	echo('No users in database' . "<br />");
+}else{
+	foreach($userList as $user){
+		$memberViewUrl = '?action=Members&amp;sub=View&amp;member='.str_replace('\0', '', $user[0]);
+		echo '<tr class="memberListRow">
+				<td class="memberName"><a href="'.$memberViewUrl.'">'.$user[1].'</a></td>
+				<td class="memberPositionMain">'.$user[4].'</td>
+				<td class="lastActive">'.'N/A'.'</td>
+			</tr>';
+	}
 }
 
 /*while (isset($memberList[$count])) {
