@@ -25,7 +25,7 @@ Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_pr
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_series //
-CREATE FUNCTION insert_series(seriesTitle varchar(100), status character, description varchar(255), thumbnailURL varchar(255), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean
+CREATE FUNCTION insert_series(seriesTitle varchar(100), status character, description varchar(255), thumbnailURL varchar(255), projectManagerID smallint unsigned, visibleToPublic boolean, isAdult boolean) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalSeries smallint unsigned;
 SELECT COUNT(*) INTO totalSeries FROM Series;
@@ -42,7 +42,7 @@ If the series has any chapters associated with it, nothing is deleted and return
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_series //
-CREATE FUNCTION delete_series(seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_series(seriesID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalChapters smallint unsigned;
 SELECT COUNT(*) INTO totalChapters FROM Chapter AS c WHERE c.seriesID = seriesID;
@@ -58,7 +58,7 @@ Deletes a series and all associated chapters & tasks.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_series_force //
-CREATE FUNCTION delete_series_force(seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_series_force(seriesID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM Task WHERE Task.seriesID = seriesID;
 DELETE FROM Chapter WHERE Chapter.seriesID = seriesID;
@@ -72,7 +72,7 @@ I: Inactive, A: Active, S: Stalled, H: Hiatus, D: Dropped, C: Complete*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_status //
-CREATE FUNCTION series_set_status(seriesID smallint unsigned, status character) RETURNS boolean
+CREATE FUNCTION series_set_status(seriesID smallint unsigned, status character) RETURNS boolean DETERMINISTIC
 BEGIN 
 IF NOT status = 'I' OR status = 'A' OR status = 'S' OR status = 'H' OR status = 'D' OR status = 'C' THEN
 RETURN false;
@@ -86,7 +86,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_thumbnail //
-CREATE FUNCTION series_set_thumbnail(seriesID smallint unsigned, thumbnailURL varchar(255)) RETURNS boolean
+CREATE FUNCTION series_set_thumbnail(seriesID smallint unsigned, thumbnailURL varchar(255)) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Series AS s SET s.thumbnailURL = thumbnailURL WHERE s.seriesID = seriesID;
 RETURN true;
@@ -97,7 +97,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_project_manager //
-CREATE FUNCTION series_set_project_manager(seriesID smallint unsigned, managerID smallint unsigned) RETURNS boolean
+CREATE FUNCTION series_set_project_manager(seriesID smallint unsigned, managerID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Series AS s SET s.projectManagerID = managerID WHERE s.seriesID = seriesID;
 RETURN true;
@@ -108,7 +108,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_visible //
-CREATE FUNCTION series_set_visible(seriesID smallint unsigned, visible boolean) RETURNS boolean
+CREATE FUNCTION series_set_visible(seriesID smallint unsigned, visible boolean) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Series AS s SET s.visibleToPublic = visible WHERE s.seriesID = seriesID;
 RETURN true;
@@ -119,7 +119,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_set_adult //
-CREATE FUNCTION series_set_adult(seriesID smallint unsigned, adult boolean) RETURNS boolean
+CREATE FUNCTION series_set_adult(seriesID smallint unsigned, adult boolean) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Series AS s SET s.isAdult = adult WHERE s.seriesID = seriesID;
 RETURN true;
@@ -130,7 +130,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_visible_series //
-CREATE FUNCTION is_visible_series(seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_visible_series(seriesID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE boolAdult boolean;
 SELECT s.visibleToPublic INTO boolAdult FROM Series AS s WHERE s.seriesID = seriesID;
@@ -142,7 +142,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_adult_series //
-CREATE FUNCTION is_adult_series(seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_adult_series(seriesID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE boolAdult boolean;
 SELECT s.isAdult INTO boolAdult FROM Series AS s WHERE s.seriesID = seriesID;
@@ -154,7 +154,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_project_count //
-CREATE FUNCTION get_project_count() RETURNS smallint unsigned
+CREATE FUNCTION get_project_count() RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Series;
@@ -166,7 +166,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_series_status //
-CREATE FUNCTION get_series_status(seriesID smallint unsigned) RETURNS character
+CREATE FUNCTION get_series_status(seriesID smallint unsigned) RETURNS character DETERMINISTIC
 BEGIN 
 DECLARE status character;
 SELECT s.status INTO status FROM Series AS s WHERE s.seriesID = seriesID;

@@ -13,7 +13,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_admin //
-CREATE FUNCTION is_admin(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_admin(userID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE suUserRole character;
 SELECT su.userRole INTO suUserRole FROM ScanUser AS su WHERE su.userID = userID;
@@ -26,7 +26,7 @@ or is_webmaster, however the implementation is decided*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_mod //
-CREATE FUNCTION is_mod(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_mod(userID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE suUserRole character;
 SELECT su.userRole INTO suUserRole FROM ScanUser AS su WHERE su.userID = userID;

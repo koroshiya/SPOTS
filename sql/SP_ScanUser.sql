@@ -11,7 +11,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_user //
-CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), email varchar(100), title character) RETURNS boolean
+CREATE FUNCTION insert_user(userName varchar(30), userPassword varchar(20), email varchar(100), title character) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalUsers smallint unsigned;
 DECLARE sha1Password binary(20);
@@ -31,7 +31,7 @@ or is the project manager of at least one series, this function fails and return
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_user //
-CREATE FUNCTION delete_user(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_user(userID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 IF is_founder(userID) OR is_webmaster(userID) OR get_user_task_count(userID) > 0 OR is_project_manager(userID) THEN
 RETURN false;
@@ -47,7 +47,7 @@ All associated Tasks are deallocated. Same with Series for which the user is the
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_user_force //
-CREATE FUNCTION delete_user_force(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION delete_user_force(userID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 IF is_founder(userID) OR is_webmaster(userID) THEN
 RETURN false;
@@ -64,7 +64,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_password //
-CREATE FUNCTION user_set_password(userID smallint unsigned, newPassword varchar(20)) RETURNS boolean
+CREATE FUNCTION user_set_password(userID smallint unsigned, newPassword varchar(20)) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
@@ -86,7 +86,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_password_valid //
-CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS boolean
+CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
@@ -107,7 +107,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_password_valid_by_name //
-CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS boolean
+CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userEmail varchar(100);
@@ -127,7 +127,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_email //
-CREATE FUNCTION user_set_email(userID smallint unsigned, newEmail varchar(100)) RETURNS boolean
+CREATE FUNCTION user_set_email(userID smallint unsigned, newEmail varchar(100)) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
@@ -148,7 +148,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_email //
-CREATE FUNCTION user_get_email(userID smallint unsigned) RETURNS varchar(100)
+CREATE FUNCTION user_get_email(userID smallint unsigned) RETURNS varchar(100) DETERMINISTIC
 BEGIN 
 DECLARE email varchar(100);
 SELECT s.email INTO email FROM ScanUser AS s WHERE s.userID = userID;
@@ -160,7 +160,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_set_permission //
-CREATE FUNCTION user_set_permission(userID smallint unsigned, newRole character) RETURNS boolean
+CREATE FUNCTION user_set_permission(userID smallint unsigned, newRole character) RETURNS boolean DETERMINISTIC
 BEGIN 
 IF NOT(newRole = 'S' OR newRole = 'A' OR newRole = 'M') THEN /*s = staff, a = admin, m = mod*/
 RETURN false;
@@ -174,7 +174,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_permission //
-CREATE FUNCTION user_get_permission(userID smallint unsigned) RETURNS character
+CREATE FUNCTION user_get_permission(userID smallint unsigned) RETURNS character DETERMINISTIC
 BEGIN
 DECLARE title character;
 SELECT u.title INTO title FROM ScanUser AS u WHERE u.userID = userID;
@@ -187,7 +187,7 @@ Tests if the user is a project manager for ANY series, not one in particular.*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_project_manager //
-CREATE FUNCTION is_project_manager(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_project_manager(userID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN
 	DECLARE total smallint unsigned;
 	SELECT COUNT(*) INTO total FROM Series AS s WHERE s.projectManagerID = userID;
@@ -200,7 +200,7 @@ Tests if the user is a project manager of a particular series*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_project_manager_of_series //
-CREATE FUNCTION is_project_manager_of_series(userID smallint unsigned, seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION is_project_manager_of_series(userID smallint unsigned, seriesID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN
 	DECLARE pmID smallint unsigned;
 	SELECT s.projectManagerID INTO pmID FROM Series AS s WHERE s.seriesID = seriesID;

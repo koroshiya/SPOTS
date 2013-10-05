@@ -22,7 +22,7 @@ Changelog:	1.01: Fixed delete_chapter, implemented insert_chapter (untested), ch
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_chapter //
-CREATE FUNCTION insert_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+CREATE FUNCTION insert_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalChapters smallint unsigned;
 DECLARE homeID smallint unsigned;
@@ -42,7 +42,7 @@ If the chapter has any tasks associated with it, nothing is deleted and returns 
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter //
-CREATE FUNCTION delete_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+CREATE FUNCTION delete_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalTasks smallint unsigned;
 SELECT COUNT(*) INTO totalTasks FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
@@ -60,7 +60,7 @@ Deletes a chapter and all associated tasks*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_chapter_force //
-CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+CREATE FUNCTION delete_chapter_force(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM Task WHERE Task.seriesID = seriesID AND Task.chapterNumber = chapterNumber AND Task.chapterSubNumber = chapterSubNumber;
 DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
@@ -73,7 +73,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_revision_modify //
-CREATE FUNCTION chapter_revision_modify(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, revision tinyint unsigned) RETURNS boolean
+CREATE FUNCTION chapter_revision_modify(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, revision tinyint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Chapter AS c SET c.chapterRevisionNumber = revision WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
 RETURN true;
@@ -84,7 +84,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_add_group //
-CREATE FUNCTION chapter_add_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, newGroupID smallint unsigned) RETURNS boolean
+CREATE FUNCTION chapter_add_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, newGroupID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 INSERT INTO ChapterGroup Values(seriesID, chapterNumber, chapterSubNumber, newGroupID);
 RETURN true;
@@ -95,7 +95,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_remove_group //
-CREATE FUNCTION chapter_remove_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, groupID smallint unsigned) RETURNS boolean
+CREATE FUNCTION chapter_remove_group(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, groupID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber AND ChapterGroup.groupID = groupID;
 RETURN true;
@@ -106,7 +106,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_remove_group_all //
-CREATE FUNCTION chapter_remove_group_all(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+CREATE FUNCTION chapter_remove_group_all(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM ChapterGroup WHERE ChapterGroup.seriesID = seriesID AND ChapterGroup.chapterNumber = chapterNumber AND ChapterGroup.chapterSubNumber = chapterSubNumber;
 RETURN true;
@@ -117,7 +117,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS chapter_set_visible //
-CREATE FUNCTION chapter_set_visible(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, visible boolean) RETURNS boolean
+CREATE FUNCTION chapter_set_visible(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, visible boolean) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE Chapter AS c SET c.visible = visible;
 RETURN true;
@@ -129,7 +129,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS is_visible_chapter //
-CREATE FUNCTION is_visible_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean
+CREATE FUNCTION is_visible_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
 DECLARE visible boolean;
 SELECT c.visible INTO visible FROM Series AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
