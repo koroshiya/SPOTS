@@ -38,7 +38,7 @@
 	 */
 	function addSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
 
-		$args = [
+		$args = array(
 				"seriesTitle" => $seriesTitle,
 				"status" => $status,
 				"description" => $description,
@@ -46,7 +46,7 @@
 				"projectManagerID" => $projectManagerID,
 				"visibleToPublic" => $visibleToPublic,
 				"boolAdult" => $boolAdult,
-		];
+		);
 
 		$procedure_name = 'insert_series';
 		$result = executeFunction($procedure_name, $args);

@@ -1,6 +1,7 @@
 <?php
 
 $fromIndex = TRUE;
+$databaseDir = dirname(__FILE__).'/Database/';
 
 session_start();
 if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
@@ -20,7 +21,6 @@ if (!isset($_GET['action'])) {
 //Declare SPOTS variables
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
-$databaseDir = dirname(__FILE__).'/Database/';
 
 require_once('./Database/Connection.php');
 global $connection;
