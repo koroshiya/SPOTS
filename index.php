@@ -2,6 +2,7 @@
 
 $fromIndex = TRUE;
 $databaseDir = dirname(__FILE__).'/Database/';
+<<<<<<< HEAD
 
 require_once($databaseDir.'Connection.php');
 global $connection;
@@ -12,6 +13,8 @@ else {
 	// No point in checking anything else if we can't connect to the database.
 	die('Failure to connect to database.');
 }
+=======
+>>>>>>> b751f1b60308e53d3aa29eb8954912577ae7af4f
 
 session_start();
 if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
@@ -30,6 +33,15 @@ if (!isset($_GET['action'])) {
 
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
+<<<<<<< HEAD
+=======
+
+require_once('./Database/Connection.php');
+global $connection;
+if ($connection === null || !mysqli_ping($connection)){
+	connect();
+}
+>>>>>>> b751f1b60308e53d3aa29eb8954912577ae7af4f
 
 require_once('./header.php');
 

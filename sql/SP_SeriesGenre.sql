@@ -2,7 +2,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_add_genre //
-CREATE FUNCTION series_add_genre(seriesID smallint unsigned, name varchar(20)) RETURNS boolean
+CREATE FUNCTION series_add_genre(seriesID smallint unsigned, name varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 INSERT INTO SeriesGenre VALUES(seriesID, name);
 RETURN true;
@@ -13,7 +13,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_remove_genre //
-CREATE FUNCTION series_remove_genre(seriesID smallint unsigned, name varchar(20)) RETURNS boolean
+CREATE FUNCTION series_remove_genre(seriesID smallint unsigned, name varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM SeriesGenre WHERE SeriesGenre.seriesID = seriesID AND SeriesGenre.name = name;
 RETURN true;
@@ -24,7 +24,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS series_remove_genre_all //
-CREATE FUNCTION series_remove_genre_all(seriesID smallint unsigned) RETURNS boolean
+CREATE FUNCTION series_remove_genre_all(seriesID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM SeriesGenre WHERE SeriesGenre.seriesID = seriesID;
 RETURN true;

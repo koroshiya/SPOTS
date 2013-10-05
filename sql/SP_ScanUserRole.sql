@@ -13,7 +13,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_add_role //
-CREATE FUNCTION user_add_role(userID smallint unsigned, name varchar(20)) RETURNS boolean
+CREATE FUNCTION user_add_role(userID smallint unsigned, name varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 INSERT INTO UserRole VALUES(userID, name);
 RETURN true;
@@ -27,7 +27,7 @@ into another static table and deleted upon chapter release*/
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_remove_role //
-CREATE FUNCTION user_remove_role(userID smallint unsigned, name varchar(20)) RETURNS boolean
+CREATE FUNCTION user_remove_role(userID smallint unsigned, name varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE total smallint unsigned;
 SELECT Count(*) INTO total FROM Task AS t WHERE t.userID = userID AND t.userRole = name;
@@ -43,7 +43,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_remove_role_all //
-CREATE FUNCTION user_remove_role_all(userID smallint unsigned) RETURNS boolean
+CREATE FUNCTION user_remove_role_all(userID smallint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE total smallint unsigned;
 SELECT Count(*) INTO total FROM Task AS t WHERE t.userID = userID;

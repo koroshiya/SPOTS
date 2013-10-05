@@ -18,7 +18,7 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_task //
-CREATE FUNCTION insert_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean
+CREATE FUNCTION insert_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 INSERT INTO Task VALUES(seriedID, chapterNumber, chapterSubNumber, userID, null, null, userRole);
 RETURN true;
@@ -29,7 +29,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS delete_task //
-CREATE FUNCTION delete_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean
+CREATE FUNCTION delete_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DELETE FROM Task WHERE Task.seriesID = seriesID AND Task.chapterNumber = chapterNumber AND Task.chapterSubNumber = chapterSubNumber AND Task.userID = userID AND Task.userRole = userRole;
 RETURN true;
@@ -40,7 +40,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS task_set_status //
-CREATE FUNCTION task_set_status(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), status character) RETURNS boolean
+CREATE FUNCTION task_set_status(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), status character) RETURNS boolean DETERMINISTIC
 BEGIN 
 IF status = 'A' OR status = 'I' OR status = 'S' OR status = 'C' THEN
 UPDATE t AS Task SET t.status = status WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
@@ -54,7 +54,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS task_set_description //
-CREATE FUNCTION task_set_description(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), description varchar(255)) RETURNS boolean
+CREATE FUNCTION task_set_description(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), description varchar(255)) RETURNS boolean DETERMINISTIC
 BEGIN 
 UPDATE t AS Task SET t.description = description WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
 RETURN true;
@@ -65,7 +65,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_user_task_count //
-CREATE FUNCTION get_user_task_count(userID smallint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_user_task_count(userID smallint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = userID;
@@ -77,7 +77,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_user_task_count_active //
-CREATE FUNCTION get_user_task_count_active(userID smallint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_user_task_count_active(userID smallint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = userID AND NOT t.status = 'C';
@@ -89,7 +89,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_user_task_count_complete //
-CREATE FUNCTION get_user_task_count_complete(userID smallint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_user_task_count_complete(userID smallint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = userID AND t.status = 'C';
@@ -101,7 +101,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_task_status //
-CREATE FUNCTION get_task_status(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS character
+CREATE FUNCTION get_task_status(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS character DETERMINISTIC
 BEGIN 
 DECLARE status smallint unsigned;
 SELECT t.status INTO status FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
@@ -113,7 +113,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_chapter_task_count //
-CREATE FUNCTION get_chapter_task_count(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_chapter_task_count(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
@@ -125,7 +125,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_chapter_task_count_active //
-CREATE FUNCTION get_chapter_task_count_active(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_chapter_task_count_active(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
@@ -137,7 +137,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS get_chapter_task_count_complete //
-CREATE FUNCTION get_chapter_task_count_complete(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned
+CREATE FUNCTION get_chapter_task_count_complete(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
 BEGIN
 DECLARE total smallint unsigned;
 SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
