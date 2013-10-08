@@ -1,5 +1,9 @@
+#project_info_table {
+	margin:-45px;
+	border-spacing:45px;
+}
 #content {
-	width:95%;
+	width:85%;
 	margin:0 auto;
 }
 #view_header {
@@ -10,8 +14,8 @@
 	font-size:16pt;
 }
 #project_info {
-	text-indent:5px;
 	text-align:left;
+	font-size:15pt;
 }
 #project_title {
 	display:inline-block;
@@ -20,8 +24,27 @@
 }
 #project_img {
 	float:left;
-	margin:5px;
+	margin:10px;
+}
+#project_genres {
+	margin:0px;
+	padding:0px;
 }
 .project_genre {
 	display:inline;
+}
+#project_description {
+	margin:0px;
+}
+.chapter_number, .chapter_progress, .chapter_downloads {
+	border: 2px solid lightgrey;
+}
+.chapter_number {
+	width:80px;
+}
+.chapter_progress {
+	width:400px;
+}
+.chapter_downloads {
+	width:140px;
 }

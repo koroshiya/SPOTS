@@ -20,7 +20,7 @@ header {
 }
 a {
 	text-decoration:none;
-	color:black;
+	color:#0099cc;
 }
 table {
 	display:inline-table;
@@ -31,6 +31,8 @@ tr {
 th {
 	color:white;
 	background-color:#0099cc;
+	padding-left:3px;
+	padding-right:3px;
 }
 input[type="text"], input[type="password"], input[type="checkbox"], input[type="email"], textarea {
 	border:2px solid #999;
@@ -156,11 +158,11 @@ select {
 }
 .subTitle {
 	color:#008BC0;
-	font-size:18pt;
+	font-size:20pt;
 }
 
 .list {
 	background-color:white;
 	border-collapse:collapse;
-	border:1px solid black;
+	border: 2px solid lightgrey;
 }

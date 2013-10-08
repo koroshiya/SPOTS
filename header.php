@@ -24,7 +24,6 @@
 	</nav>
     <span id="header_user">Guest</span>
 </header>
-<div id="umClickOff" style="width:100%; height:100%; position:fixed; visibility:hidden; z-index:1000;"></div>
 <div id="userMenu">
 <?php
 	if (!isset($_SESSION['authorized'])){
@@ -36,7 +35,11 @@
 	</form>
 <?php
 	}else{
-		//TODO: display relevant user info? Don't show this div at all?
+?>
+	<a style="width:100%; height:40px; color:white;" href="index.php?action=UserCP">UserCP</a><br />
+	<a style="width:100%; height:40px; color:white;" href="Logout.php">Logout</a>
+<?php
+	//Or something like this :/
 	}
 ?>
 

@@ -12,9 +12,5 @@ $(document).ready(function(){
 			$("#umClickOff").hide();
 		}
 	});
-	$("#umClickOff").click(function() {
-		$("#userMenu").hide();
-		$("#umClickOff").hide();
-	});
 
 });
