@@ -21,18 +21,14 @@ $projectChapters = array(
 		<span id="project_title"><?php echo $projectTitle; ?></span><br />
 		<img id="project_img" src="<?php echo $projectImage; ?>" alt="<?php echo $projectTitle; ?>" />
 		<div id="project_info">
-			<table id="project_info_table">
-				<tr>
-				<td><span class="subTitle">Author</span><br />
-				<span id="project_author"> <?php echo $projectAuthor; ?> </span></td>
-				<td><span class="subTitle">Artist</span><br />
-				<span id="project_artist"> <?php echo $projectArtist; ?> </span></td>
-				<td><span class="subTitle">Status</span><br />
-				<span id="project_status"> <?php echo $projectStatus; ?> </span></td>
-				<td><span class="subTitle">Type</span><br />
-				<span id="project_type"> <?php echo $projectType; ?> </span></td>
-				</tr>
-			</table><br />
+			<div class="project_info_table"><span class="subTitle">Author</span><br />
+			<span id="project_author"> <?php echo $projectAuthor; ?> </span></div>
+			<div class="project_info_table"><span class="subTitle">Artist</span><br />
+			<span id="project_artist"> <?php echo $projectArtist; ?> </span></div>
+			<div class="project_info_table"><span class="subTitle">Status</span><br />
+			<span id="project_status"> <?php echo $projectStatus; ?> </span></div>
+			<div><span class="subTitle">Type</span><br />
+			<span id="project_type"> <?php echo $projectType; ?> </span></div>
 			<br />
 			<span class="subTitle">Genres</span><br />
 			<ul id="project_genres">
