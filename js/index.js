@@ -5,12 +5,13 @@ $(document).ready(function(){
 
 	$("#header_user").click(function() {
 		$("#userMenu").toggle();
-		if ($("#userMenu").css("visibility") == "visible") {
+		var visible = $("#userMenu").css("visibility") == "visible" ? "hidden" : "visible";
+		$("#userMenu").css("visibility", visible);
+		/*if ($("#userMenu").css("visibility") == "visible") {
 			$("#umClickOff").show();
-		}
-		else {
+		}else {
 			$("#umClickOff").hide();
-		}
+		}*/
 	});
 
 });
