@@ -1,5 +1,6 @@
 <?php
 
+//TODO: Use define() here instead of using normal variables.
 $fromIndex = TRUE;
 $databaseDir = dirname(__FILE__).'/Database/';
 
@@ -9,7 +10,7 @@ if ($connection === null || !mysqli_ping($connection)){
 	connect();
 }
 else {
-	// No point in checking anything else if we can't connect to the database.
+	// No point in doing anything else if we can't connect to the database.
 	die('Failure to connect to database.');
 }
 
@@ -28,6 +29,7 @@ if (!isset($_GET['action'])) {
 	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
 }
 
+//TODO: Again, define instead of $
 $actionDir = './Modules/'.$action;
 $moduleDir = './Modules/'.$action.'/'.$sub;
 

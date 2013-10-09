@@ -20,7 +20,8 @@
 }
 #project_img {
 	float:left;
-	margin:10px;
+	margin:15px;
+	margin-top:0px;
 }
 .project_info_table {
 	float:left;
