@@ -67,11 +67,6 @@ $projectChapters = array(
 			<th class="chapter_progress">Progress</th>
 			<th class="chapter_downloads">DL Links</th>
 		</tr>
-		<?php
-			foreach($projectChapters as $projectChapter) {
-				echo '<tr><td class="chapter_number">'.$projectChapter[0].'</td><td class="chapter_progress">'.$projectChapter[1].'</td><td class="chapter_downloads"><a href="'.$projectChapter[2].'">[link]</a></td></tr>';
-			}
-		?>
 		</table>
 	</div>
 </div>
