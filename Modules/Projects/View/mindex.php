@@ -52,11 +52,6 @@ $projectChapters = array(
 			<br />
 			<span class="subTitle">Description</span><br />
 			<p id="project_description"> <?php echo $info['description']; ?> </p>
-			<?php $project = mysqli_fetch_array(mysqli_query('SELECT * FROM Series WHERE seriesID='.$_GET['project'])); 
-				foreach($project as $p) {
-					echo $p.', ';
-				}
-			?>
 		</div>
 	</div>
 	<br />
@@ -67,6 +62,11 @@ $projectChapters = array(
 			<th class="chapter_progress">Progress</th>
 			<th class="chapter_downloads">DL Links</th>
 		</tr>
+		<?php
+			foreach($projectChapters as $projectChapter) {
+				echo '<tr><td class="chapter_number">'.$projectChapter[0].'</td><td class="chapter_progress">'.$projectChapter[1].'</td><td class="chapter_downloads"><a href="'.$projectChapter[2].'">[link]</a></td></tr>';
+			}
+		?>
 		</table>
 	</div>
 </div>
