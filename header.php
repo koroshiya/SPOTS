@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
 	<title><?php echo str_replace('_', ' ', $action); ?> | SPOTS</title>
-	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,300italic' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="style.css" type="text/css">
+	<link href='css/font-face.css' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<?php
 		if (isset($moduleDir) && file_exists($moduleDir.'/style.css')) {
 			echo '<link rel="stylesheet" href="'.$moduleDir.'/style.css" type="text/css">';
