@@ -1,18 +1,17 @@
 <?php
-if (!$fromIndex){die('You must access this through the root index!');}
+if (!fromIndex){die('You must access this through the root index!');}
 
 if (isset($_GET['project']) && is_numeric($_GET['project'])) {
 	$projID = (int)$_GET['project'];
-	$parent = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
-	require_once($parent . 'SeriesIO.php');
+	require_once(databaseDir . 'SeriesIO.php');
 
 	$series = getSeriesByID($projID);
-	$title =  $series[1];
-	$statusChar =  $series[2];
+	$title = $series[1];
+	$statusChar = $series[2];
 	$desc = $series[3];
 	$isVisible = $series[6];
 	$isAdult = $series[7];
-	$statusString =  getSeriesStatusFromChar($statusChar);
+	$statusString = getSeriesStatusFromChar($statusChar);
 	
 	$statusStrings = array('Active', 'Inactive', 'Stalled', 'Hiatus', 'Dropped', 'Complete');
 	$statusArray = array();

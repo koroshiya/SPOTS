@@ -1,8 +1,8 @@
 <?php
-if (!$fromIndex){die('You must access this through the root index!');}
+if (!fromIndex){die('You must access this through the root index!');}
 
-require_once($databaseDir . 'SeriesIO.php');
-require_once($databaseDir . 'UserIO.php');
+require_once(databaseDir . 'SeriesIO.php');
+require_once(databaseDir . 'UserIO.php');
 
 if (isset($_GET['series_search']) && isset($_GET['status'])) {
 	$seriesList = getSeriesByStatusAndTitle($_GET['status'], $_GET['series_search']);

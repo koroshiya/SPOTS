@@ -1,6 +1,6 @@
 <?php
 
-if (!$fromIndex){die('You must access this through the root index!');}
+if (!fromIndex){die('You must access this through the root index!');}
 
     require_once('./Database/Connection.php');
     

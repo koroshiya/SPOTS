@@ -1,10 +1,9 @@
 <?php
 
-//TODO: Use define() here instead of using normal variables.
-$fromIndex = TRUE;
-$databaseDir = dirname(__FILE__).'/Database/';
+DEFINE(fromIndex, TRUE);
+DEFINE(databaseDir, dirname(__FILE__).'/Database/');
 
-require_once($databaseDir.'Connection.php');
+require_once(databaseDir.'Connection.php');
 global $connection;
 if ($connection === null || !mysqli_ping($connection)){
 	connect();
@@ -29,9 +28,8 @@ if (!isset($_GET['action'])) {
 	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
 }
 
-//TODO: Again, define instead of $
-$actionDir = './Modules/'.$action;
-$moduleDir = './Modules/'.$action.'/'.$sub;
+DEFINE(actionDir, './Modules/'.$action);
+DEFINE(moduleDir, './Modules/'.$action.'/'.$sub);
 
 require_once('./Database/Connection.php');
 global $connection;
@@ -41,7 +39,7 @@ if ($connection === null || !mysqli_ping($connection)){
 
 require_once('./header.php');
 
-$sidebar = $actionDir.'/sidebar.php';
+$sidebar = actionDir.'/sidebar.php';
 if (!file_exists($sidebar) || !include_once($sidebar)){
 	$marginFix = ' style="margin-left:0px;"';
 }else {
@@ -49,7 +47,7 @@ if (!file_exists($sidebar) || !include_once($sidebar)){
 }
 
 echo '<div id="module"'.$marginFix.'>';
-$mindex = $moduleDir.'/mindex.php';
+$mindex = moduleDir.'/mindex.php';
 if (!include_once($mindex)) {
 	echo '<div style="margin-top:50px;">This page does not exist!</div>';
 }

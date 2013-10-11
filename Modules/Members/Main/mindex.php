@@ -1,15 +1,15 @@
 <?php
 
 //Dummy Data to be replaced with SQL calls later.
-require_once($databaseDir . 'UserIO.php');
-require_once($databaseDir . 'UserRoleIO.php');
+require_once(databaseDir . 'UserIO.php');
+require_once(databaseDir . 'UserRoleIO.php');
 
 if (isset($_GET['position'])){
 	if (strlen($_GET['position']) == 1 && preg_match("/[a-z]/", $_GET['position'])){
 		$userList = getUsersByPosition($_GET['position']);
 	}else{
 		$userList = getUsersByRole($_GET['position']);
-	}	
+	}
 }else{
 	$userList = getUsersAll();
 }

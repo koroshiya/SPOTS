@@ -6,8 +6,8 @@
 	<link href='css/font-face.css' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<?php
-		if (isset($moduleDir) && file_exists($moduleDir.'/style.css')) {
-			echo '<link rel="stylesheet" href="'.$moduleDir.'/style.css" type="text/css">';
+		if (isset(moduleDir) && file_exists(moduleDir.'/style.css')) {
+			echo '<link rel="stylesheet" href="'.moduleDir.'/style.css" type="text/css">';
 		}
 	?>
 </head>

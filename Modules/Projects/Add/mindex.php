@@ -1,6 +1,5 @@
 <?php
-if (!$fromIndex)
-	die('You must access this through the root index!');
+if (!fromIndex){die('You must access this through the root index!');}
 
 //FIXME: Files are not transfered to the server. Probably a stupid mistake on my part but I'll leave it for later.
 

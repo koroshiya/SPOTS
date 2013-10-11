@@ -1,9 +1,9 @@
 <?php
-if (!$fromIndex){die('You must access this through the root index!');}
+if (!fromIndex){die('You must access this through the root index!');}
 
-require_once($databaseDir.'SeriesIO.php');
-require_once($databaseDir.'SeriesGenreIO.php');
-require_once($databaseDir.'ChapterIO.php');
+require_once(databaseDir.'SeriesIO.php');
+require_once(databaseDir.'SeriesGenreIO.php');
+require_once(databaseDir.'ChapterIO.php');
 
 $sID = $_GET['project'];
 $info = getSeriesByID($sID);

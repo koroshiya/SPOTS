@@ -6,8 +6,7 @@
 			
 			<?php
 
-				$parent = dirname(dirname(dirname(dirname(__FILE__)))) . '/Database/';
-				include_once($parent . 'SeriesIO.php');
+				include_once(databaseDir . 'SeriesIO.php');
 
 				if (isset($_GET['status']) && strlen($_GET['status']) == 1 && preg_match("/[a-z]/", $_GET['status'])){
 					$arrayOfSeries = getSeriesByStatus($_GET['status']);

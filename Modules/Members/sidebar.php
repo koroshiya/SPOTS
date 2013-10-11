@@ -14,13 +14,9 @@
 			<option value="m">Moderators</option>
 			<option value="s">Staff</option>
 			<?php
-				$parent = dirname(dirname(dirname(__FILE__))) . '/Database/';
-				//echo "$parent";
-				//include_once($parent . 'Connection.php');
-				
 				global $connection;
 				if ($connection !== null && mysqli_ping($connection)){
-					require_once($parent . 'RoleIO.php');
+					require_once(databaseDir . 'RoleIO.php');
 					foreach (getRolesAll() as $key) {
 						echo "<option value=\"$key[0]\">$key[0]</option>";
 					}
