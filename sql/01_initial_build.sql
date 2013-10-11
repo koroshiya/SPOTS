@@ -61,6 +61,9 @@ CREATE TABLE IF NOT EXISTS Series(
 	projectManagerID smallint unsigned null,
 	visibleToPublic boolean not null,
 	isAdult boolean not null,
+	author varchar(50) null,
+	artist varchar(50) null,
+	type varchar(50) null, --eg. manga, manhwa, etc.
 	PRIMARY KEY (seriesID),
 	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 

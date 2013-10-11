@@ -1,30 +1,19 @@
 <?php
 if (!$fromIndex){die('You must access this through the root index!');}
 
-// I can't find the getStatusByChar function...
-function getStatus($input) {
-	if ($input == 'a') {
-		return 'Active';
-	}
-	else if ($input == 's') {
-		return 'Stalled';
-	}
-}
+require_once($databaseDir.'SeriesIO.php');
+require_once($databaseDir.'SeriesGenreIO.php');
+require_once($databaseDir.'ChapterIO.php');
 
-include_once($databaseDir.'SeriesIO.php');
+$sID = $_GET['project'];
+$info = getSeriesByID($sID);
 
-$info = getSeriesByID($_GET['project']);
+$projectAuthor = $info[8] == null ? 'N/A' : $info[8];
+$projectArtist = $info[9] == null ? 'N/A' : $info[9];
+$projectType = $info[10] == null ? 'N/A' : $info[10];
 
-$projectAuthor = 'Author'; // Needs a slot in the Database
-$projectArtist = 'Artist'; // Needs a slot in the Database
-$projectType = 'Manga'; // Needs a slot in the Database
-$projectGenres = array( // I don't know how to access the DB for these...
-	'Comedy', 'Harem', 'Romance', 'School Life', 'Shounen'
-);
-
-$projectChapters = array(
-	array(1, 'Complete', 'index.php')
-);
+$projectGenres = getSeriesGenres($sID);
+$projectChapters = getChapterBySeriesId($sID);
 
 ?>
 <div id="content">
@@ -37,7 +26,7 @@ $projectChapters = array(
 			<div class="project_info_table"><span class="subTitle">Artist</span><br />
 			<span id="project_artist"> <?php echo $projectArtist; ?> </span></div>
 			<div class="project_info_table"><span class="subTitle">Status</span><br />
-			<span id="project_status"> <?php echo getStatus($info['status']); ?> </span></div>
+			<span id="project_status"> <?php echo getSeriesStatusFromChar($info['status']); ?> </span></div>
 			<div><span class="subTitle">Type</span><br />
 			<span id="project_type"> <?php echo $projectType; ?> </span></div>
 			<br />

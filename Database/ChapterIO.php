@@ -167,4 +167,10 @@
 
 	}
 
+	function getChapterBySeriesId($seriesID){
+		$name = getEscapedSQLParam($name);
+		$proc = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
+		return executeStoredProcedure($proc);
+	}
+
 ?>
