@@ -1,0 +1,20 @@
+#content {
+	width:85%;
+	margin:0 auto;
+}
+#view_header {
+	width:100%;
+	overflow:hidden;
+	background-color:#ededed;
+	border:2px solid lightgrey;
+	font-size:16pt;
+}
+#project_info {
+	text-align:left;
+	font-size:15pt;
+}
+#member_name {
+	display:inline-block;
+	margin:5px;
+	font-size:22pt;
+}

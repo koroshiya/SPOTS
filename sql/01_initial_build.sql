@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS Series(
 	isAdult boolean not null,
 	author varchar(50) null,
 	artist varchar(50) null,
-	type varchar(50) null, --eg. manga, manhwa, etc.
+	type varchar(50) null,
 	PRIMARY KEY (seriesID),
 	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 
