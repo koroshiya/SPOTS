@@ -220,7 +220,8 @@
 	function getUser($userID){
 		$userID = getEscapedSQLParam($userID);
 		$procedure_name = "SELECT * FROM ScanUser AS s WHERE s.userID = $userID;";
-		return executeStoredProcedure($procedure_name);
+		$result = executeStoredProcedure($procedure_name);
+		return $result[0];
 	}
 
 	/**
