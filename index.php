@@ -1,7 +1,7 @@
 <?php
 
-DEFINE(fromIndex, TRUE);
-DEFINE(databaseDir, dirname(__FILE__).'/Database/');
+DEFINE('fromIndex', TRUE);
+DEFINE('databaseDir', dirname(__FILE__).'/Database/');
 
 require_once(databaseDir.'Connection.php');
 global $connection;
@@ -28,10 +28,10 @@ if (!isset($_GET['action'])) {
 	$sub = isset($_GET['sub']) ? str_replace('\0', '', $_GET['sub']) : 'Main';
 }
 
-DEFINE(actionDir, './Modules/'.$action);
-DEFINE(moduleDir, './Modules/'.$action.'/'.$sub);
+DEFINE('actionDir', './Modules/'.$action);
+DEFINE('moduleDir', './Modules/'.$action.'/'.$sub);
 
-require_once('./Database/Connection.php');
+require_once(databaseDir.'Connection.php');
 global $connection;
 if ($connection === null || !mysqli_ping($connection)){
 	connect();

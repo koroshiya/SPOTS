@@ -7,9 +7,9 @@
   * @param dbName Name of the database for which to create a connection.
   */
 if (!fromIndex){die();}
-DEFINE(host, 'localhost');
-DEFINE(dbUser, 'root');
-DEFINE(dbPass, '');
-DEFINE(dbName, 'SPOTS');
+DEFINE('host', 'localhost');
+DEFINE('dbUser', 'root');
+DEFINE('dbPass', '');
+DEFINE('dbName', 'SPOTS');
 
 ?>
