@@ -34,7 +34,7 @@ $projectChapters = getChapterBySeriesId($sID);
 			<ul id="project_genres">
 				<?php 
 					foreach($projectGenres as $projectGenre) {
-						echo('<li class="project_genre">'.$projectGenre.'</li>, ');
+						echo('<li class="project_genre">'.$projectGenre.'</li>');
 					}
 				?>
 			</ul>
