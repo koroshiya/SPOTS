@@ -9,14 +9,6 @@
 	border:2px solid lightgrey;
 	font-size:16pt;
 }
-#edit_header {
-	width:100%;
-	overflow:hidden;
-	background-color:#ededed;
-	border:2px solid lightgrey;
-	font-size:16pt;
-	visibility:hidden;
-}
 #project_info {
 	text-align:left;
 	font-size:15pt;

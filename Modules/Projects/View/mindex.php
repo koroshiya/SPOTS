@@ -3,7 +3,6 @@ if (!fromIndex){die('You must access this through the root index!');}
 
 /*
 TODO:
-- Force the edit_header div into the same position as view_header without using "position" css (absolute/fixed cause it to ignore "content")
 - Make the genres display as a proper table instead of a list
 - Make the genres editable inside their table cells... (this comes after the item before it)
 - Get "textarea" to accept a default value...
