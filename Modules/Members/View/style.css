@@ -9,7 +9,8 @@
 	border:2px solid lightgrey;
 	font-size:16pt;
 }
-#project_info {
+#user_info {
+	margin-left:15px;
 	text-align:left;
 	font-size:15pt;
 }

@@ -4,6 +4,11 @@
 		<input type="text" name="series_search" id="projectSearch" value="Search..." onfocus="if (this.value == 'Search...'){this.value=''}" onblur="if (this.value == ''){this.value='Search...'}" style="width:85%">
 	</form>
 	<a class="sidebar_item" href="?action=Projects&amp;sub=Add">Add Project</a><br />
+	<?php
+		if ($_GET['sub'] == 'View') {
+			echo '<a class="sidebar_item" href="#" onclick="document.getElementById(\'view_header\').style.visibility=\'hidden\'; document.getElementById(\'edit_header\').style.visibility=\'visible\';">Edit Project</a><br />';
+		}
+	?>
 
 	<div class="sidebar_heading">Sort:</div>
 	<form method="GET" style="text-align:center;">

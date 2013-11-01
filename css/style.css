@@ -65,8 +65,8 @@ input[type="file"] {
 }
 select {
 	width:130px;
-	height:25px;
-	font-size:12pt;
+	height:23px;
+	font-size:9pt;
 }
 
 #header_title {
