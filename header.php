@@ -22,7 +22,7 @@
 		<a class="header_nav" href="index.php?action=Groups">Groups</a>
 		<a class="header_nav" href="index.php?action=Settings">Settings</a>
 	</nav>
-    <span id="header_user">Guest</span>
+    <span id="header_user" onclick="userMenuClick()">Guest</span>
 </header>
 <div id="userMenu">
 <?php
