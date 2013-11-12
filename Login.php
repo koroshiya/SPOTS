@@ -20,7 +20,7 @@ if (!fromIndex){die('You must access this through the root index!');}
                 $_SESSION['authorized'] = $valid;
             }
         }
-    }elseif (isset($_SESSION['authorized']) && isset($_POST['action']) && $_POST['action'] === "logout"){
+    }elseif (isset($_SESSION['authorized'])){
         $_SESSION['authorized'] = null;
     }else{
     	unset($_POST['loginUser']);

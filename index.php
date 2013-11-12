@@ -14,7 +14,8 @@ else {
 }
 
 session_start();
-if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
+if ((isset($_GET['action']) && $_GET['action'] === 'logout') ||
+	(isset($_POST['loginUser']) && isset($_POST['loginPass']))){
     require_once('./Login.php');
     //exit;
 }

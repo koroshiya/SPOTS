@@ -37,7 +37,7 @@
 	}else{
 ?>
 	<a style="width:100%; height:40px; color:white;" href="index.php?action=UserCP">UserCP</a><br />
-	<a style="width:100%; height:40px; color:white;" href="Logout.php">Logout</a>
+	<a style="width:100%; height:40px; color:white;" href="index.php?action=logout">Logout</a>
 <?php
 	//Or something like this :/
 	}
