@@ -1,0 +1,24 @@
+.project-block {
+	display:block;
+	width:600px;
+	background-color:#ededed;
+	border:2px solid lightgrey;
+	border-bottom:none;
+	float:left;
+}
+.project-title {
+	width:100%;
+	font-weight:bold;
+	font-size:16pt;
+	border-bottom:2px solid lightgrey;
+}
+.chapter-block {
+	text-align:left;
+	width:100%;
+	border-bottom:2px solid lightgrey;
+}
+.chapter-number {
+	width:50px;
+	text-align:center;
+	border-right:2px solid lightgrey;
+}

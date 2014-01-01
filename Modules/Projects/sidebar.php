@@ -13,7 +13,7 @@
 	<div class="sidebar_heading">Sort:</div>
 	<form method="GET" style="text-align:center;">
 		<input type="hidden" name="action" value="Projects">
-		<select name="status" style="width:80%;">
+		<select name="status" style="width:80%">
 			<option value="">All Projects</option>
 			<option value="a">Active</option>
 			<option value="s">Stalled</option>

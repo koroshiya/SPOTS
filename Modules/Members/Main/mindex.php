@@ -1,6 +1,5 @@
 <?php
 
-//Dummy Data to be replaced with SQL calls later.
 require_once(databaseDir . 'UserIO.php');
 require_once(databaseDir . 'UserRoleIO.php');
 
@@ -13,14 +12,6 @@ if (isset($_GET['position'])){
 }else{
 	$userList = getUsersAll();
 }
-/*$memberList = array(
-	'Daktyl198', 'Administrator', '2 days ago',
-	'Koro', 'Administrator', '1 week ago', 
-	'metalbr0', 'Cleaner', 'Yesterday',
-	'Pistachio', 'Typesetter', 'Today'
-);
-
-$count = 0;*/
 
 ?>
 	<span style="font-style:italic; font-size:10pt;">Click on a title to view the member's details</span><br />
@@ -39,23 +30,26 @@ if ($userList === FALSE){
 }else{
 	foreach($userList as $user){
 		$memberViewUrl = '?action=Members&amp;sub=View&amp;member='.str_replace('\0', '', $user[0]);
+
+		// I don't know all the actual characters, so I'm just gonna throw in two conversions
+		if ($user[4] == 'a') {
+			$memberRole = 'Administrator';
+		}
+		else if ($user[4] == 't') {
+			$memberRole = 'Translator';
+		}
+		else
+		{
+			$memberRole = $user[4];
+		}
+
 		echo '<tr class="memberListRow">
-				<td class="memberName"><a href="'.$memberViewUrl.'">'.$user[1].'</a></td>
-				<td class="memberPositionMain">'.$user[4].'</td>
+				<td class="memberName"><a href="'. $memberViewUrl .'">'.$user[1].'</a></td>
+				<td class="memberPositionMain">'. $memberRole .'</td>
 				<td class="lastActive">'.'N/A'.'</td>
 			</tr>';
 	}
 }
-
-/*while (isset($memberList[$count])) {
-	$memberViewUrl = '?action=Members&amp;sub=View_Member&amp;member='.str_replace('\0', '', $memberList[$count]);
-	echo '<tr class="memberListRow">
-			<td class="memberName"><a href="'.$memberViewUrl.'">'.$memberList[$count].'</a></td>
-			<td class="memberPositionMain">'.$memberList[$count+1].'</td>
-			<td class="lastActive">'.$memberList[$count+2].'</td>
-		</tr>';
-	$count += 3;
-}*/
 
 echo '</table>';
 

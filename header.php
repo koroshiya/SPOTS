@@ -3,7 +3,6 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=windows-1252">
 	<title><?php echo str_replace('_', ' ', $action); ?> | SPOTS</title>
-	<link href='css/font-face.css' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<?php
 		if (file_exists(moduleDir.'/style.css')) {
@@ -22,17 +21,18 @@
 		<a class="header_nav" href="index.php?action=Groups">Groups</a>
 		<a class="header_nav" href="index.php?action=Settings">Settings</a>
 	</nav>
-    <span id="header_user" onclick="userMenuClick()">Guest</span>
+    <span id="header_user">Guest</span>
 </header>
 <div id="userMenu">
 <?php
 	if (!isset($_SESSION['authorized'])){
-?>
+?>	
+	<br/>
 	<form id="loginForm" name="loginForm" method="post">
 		Username:<br /><input type="text" id="loginUser" name="loginUser" /><br />
 		Password:<br /><input type="password" id="loginPass" name="loginPass" /><br />
 		<input action="index.php" type="submit" value="login" style="margin-top:12px;" />
-	</form>
+	</form><br />
 <?php
 	}else{
 ?>
