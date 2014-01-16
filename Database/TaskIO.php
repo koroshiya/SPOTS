@@ -238,6 +238,53 @@
 		return executeStoredProcedure($proc);
 	}
 
+	function getFullyDefinedTasks($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$args[2] = getEscapedSQLParam($args[2]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1] AND t.status = $args[2];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByTitleAndRole($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByRoleAndStatus($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.userRole = $args[0] AND t.status = $args[1];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByTitleAndStatus($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$args[1] = getEscapedSQLParam($args[1]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.status = $args[1];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByTitle($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByRole($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.userRole = $args[0];";
+		return executeStoredProcedure($proc);
+	}
+
+	function getDefinedTasksByStatus($args){
+		$args[0] = getEscapedSQLParam($args[0]);
+		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.status = $args[0];";
+		return executeStoredProcedure($proc);
+	}
+
 	/**
 	 * Converts a char to its equivalent status string. eg. d = dropped.
 	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole
