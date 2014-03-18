@@ -17,11 +17,11 @@ if (!fromIndex){die('You must access this through the root index!');}
             require_once('./Database/UserIO.php');
             $valid = userGetPasswordIsValidByName($username, $password);
             if ($valid){
-                $_SESSION['authorized'] = $valid;
+                $_SESSION['SPOTS_authorized'] = $valid;
             }
         }
-    }elseif (isset($_SESSION['authorized'])){
-        $_SESSION['authorized'] = null;
+    }elseif (isset($_SESSION['SPOTS_authorized'])){
+        $_SESSION['SPOTS_authorized'] = null;
     }else{
     	unset($_POST['loginUser']);
     	unset($_POST['loginPass']);

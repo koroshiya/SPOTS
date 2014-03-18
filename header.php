@@ -25,7 +25,7 @@
 </header>
 <div id="userMenu">
 <?php
-	if (!isset($_SESSION['authorized'])){
+	if (!isset($_SESSION['SPOTS_authorized'])){
 ?>	
 	<br/>
 	<form id="loginForm" name="loginForm" method="post">
