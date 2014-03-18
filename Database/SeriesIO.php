@@ -1,19 +1,5 @@
 <?php
 
-/**
- * File: SeriesIO.php
- * Author: Koro
- * Date created: 06/July/2012
- * Changelog:	1.01: Reduced repeat code in getSeriesByLetter, implemented getSeriesStatus, getSeriesByStatus, getSeriesByID
- *				1.02: Implemented addSeries, deleteSeries, deleteSeriesByForce, modifySeriesStatus, seriesSetVisible, seriesSetAdult, seriesSetProjectManager
- *						Implemented basic type checking for some methods
- *				1.03: Removed genre inputs to reflect changes to DB
- *				1.04: Added missing connection params
- *				1.05: Updated to reflect changes to DB
- *				1.06: Implemented getSeriesByTitle commands
- * Purpose: Provides methods for interacting with Series objects in the database
-*/ 
-
 	require_once('Connection.php');
 
 	//Example usage:

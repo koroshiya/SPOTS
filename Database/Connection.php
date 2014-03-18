@@ -1,20 +1,4 @@
 <?php
-/**
- *File: Connection.php
- *Author: Koro
- *Date created: 04/July/2012
- *Changelog: 
- *			1.01: Changed MySQL methods to MySQLi, implemented isWebMaster, isFounder, getUserTaskCount, etc.
- *					Added support for multi-argument functions
- *			1.02: Added getSeriesByLetter, methods for stored procedures/functions
- *			1.03: Moved non-connection functions into separate files
- *			1.04: Removed global connection details, replaced with $connection variable.
- *					Single connection now remains across function calls.
- *			1.05: Fix to BuildAndRun function. Comment refactoring/completion.
- *			1.06: Failed functions now return false in an array so calling classes process the result properly.
- *			1.07: Restructured $connection calls and centralized them to this file.
- *Purpose: Establishes database connections and provides methods for interacting with the database. 
-*/ 
 	
 	/**
 	 * Attempts to connect to MySQL on the target machine with the credentials supplied.
@@ -70,6 +54,9 @@
 	function executeStoredProcedure($procedure){
 		
 		global $connection;
+		if ($connection === null || !mysqli_ping($connection)){
+			connect();
+		}
 		$result = mysqli_query($connection, $procedure);
 
 		if ($result === FALSE) {
