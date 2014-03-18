@@ -26,7 +26,7 @@
 	 */
 	function insertUser($userName, $userPassword, $userRole, $email, $title){
 		
-		$procedure_name = 'delete_user';
+		$procedure_name = 'insert_user';
 		
 		$array = array($userName, $userPassword, $userRole, $email, $title);
 		return executeUserFunction($procedure_name, $array);
