@@ -25,6 +25,7 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
     }
 }elseif (isset($_SESSION['SPOTS_authorized'])){
     $_SESSION['SPOTS_authorized'] = null;
+    $_SESSION['SPOTS_user'] = null;
 }else{
     unset($_POST['loginUser']);
 	unset($_POST['loginPass']);
