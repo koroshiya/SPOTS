@@ -9,13 +9,6 @@ $("#header_user").click(function(){
 
 function GoToPage(page){
 	$("#pageContent").html("Loading...");
-	/*$("#pageContent").load("./inc/"+page+".php", function(response, status, xhr) {
-	  if (status == "error") {
-	    var msg = "Sorry but there was an error: ";
-	    $("#pageContent").html(msg + xhr.status + " " + xhr.statusText);
-	  }
-	});*/
-	//$("#pageContent").load("./inc/"+page+".php");
 	$.post("./inc/"+page+".php")
 		.done(function(data) {
 			$("#pageContent").html(data);

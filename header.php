@@ -34,7 +34,7 @@
 <?php
 	}else{
 ?>
-	<a style="width:100%; height:40px; color:white;" href="index.php?action=logout">Logout</a>
+	<a style="width:100%; height:40px;" href="index.php?action=logout">Logout</a>
 <?php
 	}
 ?>

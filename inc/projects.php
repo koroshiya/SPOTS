@@ -2,7 +2,6 @@
 
 if (!fromIndex){die('You must access this through the root index!');}
 session_start();
-if (!isset($_SESSION['SPOTS_authorized'])){die('You are not authorized to access this page.');}
 
 DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 
@@ -17,7 +16,11 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 
 				require_once(databaseDir . 'SeriesIO.php');
 
-				$arrayOfSeries = getSeriesAll();
+				if (!isset($_SESSION['SPOTS_authorized'])){
+					$arrayOfSeries = getSeriesAllPublic();
+				}else{
+					$arrayOfSeries = getSeriesAll();
+				}
 
 				if ($arrayOfSeries !== false && sizeof($arrayOfSeries) > 0){
 					echo '<script type="text/javascript">';

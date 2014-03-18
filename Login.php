@@ -10,7 +10,7 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
     $password = htmlspecialchars($_POST['loginPass']);
     unset($_POST['loginUser']);
     unset($_POST['loginPass']);
-        
+    
     connect();
 
     if ($connection === null || !mysqli_ping($connection)){

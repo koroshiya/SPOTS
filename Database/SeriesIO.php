@@ -300,4 +300,14 @@
 		return executeStoredProcedure($procedure_name);
 	}
 
+	/**
+	 * Retrieves all series from the database.
+	 *
+	 * @return All series from the database.
+	 */
+	function getSeriesAllPublic(){
+		$procedure_name = "SELECT * FROM Series AS s WHERE s.visibleToPublic = True;";
+		return executeStoredProcedure($procedure_name);
+	}
+
 ?>
