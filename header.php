@@ -5,23 +5,26 @@
 	<title>SPOTS</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/ToolTip.js"></script>
 </head>
 <body>
 
 <header>
 	<nav style="display:inline-block; float:left; margin:0px; margin-left:10px;" role="navigation">
-		<a id="header_title" href="index.php">SPOTS</a>
+		<a id="header_title">SPOTS</a>
+		<?php if ($loggedIntoSPOTS){ ?>
 		<a class="header_nav" id="nav_tasks">Tasks</a>
 		<a class="header_nav" id="nav_projects">Projects</a>
 		<a class="header_nav" id="nav_members">Members</a>
 		<a class="header_nav" id="nav_groups">Groups</a>
 		<a class="header_nav" id="nav_settings">Settings</a>
+		<? } ?>
 	</nav>
-    <span id="header_user">Guest</span>
+    <span id="header_user"><?php echo (isset($_SESSION['SPOTS_user']) ? $_SESSION['SPOTS_user'] : "Login") ?></span>
 </header>
 <div id="userMenu">
 <?php
-	if (!isset($_SESSION['SPOTS_authorized'])){
+	if (!$loggedIntoSPOTS){
 ?>	
 	<br />
 	<form id="loginForm" name="loginForm" method="post">
@@ -32,10 +35,12 @@
 <?php
 	}else{
 ?>
-	<a style="width:100%; height:40px; color:white;" href="index.php?action=UserCP">UserCP</a><br />
 	<a style="width:100%; height:40px; color:white;" href="index.php?action=logout">Logout</a>
 <?php
 	}
 ?>
 
 </div>
+
+<br /><br />
+<div id="pageContent"></div>
