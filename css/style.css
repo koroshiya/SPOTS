@@ -140,6 +140,7 @@ select {
 	background-color:#ededed;
 	border-right:3px solid lightgrey;
 	line-height:40px;
+	left:0;
 }
 .sidebar_heading {
 	height:40px;
@@ -161,6 +162,7 @@ select {
 .sidebar_item:hover {
 	color:white;
 	background-color:#0088C0;
+	cursor:pointer;
 }
 
 #module {
@@ -183,4 +185,18 @@ select {
 	background-color:white;
 	border-collapse:collapse;
 	border: 2px solid lightgrey;
+}
+
+#pageContent{
+	margin-left:235px;
+	margin-top:40px;
+	height:100%;
+}
+
+#imgDiv{
+	margin:2px;
+}
+
+#imgDiv:hover{
+	padding:2px solid black;
 }

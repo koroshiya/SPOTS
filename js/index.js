@@ -1,3 +1,8 @@
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+});
+
 $("#header_user").click(function(){
 	$("#userMenu").toggle();
 });

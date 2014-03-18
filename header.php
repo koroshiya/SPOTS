@@ -5,7 +5,6 @@
 	<title>SPOTS</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-	<script type="text/javascript" src="./js/ToolTip.js"></script>
 </head>
 <body>
 
@@ -42,5 +41,6 @@
 
 </div>
 
+<nav id="sidebar"></nav>
 <br /><br />
 <div id="pageContent"></div>
