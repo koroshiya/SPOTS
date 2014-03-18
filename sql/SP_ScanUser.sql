@@ -19,7 +19,7 @@ SELECT COUNT(*) INTO totalUsers FROM ScanUser;
 IF totalUsers = 65535 THEN
 RETURN false;
 END IF;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
+SET sha1Password = (SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
 INSERT INTO ScanUser(userName, userPassword, email, title) VALUES(userName, sha1Password, email, title);
 RETURN true;
 END // 
@@ -70,13 +70,12 @@ DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
 DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
-DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
 RETURN false;
 END IF;
-SELECT su.userName, su.email, su.userPass INTO userName, userEmail, userPass FROM ScanUser AS su WHERE su.userID = userID;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
+SELECT su.userName, su.email INTO userName, userEmail FROM ScanUser AS su WHERE su.userID = userID;
+SET sha1Password = (SHA1(CONCAT(userName, newPassword, 'myEpicSalt', userEmail)));
 Update ScanUser SET ScanUser.userPassword = sha1Password;
 RETURN true;
 END // 
@@ -138,7 +137,7 @@ IF NOT userExists THEN
 RETURN false;
 END IF;
 SELECT su.userName, su.userPass INTO userName, userPass FROM ScanUser AS su WHERE su.userID = userID;
-SET sha1Password = UNHEX(SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
+SET sha1Password = (SHA1(CONCAT(userName, newPassword, 'myEpicSalt', newEmail)));
 Update ScanUser SET ScanUser.userPassword = sha1Password, ScanUser.email = newEmail;
 RETURN true;
 END // 
