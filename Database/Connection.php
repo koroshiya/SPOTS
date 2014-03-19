@@ -88,6 +88,9 @@
 	function buildAndRunQuery($init, $arr){
 
 		global $connection;
+		if ($connection === null || !mysqli_ping($connection)){
+			connect();
+		}
 		if ($connection === FALSE || $connection === NULL){
 			echo 'Connection refused<br />';
 			return FALSE;
