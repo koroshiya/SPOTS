@@ -1,7 +1,6 @@
 <?php
 
 if (!fromIndex){die('You must access this through the root index!');}
-session_start();
 
 DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 
@@ -16,6 +15,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 
 				require_once(databaseDir . 'SeriesIO.php');
 
+				session_start();
 				if (!isset($_SESSION['SPOTS_authorized'])){
 					$arrayOfSeries = getSeriesAllPublic();
 				}else{
@@ -26,26 +26,15 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					echo '<script type="text/javascript">';
 					echo 'var arrayOfSeries = [];';
 					foreach ($arrayOfSeries as $series) {
-						$title = $series[1];
-						$status = $series[2];
-						$desc = $series[3];
-						$thumb  = $series[4];
-						$adult  = $series[7];
-
 						echo 'arrayOfSeries.push({
-							title: "'.$title.'",
-							status: "'.$status.'",
-							desc: "'.$desc.'",
-							thumb: "'.$thumb.'",
-							adult: '.$adult.',
+							id: "'.$series[0].'",
+							title: "'.$series[1].'",
+							status: "'.$series[2].'",
+							desc: "'.$series[3].'",
+							thumb: "'.$series[4].'",
+							adult: '.$series[7].'
 						});';
 					}
-					//anch_img.attr("src", value.thumb);
-					echo '$.each(arrayOfSeries, function( index, value ) {
-							var anch_img = $("<img id=\"imgDiv\" />");
-							anch_img.attr("src", "thumbs/Aiki.jpg");
-							$("#projectList").append(anch_img);
-						});';
 					echo '</script>';
 
 				}else{
@@ -70,9 +59,26 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		$("#projectList").html("<h2>"+title+"</h2><br><br>");
 		$.each(arrayOfSeries, function( index, value ) {
 			if (filter === "all" || filter === value.status){
+				var anch = $("<div id=\"imgDiv\"></div>");
 				var anch_img = $("<img />");
 				anch_img.attr("src", "thumbs/Aiki.jpg"); //anch_img.attr("src", value.thumb);
-				$("#projectList").append(anch_img);
+				anch.append(anch_img);
+				anch.append("<br />");
+				var btitle = $("<b></b>");
+				btitle.append(value.title);
+				anch.append(btitle);
+				anch.click(function(){
+					$("#projectList").html("Loading...");
+					$.post("./inc/project.php", {id: value.id})
+						.done(function(data) {
+							$("#pageContent").html(data);
+						})
+						.fail(function() {
+							console.log("Series does not exist or could not be loaded");
+							FilterSeries("A", "Active Series");
+						});
+				});
+				$("#projectList").append(anch);
 			}
 		});
 	}
@@ -83,5 +89,6 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_hiatus").click(function(){FilterSeries("H", "Series on Hiatus");});
 	$("#sidebar_complete").click(function(){FilterSeries("C", "Complete Series");});
 	$("#sidebar_dropped").click(function(){FilterSeries("D", "Dropped Series");});
+	FilterSeries("A", "Active Series");
 </script>
 </div>

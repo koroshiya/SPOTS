@@ -1,16 +1,5 @@
 <?php
 
-/**
- *File: UserIO.php
- *Author: Koro
- *Changelog: 1.01: Implemented getUserRole and getUserTitle
- *			1.02: Implemented other IO and validation methods
- *			1.03: Grouped similar functions
- *			1.04: Fixed invalid connection passing, implemented getUser functions
- *			1.05: Fix for insertUser function
- *Purpose: Provides methods for interacting with User objects in the database
-**/ 
-
 	require_once('Connection.php');
 	
 	/**
