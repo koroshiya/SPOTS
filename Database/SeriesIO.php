@@ -173,6 +173,16 @@
 		return $row[0];
 
 	}
+	function updateSeriesThumbnail($seriesID, $thumb){
+
+		if (!is_numeric($seriesID) || empty($thumb)){
+			return array(False);
+		}
+		$procedure_name = "series_set_thumbnail";
+		$result = executeFunction($procedure_name, array($seriesID, $thumb));
+		return $result;
+
+	}
 
 	/**
 	 * Gets all series that start with a specific character.
