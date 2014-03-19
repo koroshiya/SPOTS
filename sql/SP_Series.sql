@@ -135,9 +135,9 @@ DELIMITER //
 DROP FUNCTION IF EXISTS is_visible_series //
 CREATE FUNCTION is_visible_series(seriesID smallint unsigned) RETURNS boolean DETERMINISTIC
 BEGIN 
-DECLARE boolAdult boolean;
-SELECT s.visibleToPublic INTO boolAdult FROM Series AS s WHERE s.seriesID = seriesID;
-RETURN boolAdult;
+DECLARE boolPublic boolean;
+SELECT s.visibleToPublic INTO boolPublic FROM Series AS s WHERE s.seriesID = seriesID;
+RETURN boolPublic;
 END // 
 DELIMITER ;
 
