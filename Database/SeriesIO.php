@@ -165,7 +165,9 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		$seriesID = getEscapedSQLParam($seriesID);
+		if (!is_numeric($seriesID)){
+			return array(False);
+		}
 		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
 		$row = executeStoredProcedure($procedure_name);
 		return $row[0];
