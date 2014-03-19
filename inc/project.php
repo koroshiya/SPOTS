@@ -26,19 +26,19 @@ $pm = getUser($seriesInfo[5]);
 		<div id="dialogform" style="display:none; width:200px;">
 			<form action="ajax/uploadThumb.php" method="post" enctype="multipart/form-data" id="MyUploadForm">
 			<input name="FileInput" id="FileInput" type="file" /><br /><br />
-			</form>
 			<div id="progressbox">
 				<div id="progressbar"></div>
 				<div id="statustxt">0%</div>
 			</div><br />
-			<input type="submit" id="submit-btn" value="Upload" style="float:left; width:90px;" />
+			<input type="submit" id="submit-btn" value="Upload" style="float:left; width:90px;" /><br /><br />
 			<div id="output"></div>
+			</form>
 		</div>
 		<div id="projectDiv">
 			<table><tbody>
 			<?php
 				echo "<tr><th>Title</th><td>$seriesInfo[1]</td>";
-				echo "<tr><td colspan=\"2\" style=\"height:200px;\"><img style=\"max-height:200px; max-width:200px;\" src=\"thumbs/Aiki.jpg\" /></td></tr>"; //TODO: series image
+				echo "<tr><td colspan=\"2\" style=\"height:200px;\"><img id=\"seriesImage\" style=\"max-height:200px; max-width:200px;\" src=\"thumbs/$seriesInfo[4]\" /></td></tr>"; //TODO: series image
 				echo "<tr><th>Status</th><td>$seriesInfo[2]</td>";
 				echo "<tr><th>Project Manager</th><td>$pm[1]</td>";
 				/*
@@ -67,7 +67,7 @@ $pm = getUser($seriesInfo[5]);
 	$("#sidebar_back").click(function(){GoToPage("projects");});
 
 	$("#btn_thumb").click(function() {
-		$(this).text($(this).text() === "Cancel" ? "New thumbnail" : "Cancel");
+		$(this).text($(this).text() === "New thumbnail" ? "Cancel" : "New thumbnail");
 
 		$("#dialogform").toggle();
 		$("#projectDiv").toggle();
@@ -76,9 +76,10 @@ $pm = getUser($seriesInfo[5]);
 	$('#MyUploadForm').submit(function(evt) {
 		evt.preventDefault();
 	    $(this).ajaxSubmit({
-		    target:   '#output',   // target element(s) to be updated with server response
-		    beforeSubmit:  beforeSubmit,  // pre-submit callback
-		    success:       afterSuccess,  // post-submit callback
+	    	data: {SeriesID: <?php echo $id; ?>},
+		    target: '#output',   // target element(s) to be updated with server response
+		    beforeSubmit: beforeSubmit,  // pre-submit callback
+		    success: afterSuccess,  // post-submit callback
 		    uploadProgress: OnProgress, //upload progress callback
 		    resetForm: false        // reset the form after successful submit
 		});
@@ -116,8 +117,11 @@ $pm = getUser($seriesInfo[5]);
 	    }
 	}
 	function afterSuccess(){
+		$('#statustxt').html("100%");
 		for (var i = 0; i < arguments.length; i++) {
 			console.log(arguments[i]);
 		}
+		$("#seriesImage").attr('src', 'thumbs/'+<?php echo $id; ?>+"."+$('#FileInput')[0].files[0].name.split('.').pop());
+		$("#btn_thumb").text("Return to Series");
 	}
 </script>
