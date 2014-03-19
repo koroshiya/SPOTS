@@ -26,13 +26,12 @@ $pm = getUser($seriesInfo[5]);
 		<div id="dialogform" style="display:none; width:200px;">
 			<form action="ajax/uploadThumb.php" method="post" enctype="multipart/form-data" id="MyUploadForm">
 			<input name="FileInput" id="FileInput" type="file" /><br /><br />
-			<input type="submit"  id="submit-btn" value="Upload" style="float:left;" />
-			<img src="images/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
 			</form>
 			<div id="progressbox">
 				<div id="progressbar"></div>
 				<div id="statustxt">0%</div>
-			</div>
+			</div><br />
+			<input type="submit" id="submit-btn" value="Upload" style="float:left; width:90px;" />
 			<div id="output"></div>
 		</div>
 		<div id="projectDiv">
@@ -43,29 +42,33 @@ $pm = getUser($seriesInfo[5]);
 				echo "<tr><th>Status</th><td>$seriesInfo[2]</td>";
 				echo "<tr><th>Project Manager</th><td>$pm[1]</td>";
 				/*
-	seriesID smallint unsigned not null AUTO_INCREMENT,0
-	seriesTitle varchar(100) not null,1
-	status character null,2
-	description varchar(255) null,3
-	thumbnailURL varchar(255) null,4
-	projectManagerID smallint unsigned null,5
-	visibleToPublic boolean not null,6
-	isAdult boolean not null,7
-	author varchar(50) null,8
-	artist varchar(50) null,9
-	type varchar(50) null, --eg. manga, manhwa, etc.10
+					seriesID smallint unsigned not null AUTO_INCREMENT,0
+					seriesTitle varchar(100) not null,1
+					status character null,2
+					description varchar(255) null,3
+					thumbnailURL varchar(255) null,4
+					projectManagerID smallint unsigned null,5
+					visibleToPublic boolean not null,6
+					isAdult boolean not null,7
+					author varchar(50) null,8
+					artist varchar(50) null,9
+					type varchar(50) null, --eg. manga, manhwa, etc.10
 				*/
 			?>
-			<tr><td><button id="btn_thumb">New thumbnail</button></td></tr>
 			</tbody></table>
 		</div>
 	</center>
 </section>
 <script type="text/javascript">
-	$("#sidebar").html('<a class="sidebar_item" id="sidebar_back">Back to Projects</a>');
+	$("#sidebar").html(
+		'<a class="sidebar_item" id="sidebar_back">Back to Projects</a>'+
+		'<a class="sidebar_item" id="btn_thumb">New thumbnail</a>'
+	);
 	$("#sidebar_back").click(function(){GoToPage("projects");});
 
 	$("#btn_thumb").click(function() {
+		$(this).text($(this).text() === "Cancel" ? "New thumbnail" : "Cancel");
+
 		$("#dialogform").toggle();
 		$("#projectDiv").toggle();
 	});
@@ -112,11 +115,9 @@ $pm = getUser($seriesInfo[5]);
 	        $('#statustxt').css('color','#000'); //change status text to white after 50%
 	    }
 	}
-	function afterSuccess(a, b, c, d){
-		console.log("a: "+a);
-		console.log("b: "+b);
-		console.log("c: "+c);
-		console.log("d: "+d);
+	function afterSuccess(){
+		for (var i = 0; i < arguments.length; i++) {
+			console.log(arguments[i]);
+		}
 	}
-	//"ajax/uploadThumb.php"
 </script>
