@@ -23,10 +23,10 @@ $pm = getUser($seriesInfo[5]);
 <section>
 	
 	<center>
-		<div id="dialogform" style="display:none;">
+		<div id="dialogform" style="display:none; width:200px;">
 			<form action="ajax/uploadThumb.php" method="post" enctype="multipart/form-data" id="MyUploadForm">
-			<input name="FileInput" id="FileInput" type="file" />
-			<input type="submit"  id="submit-btn" value="Upload" />
+			<input name="FileInput" id="FileInput" type="file" /><br /><br />
+			<input type="submit"  id="submit-btn" value="Upload" style="float:left;" />
 			<img src="images/ajax-loader.gif" id="loading-img" style="display:none;" alt="Please Wait"/>
 			</form>
 			<div id="progressbox">
@@ -40,12 +40,6 @@ $pm = getUser($seriesInfo[5]);
 			<?php
 				echo "<tr><th>Title</th><td>$seriesInfo[1]</td>";
 				echo "<tr><td colspan=\"2\" style=\"height:200px;\"><img style=\"max-height:200px; max-width:200px;\" src=\"thumbs/Aiki.jpg\" /></td></tr>"; //TODO: series image
-			?>
-
-			<button id="btn_thumb">New thumbnail</button>
-
-
-			<?php
 				echo "<tr><th>Status</th><td>$seriesInfo[2]</td>";
 				echo "<tr><th>Project Manager</th><td>$pm[1]</td>";
 				/*
@@ -62,6 +56,7 @@ $pm = getUser($seriesInfo[5]);
 	type varchar(50) null, --eg. manga, manhwa, etc.10
 				*/
 			?>
+			<tr><td><button id="btn_thumb">New thumbnail</button></td></tr>
 			</tbody></table>
 		</div>
 	</center>
