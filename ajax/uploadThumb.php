@@ -2,9 +2,10 @@
 
 if (!fromIndex){die('You must access this through the root index!');}
 session_start();
-//if (!isset($_SESSION['SPOTS_authorized'])){
-    //die("You are not permitted to view this series");
-//}
+if (!isset($_SESSION['SPOTS_authorized'])){
+    die("You are not permitted to view this series");
+}
+#TODO: resize the image after upload using imagemagik: https://stackoverflow.com/questions/9084751/how-to-scale-down-an-image-on-the-server-side-with-php
 
 if(isset($_FILES["FileInput"])&&isset($_POST['SeriesID'])&&$_FILES["FileInput"]["error"]==UPLOAD_ERR_OK){
     $UploadDirectory = realpath(dirname(dirname(__FILE__))).'/thumbs/';
@@ -22,7 +23,7 @@ if(isset($_FILES["FileInput"])&&isset($_POST['SeriesID'])&&$_FILES["FileInput"][
     //check if this is an ajax request
     if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])){
         die();
-    }elseif ($_FILES["FileInput"]["size"] > 5242880) {
+    }elseif ($_FILES["FileInput"]["size"] > 1048576) {
         die("File size is too big!");
     }
    

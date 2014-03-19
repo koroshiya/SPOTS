@@ -102,7 +102,7 @@ $pm = getUser($seriesInfo[5]);
 	         		return false
 	        }
 	   
-	    	if (fsize>5242880){ //5MB limit
+	    	if (fsize>1048576){ //1MB limit
 	        	alert("<b>"+fsize +"</b>File is too big. It should be less than 5 MB.");
 	        	return false
 	    	}
