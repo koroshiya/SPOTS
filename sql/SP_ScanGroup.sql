@@ -11,14 +11,14 @@
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS insert_scangroup //
-CREATE FUNCTION insert_scangroup(groupName varchar(50), URL varchar(255)) RETURNS boolean NOT DETERMINISTIC
+CREATE FUNCTION insert_scangroup(gName varchar(50), url varchar(255)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalGroups smallint unsigned;
 SELECT COUNT(*) INTO totalGroups FROM ScanGroup;
 IF totalGroups = 65535 THEN
 RETURN false;
 END IF;
-INSERT INTO ScanGroup VALUES(groupName, URL);
+INSERT INTO ScanGroup SET groupName = gName, URL = url;
 RETURN true;
 END // 
 DELIMITER ;

@@ -11,13 +11,6 @@
 	FOREIGN KEY (seriesID) REFERENCES Series(seriesID)
 */
 
-/*
-Changelog:	1.01: Fixed delete_chapter, implemented insert_chapter (untested), chapter_add_group (not working)
-			1.02: Added visible param. Implemented is_visible_chapter, chapter_revision_modify, chapter_set_visible
-			1.03: Updated to reflect new ChapterGroup table
-			1.04: Fixed is_visible_chapter, implemented chapter_remove_group*
-*/
-
 /*insert_chapter*/
 
 DELIMITER // 
@@ -25,14 +18,12 @@ DROP FUNCTION IF EXISTS insert_chapter //
 CREATE FUNCTION insert_chapter(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
 DECLARE totalChapters smallint unsigned;
-DECLARE homeID smallint unsigned;
-SELECT COUNT(*) INTO totalChapters FROM Chapter AS c WHERE c.seriesID = seriesID AND c.chapterNumber = chapterNumber AND c.chapterSubNumber = chapterSubNumber;
+SELECT COUNT(*) INTO totalChapters FROM Chapter WHERE Chapter.seriesID = seriesID AND Chapter.chapterNumber = chapterNumber AND Chapter.chapterSubNumber = chapterSubNumber;
 IF totalChapters > 0 THEN
 RETURN false;
 END IF;
-SELECT c.homeID INTO homeID FROM Config AS c;
 INSERT INTO Chapter Values(seriesID, chapterNumber, chapterSubNumber, 0, '', false);
-INSERT INTO ChapterGroup Values(seriesID, chapterNumber, chapterSubNumber, homeID);
+INSERT INTO ChapterGroup Values(seriesID, chapterNumber, chapterSubNumber, 1);
 RETURN true;
 END // 
 DELIMITER ;

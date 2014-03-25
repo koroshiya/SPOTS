@@ -16,14 +16,6 @@
 	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 */
 
-/*
-Changelog:	1.01: Implemented series_set_adult, series_set_visible, series_set_project_manager
-			1.02: Removed genre instances to reflect changes to DB, implemented get_series_by_genre
-			1.03: Finished series_set_thumbnail, updated varchar fields
-			1.04: Fixed insert_series, implemented searching by title
-			1.05: Misc fixes to various procs/functs
-*/
-
 /*insert_series*/
 
 DELIMITER // 
