@@ -20,7 +20,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS insert_task //
 CREATE FUNCTION insert_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
-INSERT INTO Task VALUES(seriedID, chapterNumber, chapterSubNumber, userID, null, null, userRole);
+INSERT INTO Task VALUES(seriesID, chapterNumber, chapterSubNumber, userID, null, null, userRole);
 RETURN true;
 END // 
 DELIMITER ;
