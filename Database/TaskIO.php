@@ -112,7 +112,9 @@
 	 * @return Returns all tasks pertaining to a specific user.
 	 */
 	function getUserTasks($userID){
-		$userID = getEscapedSQLParam($userID);
+		if (!is_numeric($userID)){
+			return array(False); //TODO: do for all
+		}
 		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID;";
 		return executeStoredProcedure($proc);
 	}
