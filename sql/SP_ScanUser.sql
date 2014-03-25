@@ -1,6 +1,6 @@
 /*ScanUserIO
 	userID smallint unsigned not null AUTO_INCREMENT,
-	userName varchar(30) not null,
+	userName varchar(30) not null unique,
 	userPassword char(40) not null,
 	email varchar(100) not null,
 	title character not null,
@@ -16,7 +16,7 @@ BEGIN
 DECLARE totalUsers smallint unsigned;
 DECLARE sha1Password binary(20);
 SELECT COUNT(*) INTO totalUsers FROM ScanUser;
-IF totalUsers = 65535 THEN
+IF totalUsers = 65534 THEN
 RETURN false;
 END IF;
 SET sha1Password = (SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
@@ -85,7 +85,7 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_password_valid //
-CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS boolean DETERMINISTIC
+CREATE FUNCTION user_get_password_valid(userID smallint unsigned, password varchar(20)) RETURNS smallint unsigned DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userName varchar(30);
@@ -94,11 +94,14 @@ DECLARE userExists boolean;
 DECLARE userPass char(40);
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userID = userID);
 IF NOT userExists THEN
-RETURN false;
+RETURN 65535;
 END IF;
 SELECT su.userName, su.email, su.userPassword INTO userName, userEmail, userPass FROM ScanUser AS su WHERE su.userID = userID;
 SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
-RETURN STRCMP(userPass, sha1Password) = 0;
+IF STRCMP(userPass, sha1Password) = 0 THEN
+RETURN userID;
+END IF;
+RETURN 65535;
 END // 
 DELIMITER ;
 
@@ -106,19 +109,23 @@ DELIMITER ;
 
 DELIMITER // 
 DROP FUNCTION IF EXISTS user_get_password_valid_by_name //
-CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS boolean DETERMINISTIC
+CREATE FUNCTION user_get_password_valid_by_name(userName varchar(30), password varchar(20)) RETURNS smallint unsigned DETERMINISTIC
 BEGIN 
 DECLARE sha1Password char(40);
 DECLARE userEmail varchar(100);
 DECLARE userExists boolean;
 DECLARE userPass char(40);
+DECLARE userID smallint unsigned;
 SET userExists = EXISTS(SELECT 1 FROM ScanUser WHERE ScanUser.userName = userName);
 IF NOT userExists THEN
-RETURN false;
+RETURN 65535;
 END IF;
-SELECT su.email, su.userPassword INTO userEmail, userPass FROM ScanUser AS su WHERE su.userName = userName;
+SELECT su.email, su.userPassword, su.userID INTO userEmail, userPass, userID FROM ScanUser AS su WHERE su.userName = userName;
 SET sha1Password = (SHA1(CONCAT(userName, password, 'myEpicSalt', userEmail)));
-RETURN STRCMP(userPass, sha1Password) = 0;
+IF STRCMP(userPass, sha1Password) = 0 THEN
+RETURN userID;
+END IF;
+RETURN 65535;
 END // 
 DELIMITER ;
 

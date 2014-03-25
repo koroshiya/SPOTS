@@ -18,14 +18,16 @@ if (isset($_POST['loginUser']) && isset($_POST['loginPass'])){
     }else{
         require_once('./Database/UserIO.php');
         $valid = userGetPasswordIsValidByName($username, $password);
-        if ($valid){
+        if ($valid != 65535){
             $_SESSION['SPOTS_authorized'] = $valid;
             $_SESSION['SPOTS_user'] = $username;
+            $_SESSION['SPOTS_ID'] = $valid;
         }
     }
 }elseif (isset($_SESSION['SPOTS_authorized'])){
     $_SESSION['SPOTS_authorized'] = null;
     $_SESSION['SPOTS_user'] = null;
+    $_SESSION['SPOTS_ID'] = null;
 }else{
     unset($_POST['loginUser']);
 	unset($_POST['loginPass']);
