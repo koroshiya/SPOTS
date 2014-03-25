@@ -1,16 +1,5 @@
 <?php
 
-/**
- *File: TaskIO.php
- *Author: Koro
- *Date created: 06/July/2012
- *Changelog: 1.01: Added getUser* and getUserCount* functions
- *					Added IO functions
- *			1.02: Implemented chapter functions, implemented/updated others
- *			1.03: Reduced repeat params, removed no longer necessary functions
- *Purpose: Provides methods for interacting with Task objects in the database
-**/ 
-
 	require_once('Connection.php');
 
 	//Example usage:

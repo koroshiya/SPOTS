@@ -1,17 +1,3 @@
-/**
-*Author: Koro
-*File: 01_initial_build.sql
-*Date created: 04/July/2012
-*Changelog: 1.01: userID in Task can now be null; necessary for deallocation
-			1.02: Added visible param to Chapter table.
-			1.03: Removed genres from Series, added Genre and SeriesGenre tables
-			1.04: Removed config table; such params are to be declared via user role instead
-			1.05: Added Role, UserRole, ScanUser & ChapterGroup tables
-			1.06: Increased length of some URL/name fields
-*/
-
-
-
 CREATE DATABASE IF NOT EXISTS SPOTS CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE SPOTS;
 
