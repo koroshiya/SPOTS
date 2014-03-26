@@ -202,3 +202,9 @@ select {
 #imgDiv:hover{
 	padding:2px solid black;
 }
+
+tbody tr:nth-child(odd)		{ background-color:#eee; }
+tbody tr:nth-child(even)		{ background-color:#fff; }
+.clickable{cursor:pointer;}
+.clickable:hover{background-color:rgba(0, 0, 0, 0.15);}
+.equitable th, .equitable td{min-width:100px;}
