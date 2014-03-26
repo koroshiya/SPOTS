@@ -80,8 +80,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		sel3.append('<option value="S">Stalled</option>');
 		sel3.append('<option value="C">Complete</option>');
 		sidespan.append(sel3);
-		sidespan.append('<a class="sidebar_item" id="sidebar_submit">Search</a><br />');
 		sidebar.html(sidespan);
+		sidebar.append('<a class="sidebar_item" id="sidebar_submit">Search</a><br />');
 	}
 	function getSeriesName(id){
 		for (var i = arrayOfSeries.length - 1; i >= 0; i--) {
@@ -93,21 +93,58 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	}
 	function showTasks(){
 	    $("#projectList").html("");
+	    var ntable = $('<table class="equitable"></table>');
+	    var htable = $("<thead></thead>");
+	    var hrow = $("<tr></tr>");
+	    hrow.append("<th>Series</th>");
+	    hrow.append("<th>Chapter #</th>");
+	    hrow.append("<th>Role</th>");
+	    hrow.append("<th>Status</th>");
+	    htable.append(hrow);
+	    ntable.append(htable);
+	    var btable = $("<tbody></tbody>");
 		$.each(arrayOfTasks, function( index, value ) {
-			var listing = $("<div></div>");
-			listing.text(getSeriesName(value.seriesID)+
-				", Chapter #"+value.chapterNumber+"."+value.chapterSubNumber+
-				" - "+value.userRole+
-				" - "+value.cstatus+
-				" - Assigned to #"+value.userID);
-			$("#projectList").append(listing);
+			var tr = $('<tr class="clickable"></tr>');
+			tr.append("<td>"+getSeriesName(value.seriesID)+"</td>");
+			tr.append("<td>"+value.chapterNumber+"."+value.chapterSubNumber+"</td>");
+			tr.append("<td>"+value.userRole+"</td>");
+			tr.append("<td>"+value.cstatus+"</td>");
+			tr.click(function(){showTask(value);});
+	    	btable.append(tr);
 		});
+	    ntable.append(btable);
+		$("#projectList").html(ntable);
+	}
+	function showTask(task){
+		$("#projectList").html("Loading...");
+		$.post("./inc/task.php", 
+				{seriesID: value.seriesID,
+				chapterNumber: value.chapterNumber,
+				chapterSubNumber: value.chapterSubNumber,
+				userID: value.userID,
+				userRole: value.userRole,
+				desc: value.desc,
+				cstatus: value.cstatus,
+				seriesName: getSeriesName(seriesID)})
+			.done(function(data) {
+				$("#pageContent").html(data);
+			})
+			.fail(function() {
+				console.log("Task does not exist or could not be loaded");
+				showTasks();
+			});
 	}
 	function FilterTasks(){
 		$("#projectList").html("Loading...");
 		var series = $('#sidebar_series').val();
 		var role = $('#sidebar_role').val();
 		var status = $('#sidebar_status').val();
+
+		if (series === "-1" && role === "-1" && status === "-1"){
+			alert("Define at least one task search field");
+			showTasks();
+			return;
+		}
 
 		var postdata = $.post("./ajax/retrieveTasks.php", {series: series, role: role, status: status});
 	    postdata.done(function(sArray){
