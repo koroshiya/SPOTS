@@ -79,6 +79,9 @@
 	 * @return Returns the total number of tasks a specific user has assigned to them.
 	 */
 	function getUserTaskCount($userID){
+		if (!is_numeric($userID)){
+			return array(False);
+		}
 		return executeChapterFunction($userID, 'get_user_task_count');
 	}
 
@@ -90,6 +93,9 @@
 	 * @return Returns the total number of tasks a specific user has started, but not completed.
 	 */
 	function getUserActiveTaskCount($userID){
+		if (!is_numeric($userID)){
+			return array(False);
+		}
 		return executeChapterFunction($userID, 'get_user_task_count_active');
 	}
 
@@ -101,6 +107,9 @@
 	 * @return Returns the total number of tasks a specific user has completed.
 	 */
 	function getUserCompleteTaskCount($userID){
+		if (!is_numeric($userID)){
+			return array(False);
+		}
 		return executeChapterFunction($userID, 'get_user_task_count_complete');
 	}
 
@@ -113,7 +122,7 @@
 	 */
 	function getUserTasks($userID){
 		if (!is_numeric($userID)){
-			return array(False); //TODO: do for all
+			return array(False);
 		}
 		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID;";
 		return executeStoredProcedure($proc);
@@ -127,7 +136,9 @@
 	 * @return Returns all tasks that a specific user has started, but not completed.
 	 */
 	function getUserActiveTasks($userID){
-		$userID = getEscapedSQLParam($userID);
+		if (!is_numeric($userID)){
+			return array(False);
+		}
 		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND NOT t.status = 'C';";
 		return executeStoredProcedure($proc);
 	}
@@ -140,7 +151,9 @@
 	 * @return Returns all tasks that a specific user has completed.
 	 */
 	function getUserCompleteTasks($userID){
-		$userID = getEscapedSQLParam($userID);
+		if (!is_numeric($userID)){
+			return array(False);
+		}
 		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND t.status = 'C';";
 		return executeStoredProcedure($proc);
 	}
@@ -233,46 +246,46 @@
 		$args[0] = getEscapedSQLParam($args[0]);
 		$args[1] = getEscapedSQLParam($args[1]);
 		$args[2] = getEscapedSQLParam($args[2]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1] AND t.status = $args[2];";
+		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1] AND t.status = $args[2];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByTitleAndRole($args){
 		$args[0] = getEscapedSQLParam($args[0]);
 		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1];";
+		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByRoleAndStatus($args){
 		$args[0] = getEscapedSQLParam($args[0]);
 		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.userRole = $args[0] AND t.status = $args[1];";
+		$proc = "SELECT * FROM Task AS t WHERE t.userRole = $args[0] AND t.status = $args[1];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByTitleAndStatus($args){
 		$args[0] = getEscapedSQLParam($args[0]);
 		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0] AND t.status = $args[1];";
+		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.status = $args[1];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByTitle($args){
 		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE s.seriesTitle = $args[0];";
+		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByRole($args){
 		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.userRole = $args[0];";
+		$proc = "SELECT * FROM Task AS t WHERE t.userRole = $args[0];";
 		return executeStoredProcedure($proc);
 	}
 
 	function getDefinedTasksByStatus($args){
 		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t INNER JOIN Series AS s ON s.visibleToPublic = true WHERE t.status = $args[0];";
+		$proc = "SELECT * FROM Task AS t WHERE t.status = $args[0];";
 		return executeStoredProcedure($proc);
 	}
 
