@@ -118,6 +118,9 @@
 
 	function getEscapedSQLParam($param){
 		global $connection;
+		if ($connection === null || !mysqli_ping($connection)){
+			connect();
+		}
 		if (gettype($param) === "string"){
 			$escaped = mysqli_real_escape_string($connection, $param);
 			//$escaped = addcslashes($escaped, '%_'); //currently unnecessary; LIKE is only used for searching series
