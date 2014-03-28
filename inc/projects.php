@@ -53,7 +53,10 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<a class="sidebar_item" id="sidebar_inactive">Inactive Series</a><br />'+
 						'<a class="sidebar_item" id="sidebar_hiatus">Series on Hiatus</a><br />'+
 						'<a class="sidebar_item" id="sidebar_complete">Completed Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_dropped">Dropped Series</a><br />');
+						'<a class="sidebar_item" id="sidebar_dropped">Dropped Series</a>'+
+						'<p>------------------------------------</p>'+
+						'<a class="sidebar_item" id="sidebar_add_series">Add Series</a><br />'
+					);
 	
 	function FilterSeries(filter, title){
 		$("#projectList").html("<h2>"+title+"</h2><br><br>");
@@ -87,8 +90,9 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_stalled").click(function(){FilterSeries("S", "Stalled Series");});
 	$("#sidebar_inactive").click(function(){FilterSeries("I", "Inactive Series");});
 	$("#sidebar_hiatus").click(function(){FilterSeries("H", "Series on Hiatus");});
-	$("#sidebar_complete").click(function(){FilterSeries("C", "Complete Series");});
 	$("#sidebar_dropped").click(function(){FilterSeries("D", "Dropped Series");});
+	$("#sidebar_complete").click(function(){FilterSeries("C", "Complete Series");});
+	$("#sidebar_add_series").click(function(){GoToPage("project_add");});
 	FilterSeries("A", "Active Series");
 </script>
 </div>
