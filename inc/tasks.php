@@ -159,13 +159,16 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		var role = $('#sidebar_role').val();
 		var status = $('#sidebar_status').val();
 
-		if (series === "-1" && role === "-1" && status === "-1"){
-			alert("Define at least one task search field");
-			showTasks(personal);
-			return;
+		personal = typeof personal !== 'undefined' && personal;
+		if (personal){
+			var postdata = $.post("./ajax/retrieveTasks.php", 
+				{series: series, role: role, status: status, personal: personal}
+			);
+		}else{
+			var postdata = $.post("./ajax/retrieveTasks.php", 
+				{series: series, role: role, status: status}
+			);
 		}
-
-		var postdata = $.post("./ajax/retrieveTasks.php", {series: series, role: role, status: status});
 	    postdata.done(function(sArray){
 	    	arrayOfTasks.length = 0;
 	    	arrayOfTasks = $.parseJSON(sArray);

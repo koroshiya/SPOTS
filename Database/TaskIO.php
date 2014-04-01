@@ -128,6 +128,14 @@
 		return executeStoredProcedure($proc);
 	}
 
+	function getTasks($start){
+		if (!$start){
+			$start = 0;
+		}
+		$proc = "SELECT * FROM Task limit $start, 10;";
+		return executeStoredProcedure($proc);
+	}
+
 	/**
 	 * Retrieves all tasks that a specific user has not completed.
 	 *
