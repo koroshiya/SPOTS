@@ -19,25 +19,58 @@
 		<a class="header_nav" id="nav_settings">Settings</a>
 		<? } ?>
 	</nav>
-    <span id="header_user"><?php echo (isset($_SESSION['SPOTS_user']) ? $_SESSION['SPOTS_user'] : "Login") ?></span>
+    <span id="header_user"></span>
 </header>
 <div id="userMenu">
-<?php
-	if (!$loggedIntoSPOTS){
-?>	
 	<br />
-	<form id="loginForm" name="loginForm" method="post">
+	<form action="./ajax/login.php" id="loginForm" name="loginForm" method="post">
 		Username:<br /><input type="text" id="loginUser" name="loginUser" /><br />
 		Password:<br /><input type="password" id="loginPass" name="loginPass" /><br />
 		<input action="index.php" type="submit" value="login" style="margin-top:12px;" />
-	</form><br />
-<?php
-	}else{
-?>
-	<a style="width:100%; height:40px;" href="index.php?action=logout">Logout</a>
-<?php
-	}
-?>
+	</form>
+	<br />
+	<script type="text/javascript">
+		<?php echo 'var loggedIn = '.($loggedIntoSPOTS ? "true" : "false").';'; ?>
+		$("#header_user").text(loggedIn ? "Logout" : "Login");
+		$("#header_user").click(function(){
+			if (!loggedIn){
+				$("#userMenu").toggle();
+			}else{
+				$.post("./ajax/logout.php",{})
+					.done(function(data) {
+						GoToPage("projects");
+						loggedIn = false;
+						$("#userMenu").hide();
+						$("#header_user").text("Login");
+					})
+					.fail(function(msg) {
+						console.log(msg);
+						console.log("Logout failed");
+						$("#userMenu").hide();
+					});
+			}
+		});
+		$('#loginForm').submit(function(evt) {
+			if (!loggedIn){
+				evt.preventDefault();
+			    $(this).ajaxSubmit({
+				    success: loginSuccess,  // post-submit callback
+				    resetForm: true        // reset the form after successful submit
+				});
+			}
+		    return false;
+		});
+		function loginSuccess(output){
+			$("#userMenu").hide();
+			if (output == "-1"){
+				alert("Invalid username or password");
+				return false; //login failed
+			}
+			$("#header_user").text("Logout");
+			loggedIn = true;
+			GoToPage("projects");
+		}
+	</script>
 
 </div>
 

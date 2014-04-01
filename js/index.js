@@ -3,10 +3,6 @@ $.ajaxSetup ({
     cache: false
 });
 
-$("#header_user").click(function(){
-	$("#userMenu").toggle();
-});
-
 function GoToPage(page){
 	$("#pageContent").html("Loading...");
 	$.post("./inc/"+page+".php")
