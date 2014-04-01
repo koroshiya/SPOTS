@@ -45,6 +45,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				foreach ($arrayOfRoles as $role) {
 					echo 'arrayOfRoles.push({role: "'.$role[0].'"});';
 				}
+				echo 'var logUserID = '.$_SESSION['SPOTS_ID'].';';
 				echo '</script>';
 
 			?>
@@ -81,7 +82,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		sel3.append('<option value="C">Complete</option>');
 		sidespan.append(sel3);
 		sidebar.html(sidespan);
-		sidebar.append('<a class="sidebar_item" id="sidebar_submit">Search</a><br />');
+		sidebar.append('<a class="sidebar_item" id="sidebar_submit">Search All Tasks</a><br />');
+		sidebar.append('<a class="sidebar_item" id="sidebar_personal">Search Personal Tasks</a><br />');
 	}
 	function getSeriesName(id){
 		for (var i = arrayOfSeries.length - 1; i >= 0; i--) {
@@ -91,7 +93,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		};
 		return "N/A";
 	}
-	function showTasks(){
+	function showTasks(personal){
 	    $("#projectList").html("");
 	    var ntable = $('<table class="equitable"></table>');
 	    var htable = $("<thead></thead>");
@@ -103,17 +105,34 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	    htable.append(hrow);
 	    ntable.append(htable);
 	    var btable = $("<tbody></tbody>");
+	    personal = typeof personal !== 'undefined' && personal;
 		$.each(arrayOfTasks, function( index, value ) {
-			var tr = $('<tr class="clickable"></tr>');
-			tr.append("<td>"+getSeriesName(value.seriesID)+"</td>");
-			tr.append("<td>"+value.chapterNumber+"."+value.chapterSubNumber+"</td>");
-			tr.append("<td>"+value.userRole+"</td>");
-			tr.append("<td>"+value.cstatus+"</td>");
-			tr.click(function(){showTask(value);});
-	    	btable.append(tr);
+			if (!personal || value.userID == logUserID){
+				var tr = $('<tr class="clickable"></tr>');
+				tr.append("<td>"+getSeriesName(value.seriesID)+"</td>");
+				tr.append("<td>"+value.chapterNumber+"."+value.chapterSubNumber+"</td>");
+				tr.append("<td>"+value.userRole+"</td>");
+				tr.append("<td>"+value.status+"</td>");
+				tr.click(function(){showTask(value);});
+		    	btable.append(tr);
+		    }
 		});
 	    ntable.append(btable);
 		$("#projectList").html(ntable);
+	}
+	function translateStatusChar(schar){
+		switch(schar){
+			case 'A':
+				return "Active";
+			case 'I':
+				return "Inactive";
+			case 'S':
+				return "Stalled";
+			case 'C':
+				return "Complete";
+			default:
+				return "All";
+		}
 	}
 	function showTask(task){
 		$("#projectList").html("Loading...");
@@ -134,7 +153,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				showTasks();
 			});
 	}
-	function FilterTasks(){
+	function FilterTasks(personal){
 		$("#projectList").html("Loading...");
 		var series = $('#sidebar_series').val();
 		var role = $('#sidebar_role').val();
@@ -142,7 +161,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 
 		if (series === "-1" && role === "-1" && status === "-1"){
 			alert("Define at least one task search field");
-			showTasks();
+			showTasks(personal);
 			return;
 		}
 
@@ -150,7 +169,20 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	    postdata.done(function(sArray){
 	    	arrayOfTasks.length = 0;
 	    	arrayOfTasks = $.parseJSON(sArray);
-	    	showTasks();
+	    	if (arrayOfTasks.length === 0){
+	    		$("#projectList").html("<h3>No tasks found matching the following criteria</h3>");
+	    		if (series !== "-1"){
+	    			$("#projectList").append("<h4>Series: "+series+"</h4>");
+	    		}
+	    		if (role !== "-1"){
+	    			$("#projectList").append("<h4>Role: "+role+"</h4>");
+	    		}
+	    		if (status !== "-1"){
+	    			$("#projectList").append("<h4>Status: "+translateStatusChar(status)+"</h4>");
+	    		}
+	    	}else{
+	    		showTasks(personal);
+	    	}
 	    });
 	    postdata.fail(function(e){
 	    	console.log("Retrieve failed");
@@ -159,6 +191,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	}
 	resetSidebar();
 	showTasks();
-	$("#sidebar_submit").click(function(){FilterTasks();});
+	$("#sidebar_submit").click(function(){FilterTasks(false);});
+	$("#sidebar_personal").click(function(){FilterTasks(true);});
 </script>
 </div>

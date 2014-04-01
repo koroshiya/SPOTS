@@ -208,3 +208,5 @@ tbody tr:nth-child(even)		{ background-color:#fff; }
 .clickable{cursor:pointer;}
 .clickable:hover{background-color:rgba(0, 0, 0, 0.15);}
 .equitable th, .equitable td{min-width:100px;}
+
+nav a:hover{cursor:pointer;}
