@@ -54,8 +54,12 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<a class="sidebar_item" id="sidebar_hiatus">Series on Hiatus</a><br />'+
 						'<a class="sidebar_item" id="sidebar_complete">Completed Series</a><br />'+
 						'<a class="sidebar_item" id="sidebar_dropped">Dropped Series</a>'+
-						'<p>------------------------------------</p>'+
-						'<a class="sidebar_item" id="sidebar_add_series">Add Series</a><br />'
+						<?php if (isset($_SESSION['SPOTS_authorized'])){
+							echo "'<p>------------------------------------</p>'+";
+							echo "'<a class=\"sidebar_item\" id=\"sidebar_add_series\">Add Series</a>'+";
+						}
+						?>
+						'<br />'
 					);
 	
 	function FilterSeries(filter, title){
