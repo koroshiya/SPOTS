@@ -73,7 +73,7 @@
 			GoToPage("projects");
 		}
 		function showTabs(login){
-			var menuItems = ["nav_tasks", "nav_projects", "nav_members", "nav_groups", "nav_settings"];
+			var menuItems = ["nav_tasks", "nav_projects", "nav_members", "nav_groups", "nav_user"];
 			var i = menuItems.length - 1;
 			if (login){
 				for (; i >= 0; i--) {
