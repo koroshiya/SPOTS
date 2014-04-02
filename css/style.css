@@ -150,7 +150,7 @@ select {
 	font-size:20pt;
 	text-indent:10px;
 }
-.sidebar_item {
+.sidebar_item, #sidebar a {
 	height:40px;
 	width:100%;
 	margin:0px;
@@ -159,7 +159,7 @@ select {
 	font-size:14pt;
 	text-indent:20px;
 }
-.sidebar_item:hover {
+.sidebar_item:hover, #sidebar a:hover {
 	color:white;
 	background-color:#0088C0;
 	cursor:pointer;
@@ -203,10 +203,15 @@ select {
 	padding:2px solid black;
 }
 
-tbody tr:nth-child(odd)		{ background-color:#eee; }
-tbody tr:nth-child(even)		{ background-color:#fff; }
+tbody tr:nth-child(odd){background-color:#eee;}
+tbody tr:nth-child(even){background-color:#fff;}
 .clickable{cursor:pointer;}
 .clickable:hover{background-color:rgba(0, 0, 0, 0.15);}
 .equitable th, .equitable td{min-width:100px;}
 
 nav a:hover{cursor:pointer;}
+.hidden{display:none;}
+
+#sidebar_my_task_list a{
+	text-indent: 40px;
+}

@@ -15,7 +15,7 @@
 		<a class="header_nav" id="nav_projects">Projects</a>
 		<a class="header_nav" id="nav_members">Members</a>
 		<a class="header_nav" id="nav_groups">Groups</a>
-		<a class="header_nav" id="nav_settings">Settings</a>
+		<a class="header_nav" id="nav_user">My Page</a>
 	</nav>
     <span id="header_user"></span>
 </header>

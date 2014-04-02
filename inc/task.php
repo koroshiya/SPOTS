@@ -1,8 +1,7 @@
 <?php
 
-if (!fromIndex){
-	die('You must access this through the root index!');
-}elseif (!isset($_SESSION['SPOTS_authorized']))){
+session_start();
+if (!isset($_SESSION['SPOTS_authorized'])){
 	die("You are not permitted to access this page");
 }elseif (!isset($_POST['seriesID']) or empty($_POST['seriesID'])){
 	die("No seriesID set");
@@ -19,7 +18,6 @@ if (!fromIndex){
 $id = $_POST['userID'];
 DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 require_once(databaseDir . 'UserIO.php');
-session_start();
 
 $pm = getUser($id);
 
@@ -31,13 +29,13 @@ $pm = getUser($id);
 		<div id="projectDiv">
 			<table><tbody>
 			<?php
-				echo "<tr><th>Series</th><td>$_POST['seriesName']</td>";
-				echo "<tr><th>Chapter</th><td>$_POST['chapterNumber']</td>";
-				echo "<tr><th>Sub-Chapter</th><td>$_POST['chapterSubNumber']</td>";
-				echo "<tr><th>Task Role</th><td>$_POST['userRole']</td>";
-				echo "<tr><th>Role Status</th><td>$_POST['cstatus']</td>";
-				echo "<tr><th>Assigned User</th><td>$pm[1]</td>";
-				echo "<tr><th>Notes</th><td><textarea>$_POST['desc']</textarea></td>";
+				echo "<tr><th>Series</th><td>".$_POST['seriesName']."</td>";
+				echo "<tr><th>Chapter</th><td>".$_POST['chapterNumber']."</td>";
+				echo "<tr><th>Sub-Chapter</th><td>".$_POST['chapterSubNumber']."</td>";
+				echo "<tr><th>Task Role</th><td>".$_POST['userRole']."</td>";
+				echo "<tr><th>Role Status</th><td>".$_POST['cstatus']."</td>";
+				echo "<tr><th>Assigned User</th><td>".$pm[1]."</td>";
+				echo "<tr><th>Notes</th><td><textarea>".$_POST['desc']."</textarea></td>";
 			?>
 			</tbody></table>
 		</div>

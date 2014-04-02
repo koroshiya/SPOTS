@@ -47,16 +47,16 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	</center>
 </section>
 <script type="text/javascript">
-	$("#sidebar").html('<a class="sidebar_item" id="sidebar_all">All Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_active">Active Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_stalled">Stalled Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_inactive">Inactive Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_hiatus">Series on Hiatus</a><br />'+
-						'<a class="sidebar_item" id="sidebar_complete">Completed Series</a><br />'+
-						'<a class="sidebar_item" id="sidebar_dropped">Dropped Series</a>'+
+	$("#sidebar").html('<a id="sidebar_all">All Series</a><br />'+
+						'<a id="sidebar_active">Active Series</a><br />'+
+						'<a id="sidebar_stalled">Stalled Series</a><br />'+
+						'<a id="sidebar_inactive">Inactive Series</a><br />'+
+						'<a id="sidebar_hiatus">Series on Hiatus</a><br />'+
+						'<a id="sidebar_complete">Completed Series</a><br />'+
+						'<a id="sidebar_dropped">Dropped Series</a>'+
 						<?php if (isset($_SESSION['SPOTS_authorized'])){
 							echo "'<p>------------------------------------</p>'+";
-							echo "'<a class=\"sidebar_item\" id=\"sidebar_add_series\">Add Series</a>'+";
+							echo "'<a id=\"sidebar_add_series\">Add Series</a>'+";
 						}
 						?>
 						'<br />'

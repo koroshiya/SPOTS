@@ -61,8 +61,8 @@ $pm = getUser($seriesInfo[5]);
 </section>
 <script type="text/javascript">
 	$("#sidebar").html(
-		'<a class="sidebar_item" id="sidebar_back">Back to Projects</a>'+
-		'<a class="sidebar_item" id="btn_thumb">New thumbnail</a>'
+		'<a id="sidebar_back">Back to Projects</a>'+
+		'<a id="btn_thumb">New thumbnail</a>'
 	);
 	$("#sidebar_back").click(function(){GoToPage("projects");});
 
@@ -72,7 +72,7 @@ $pm = getUser($seriesInfo[5]);
 		$("#dialogform").toggle();
 		$("#projectDiv").toggle();
 	});
-	       
+	
 	$('#MyUploadForm').submit(function(evt) {
 		evt.preventDefault();
 	    $(this).ajaxSubmit({

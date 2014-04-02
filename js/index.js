@@ -29,8 +29,8 @@ $("#nav_members").click(function(){
 $("#nav_groups").click(function(){
 	GoToPage("groups");
 });
-$("#nav_settings").click(function(){
-	GoToPage("settings");
+$("#nav_user").click(function(){
+	GoToPage("home");
 });
 
 $(document).ready(function(){

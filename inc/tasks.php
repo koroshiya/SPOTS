@@ -82,8 +82,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		sel3.append('<option value="C">Complete</option>');
 		sidespan.append(sel3);
 		sidebar.html(sidespan);
-		sidebar.append('<a class="sidebar_item" id="sidebar_submit">Search All Tasks</a><br />');
-		sidebar.append('<a class="sidebar_item" id="sidebar_personal">Search Personal Tasks</a><br />');
+		sidebar.append('<a id="sidebar_submit">Search All Tasks</a><br />');
+		sidebar.append('<a id="sidebar_personal">Search Personal Tasks</a><br />');
 	}
 	function getSeriesName(id){
 		for (var i = arrayOfSeries.length - 1; i >= 0; i--) {
@@ -137,18 +137,19 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	function showTask(task){
 		$("#projectList").html("Loading...");
 		$.post("./inc/task.php", 
-				{seriesID: value.seriesID,
-				chapterNumber: value.chapterNumber,
-				chapterSubNumber: value.chapterSubNumber,
-				userID: value.userID,
-				userRole: value.userRole,
-				desc: value.desc,
-				cstatus: value.cstatus,
-				seriesName: getSeriesName(seriesID)})
+				{seriesID: task.seriesID,
+				chapterNumber: task.chapterNumber,
+				chapterSubNumber: task.chapterSubNumber,
+				userID: task.userID,
+				userRole: task.userRole,
+				desc: task.desc,
+				cstatus: task.cstatus,
+				seriesName: getSeriesName(task.seriesID)})
 			.done(function(data) {
 				$("#pageContent").html(data);
 			})
-			.fail(function() {
+			.fail(function(msg) {
+				console.log(msg);
 				console.log("Task does not exist or could not be loaded");
 				showTasks();
 			});
