@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS Task(
 	chapterSubNumber tinyint unsigned not null,
 	userID smallint unsigned not null,
 	description varchar(255) null,
-	status character null,
+	status character not null,
 	userRole varchar(20) not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID, userRole),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),

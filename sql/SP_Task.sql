@@ -6,7 +6,7 @@
 	chapterSubNumber tinyint unsigned not null,
 	userID smallint unsigned not null,
 	description varchar(255) null,
-	status character null,
+	status character not null,
 	userRole varchar(20) not null,
 	PRIMARY KEY (seriesID, chapterNumber, chapterSubNumber, userID, userRole),
 	FOREIGN KEY (seriesID, chapterNumber, chapterSubNumber) REFERENCES Chapter(seriesID, chapterNumber, chapterSubNumber),
@@ -20,7 +20,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS insert_task //
 CREATE FUNCTION insert_task(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20)) RETURNS boolean NOT DETERMINISTIC
 BEGIN 
-INSERT INTO Task VALUES(seriesID, chapterNumber, chapterSubNumber, userID, null, null, userRole);
+INSERT INTO Task VALUES(seriesID, chapterNumber, chapterSubNumber, userID, null, 'A', userRole);
 RETURN true;
 END // 
 DELIMITER ;
@@ -43,7 +43,7 @@ DROP FUNCTION IF EXISTS task_set_status //
 CREATE FUNCTION task_set_status(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), status character) RETURNS boolean DETERMINISTIC
 BEGIN 
 IF status = 'A' OR status = 'I' OR status = 'S' OR status = 'C' THEN
-UPDATE t AS Task SET t.status = status WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
+UPDATE Task AS t SET t.status = status WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
 RETURN true;
 END IF;
 RETURN false;
@@ -56,7 +56,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS task_set_description //
 CREATE FUNCTION task_set_description(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned, userID smallint unsigned, userRole varchar(20), description varchar(255)) RETURNS boolean DETERMINISTIC
 BEGIN 
-UPDATE t AS Task SET t.description = description WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
+UPDATE Task AS t SET t.description = description WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber AND t.userID = userID AND t.userRole = userRole;
 RETURN true;
 END // 
 DELIMITER ;
