@@ -136,33 +136,12 @@
 		return executeStoredProcedure($proc);
 	}
 
-	/**
-	 * Retrieves all tasks that a specific user has not completed.
-	 *
-	 * @param $userID ID of the user for whom to process the command.
-	 *
-	 * @return Returns all tasks that a specific user has started, but not completed.
-	 */
-	function getUserActiveTasks($userID){
+	function getUserTasksByStatus($userID, $status, $start){
 		if (!is_numeric($userID)){
 			return array(False);
 		}
-		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND NOT t.status = 'C';";
-		return executeStoredProcedure($proc);
-	}
-
-	/**
-	 * Retrieves all tasks that a specific user has completed.
-	 * 
-	 * @param $userID ID of the user for whom to process the command.
-	 *
-	 * @return Returns all tasks that a specific user has completed.
-	 */
-	function getUserCompleteTasks($userID){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND t.status = 'C';";
+		$status = getEscapedSQLParam($status);
+		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND t.status = $status LIMIT $start, 10;";
 		return executeStoredProcedure($proc);
 	}
 
