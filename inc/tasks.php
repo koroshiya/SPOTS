@@ -32,7 +32,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						chapterSubNumber: '.$task[2].',
 						userID: '.$task[3].',
 						desc: "'.$task[4].'",
-						cstatus: "'.$task[5].'",
+						status: "'.$task[5].'",
 						userRole: "'.$task[6].'"
 					});';
 				}
@@ -143,7 +143,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				userID: task.userID,
 				userRole: task.userRole,
 				desc: task.desc,
-				cstatus: task.cstatus,
+				status: task.status,
 				seriesName: getSeriesName(task.seriesID)})
 			.done(function(data) {
 				$("#pageContent").html(data);
