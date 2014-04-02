@@ -24,6 +24,15 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		//sidebar.append('<a id="sidebar_submit">Search All Tasks</a><br />');
 		//sidebar.append('<a id="sidebar_personal">Search Personal Tasks</a><br />');
 	}
+	function singleMemberSidebar(){
+		var sidebar = $("#sidebar");
+		var back_anch = $('<a id="sidebar_back_to_members">Back To All Members</a>');
+		sidebar.html(back_anch);
+		back_anch.click(function(){
+			showMembers();
+			resetSidebar();
+		});
+	}
 	function decodeUserStatus(status){
 		if (status == 'A'){
 			return "Active";
@@ -49,10 +58,6 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		}else{
 			return "N/A";
 		}
-	}
-	function singleMemberSidebar(){
-		var sidebar = $("#sidebar");
-		sidebar.html('<a id="sidebar_back_to_members"></a><br />');
 	}
 	function queryMembers(start){
 		if (typeof start == 'undefined' || start < 0){
@@ -95,9 +100,31 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	}
 	function showMember(member){
 		$("#projectList").html("Loading...");
+		singleMemberSidebar();
+		$.post("./ajax/memberInfo.php", {userID: member.userID})
+			.done(function(data) {
+				var params = $.parseJSON(data);
+				
+				var memberDiv = $("<div></div>");
+				memberDiv.append("<h2>"+member.userName+"</h2>");
+				memberDiv.append("<br>");
+				memberDiv.append("<b>User ID: #"+member.userID+"</b>");
+				memberDiv.append("<br>");
+				if (params[0] == "1"){
+					memberDiv.append("<b>User is a project manager</b>"); //TODO: list of series being managed?
+					memberDiv.append("<br>");
+				}
+				memberDiv.append("<b>User has "+params[1]+" active tasks");
+
+				$("#projectList").html(memberDiv);
+
+			})
+			.fail(function(msg) {
+				console.log(msg);
+				$("#projectList").html("Query failed");
+			});
 	}
 	resetSidebar();
 	queryMembers(0);
-	$("#sidebar_back_to_members").click(function(){showMembers();});
 </script>
 </div>
