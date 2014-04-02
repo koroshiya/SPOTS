@@ -112,7 +112,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				tr.append("<td>"+getSeriesName(value.seriesID)+"</td>");
 				tr.append("<td>"+value.chapterNumber+"."+value.chapterSubNumber+"</td>");
 				tr.append("<td>"+value.userRole+"</td>");
-				tr.append("<td>"+value.status+"</td>");
+				tr.append("<td>"+translateStatusChar(value.status)+"</td>");
 				tr.click(function(){showTask(value);});
 		    	btable.append(tr);
 		    }
