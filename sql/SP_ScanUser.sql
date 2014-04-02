@@ -4,6 +4,7 @@
 	userPassword char(40) not null,
 	email varchar(100) not null,
 	title character not null,
+	status character not null,
 	PRIMARY KEY (userID)
 */
 
@@ -20,7 +21,7 @@ IF totalUsers = 65534 THEN
 RETURN false;
 END IF;
 SET sha1Password = (SHA1(CONCAT(userName, userPassword, 'myEpicSalt', email)));
-INSERT INTO ScanUser(userName, userPassword, email, title) VALUES(userName, sha1Password, email, title);
+INSERT INTO ScanUser(userName, userPassword, email, title, status) VALUES(userName, sha1Password, email, title, 'A');
 RETURN true;
 END // 
 DELIMITER ;

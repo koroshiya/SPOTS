@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS ScanUser(
 	userPassword char(40) not null,
 	email varchar(100) not null,
 	title character not null,
+	status character not null,
 	PRIMARY KEY (userID)
 
 );
