@@ -11,13 +11,11 @@
 <header>
 	<nav style="display:inline-block; float:left; margin:0px; margin-left:10px;" role="navigation">
 		<a id="header_title">SPOTS</a>
-		<?php if ($loggedIntoSPOTS){ ?>
 		<a class="header_nav" id="nav_tasks">Tasks</a>
 		<a class="header_nav" id="nav_projects">Projects</a>
 		<a class="header_nav" id="nav_members">Members</a>
 		<a class="header_nav" id="nav_groups">Groups</a>
 		<a class="header_nav" id="nav_settings">Settings</a>
-		<? } ?>
 	</nav>
     <span id="header_user"></span>
 </header>
@@ -30,18 +28,13 @@
 	</form>
 	<br />
 	<script type="text/javascript">
-		<?php echo 'var loggedIn = '.($loggedIntoSPOTS ? "true" : "false").';'; ?>
-		$("#header_user").text(loggedIn ? "Logout" : "Login");
 		$("#header_user").click(function(){
 			if (!loggedIn){
 				$("#userMenu").toggle();
 			}else{
 				$.post("./ajax/logout.php",{})
 					.done(function(data) {
-						GoToPage("projects");
-						loggedIn = false;
-						$("#userMenu").hide();
-						$("#header_user").text("Login");
+						isLoggedIn(false);
 					})
 					.fail(function(msg) {
 						console.log(msg);
@@ -66,10 +59,35 @@
 				alert("Invalid username or password");
 				return false; //login failed
 			}
-			$("#header_user").text("Logout");
-			loggedIn = true;
+			isLoggedIn(true);
+		}
+		function isLoggedIn(login){
+			$("#userMenu").hide();
+			loggedIn = login;
+			if (login){
+				$("#header_user").text("Logout");
+			}else{
+				$("#header_user").text("Login");
+			}
+			showTabs(login);
 			GoToPage("projects");
 		}
+		function showTabs(login){
+			var menuItems = ["nav_tasks", "nav_projects", "nav_members", "nav_groups", "nav_settings"];
+			var i = menuItems.length - 1;
+			if (login){
+				for (; i >= 0; i--) {
+					$("#"+menuItems[i]).show();
+				};
+			}else{
+				for (; i >= 0; i--) {
+					$("#"+menuItems[i]).hide();
+				};
+			}
+		}
+		<?php echo 'var loggedIn = '.($loggedIntoSPOTS ? "true" : "false").';'; ?>
+		$("#header_user").text(loggedIn ? "Logout" : "Login");
+		showTabs(loggedIn);
 	</script>
 
 </div>
