@@ -223,6 +223,11 @@
 		return executeStoredProcedure($procedure_name);
 	}
 
+	function getUsersInOrder($start){
+		$procedure_name = "SELECT * FROM ScanUser LIMIT $start, 20;";
+		return executeStoredProcedure($procedure_name);
+	}
+
 	/**
 	 * Retrieves all users from the DB who belong to a certain title/status.
 	 *
