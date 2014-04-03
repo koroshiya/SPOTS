@@ -12,6 +12,8 @@
 	author varchar(50) null,
 	artist varchar(50) null,
 	type varchar(50) null, --eg. manga, manhwa, etc.
+	downloadURL varchar(255) null,
+	readOnlineURL varchar(255) null,
 	PRIMARY KEY (seriesID),
 	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 */

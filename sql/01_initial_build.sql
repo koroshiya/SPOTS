@@ -51,6 +51,8 @@ CREATE TABLE IF NOT EXISTS Series(
 	author varchar(50) null,
 	artist varchar(50) null,
 	type varchar(50) null,
+	downloadURL varchar(255) null,
+	readOnlineURL varchar(255) null,
 	PRIMARY KEY (seriesID),
 	FOREIGN KEY (projectManagerID) REFERENCES ScanUser(userID)
 
