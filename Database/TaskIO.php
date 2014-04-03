@@ -129,7 +129,7 @@
 	}
 
 	function getTasks($start){
-		if (!$start){
+		if (!$start || !is_numeric($start)){
 			$start = 0;
 		}
 		$proc = "SELECT * FROM Task limit $start, 10;";
