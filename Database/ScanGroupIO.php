@@ -68,4 +68,9 @@
 
 	}
 
+	function getGroupsInOrder($start){
+		$procedure_name = "SELECT * FROM ScanGroup LIMIT $start, 20;";
+		return executeStoredProcedure($procedure_name);
+	}
+
 ?>
