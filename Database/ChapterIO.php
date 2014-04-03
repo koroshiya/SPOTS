@@ -168,8 +168,43 @@
 	}
 
 	function getChapterBySeriesId($seriesID){
-		$name = getEscapedSQLParam($name);
+		if (!is_numeric($seriesID)){
+			return array(False);
+		}
 		$proc = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
+		return executeStoredProcedure($proc);
+	}
+
+	function getChapterListByGroupId($groupID, $start){
+		if (!is_numeric($groupID)){
+			return array(False);
+		}elseif (!$start || !is_numeric($start)){
+			$start = 0;
+		}
+		$proc = "SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = $groupID LIMIT $start, 10;";
+		return executeStoredProcedure($proc);
+	}
+
+	function getChapterListRecentByGroupId($groupID, $start, $total){
+		if (!is_numeric($groupID)){
+			return array(False);
+		}
+		if (!$total || !is_numeric($total)){
+			$total = 0;
+		}
+		if (!$start || !is_numeric($start)){
+			$start = 0;
+		}
+		$start = $total - $start;
+		$proc = "SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = $groupID LIMIT $start, 10;";
+		return executeStoredProcedure($proc);
+	}
+
+	function getChapterCountByGroupId($groupID){
+		if (!is_numeric($groupID)){
+			return array(False);
+		}
+		$proc = "SELECT COUNT(*) AS count FROM ChapterGroup AS s WHERE s.seriesID = $groupID;";
 		return executeStoredProcedure($proc);
 	}
 
