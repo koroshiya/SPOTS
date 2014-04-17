@@ -9,7 +9,9 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 ?>
 
 <section>
-	<center><div id="projectList"></div></center>
+	<center>
+		<div id="projectList"></div>
+	</center>
 </section>
 
 <script type="text/javascript">

@@ -1,6 +1,8 @@
 <?php
 
 	require_once('Connection.php');
+    require_once(databaseDir.'Settings.php');
+    require_once(databaseDir.'meekrodb.2.2.class.php');
 
 	//Example usage:
 	//echo getProjectCount();
@@ -22,22 +24,28 @@
 	 *
 	 * @return True if command is successful, otherwise false.
 	 */
-	function addSeries($seriesTitle, $status, $description, $thumbnailURL, $projectManagerID, $visibleToPublic, $boolAdult){
+	function addSeries($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult){
 
-		$args = array(
-				"seriesTitle" => $seriesTitle,
-				"status" => $status,
-				"description" => $description,
-				"thumbnailURL" => $thumbnailURL,
-				"projectManagerID" => $projectManagerID,
-				"visibleToPublic" => $visibleToPublic,
-				"boolAdult" => $boolAdult,
-		);
+		DB::$user = dbUser;
+		DB::$password = dbPass;
+		DB::$dbName = dbName;
+		DB::$host = host;
+		DB::$error_handler = 'DBError';
 
-		$procedure_name = 'insert_series';
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		$return = DB::insert('Series', array(
+			'seriesTitle' => $seriesTitle,
+			'status' => $status,
+			'description' => $description,
+			'projectManagerID' => $projectManagerID,
+			'visibleToPublic' => $visibleToPublic,
+			'isAdult' => $boolAdult
+		));
+		return $return;
 		
+	}
+
+	function DBError($params){
+		die("-1Database operation failed");
 	}
 
 	/**

@@ -6,11 +6,17 @@ if (!isset($_SESSION['SPOTS_authorized'])){
     die("You are not permitted to view this page");
 }
 
-$title = $_POST['form_title'];
+function returnError($msg){
+	echo "-1";
+	die($msg);
+}
 
-if (strlen($title) > 100){die("Series title is too long");}
+$title = $_POST['title'];
 
-$status = $_POST['form_status'];
+if (strlen($title) > 100){returnError("Series title is too long");}
+elseif (strlen($title) == 0){returnError("Series title not entered");}
+
+$status = $_POST['status'];
 
 switch ($status) {
 	case 'A':
@@ -21,23 +27,26 @@ switch ($status) {
 	case 'C':
 		break;
 	default:
-		die("Invalid status code");
+		returnError("Invalid status code");
 		break;
 }
 
-$desc = $_POST['form_desc'];
+$desc = $_POST['desc'];
 
-if (strlen($desc) > 255){die("Series description is too long");}
+if (strlen($desc) > 255){returnError("Series description is too long");}
+elseif (is_null($desc) || strlen($desc) == 0){$desc = null;}
 
-$pm = $_POST['form_pm'];
+$pm = $_POST['pm'];
 
-if (!is_numeric($pm)){die("Invalid project manager ID");}
+if (!is_numeric($pm)){returnError("Invalid project manager ID");}
 elseif ($pm == -1){$pm = null;}
 
-$public = $_POST['form_public'];
-$adult = $_POST['form_adult'];
+$public = $_POST['ispublic'] == "1" ? "True" : "False";
+$adult = $_POST['isadult'] == "1" ? "True" : "False";
 
 DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 require_once(databaseDir.'SeriesIO.php');
+
+return addSeries($title, $status, $desc, $pm, $public, $adult);
 
 ?>

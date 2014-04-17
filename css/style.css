@@ -83,7 +83,7 @@ input[type="file"] {
 	font-size:10pt;
 }
 select {
-	width:130px;
+	min-width:130px;
 	height:23px;
 	font-size:9pt;
 }
@@ -214,4 +214,8 @@ nav a:hover{cursor:pointer;}
 
 #sidebar_my_task_list a{
 	text-indent: 40px;
+}
+#form_desc{
+	width:250px;
+	height:75px;
 }
