@@ -20,9 +20,9 @@ if (isset($_POST['start']) && is_numeric($_POST['start'])){
 }
 
 if ($statusSearch == -1){
-	$data = getUserTasks($_SESSION['SPOTS_ID'], $start);
+	$data = getFullyDefinedTasks(array(null,null,null), $start, $_SESSION['SPOTS_ID']);
 }else{
-	$data = getUserTasksByStatus($_SESSION['SPOTS_ID'], $statusSearch, $start);
+	$data = getFullyDefinedTasks(array(null,null,$statusSearch), $start, $_SESSION['SPOTS_ID']);
 }
 
 echo json_encode($data);

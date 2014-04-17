@@ -113,35 +113,11 @@
 		return executeChapterFunction($userID, 'get_user_task_count_complete');
 	}
 
-	/**
-	 * Retrieves all tasks that a specific user has assigned to them
-	 *
-	 * @param $userID ID of the user for whom to process the command.
-	 *
-	 * @return Returns all tasks pertaining to a specific user.
-	 */
-	function getUserTasks($userID){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID;";
-		return executeStoredProcedure($proc);
-	}
-
 	function getTasks($start){
 		if (!$start || !is_numeric($start)){
 			$start = 0;
 		}
 		$proc = "SELECT * FROM Task limit $start, 10;";
-		return executeStoredProcedure($proc);
-	}
-
-	function getUserTasksByStatus($userID, $status, $start){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		$status = getEscapedSQLParam($status);
-		$proc = "SELECT * FROM Task AS t WHERE t.userID = $userID AND t.status = $status LIMIT $start, 10;";
 		return executeStoredProcedure($proc);
 	}
 
@@ -229,52 +205,45 @@
 		return executeStoredProcedure($proc);
 	}
 
-	function getFullyDefinedTasks($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$args[2] = getEscapedSQLParam($args[2]);
-		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1] AND t.status = $args[2];";
+	function getFullyDefinedTasks($args, $start, $userID){
+
+		$proc = "SELECT * FROM Task AS t";
+		if (!is_null($args[0])){
+			if (!is_numeric($args[0])){
+				return array(False);
+			}
+			$proc .= " INNER JOIN Series AS s ON s.seriesID = $args[0]";
+		}
+		if (!is_null($args[1]) || !is_null($args[2])){
+			$proc .= " WHERE ";
+			if (!is_null($userID)){
+				if (!is_numeric($userID)){
+					return array(False);
+				}
+				$proc .= "t.userID = $userID AND ";
+			}
+			if (!is_null($args[1]) && !is_null($args[2])){
+				$args[1] = getEscapedSQLParam($args[1]);
+				$args[2] = getEscapedSQLParam($args[2]);
+				$proc .= "t.userRole = $args[1] AND t.status = $args[2]";
+			}elseif (!is_null($args[1])) {
+				$args[1] = getEscapedSQLParam($args[1]);
+				$proc .= "t.userRole = $args[1]";
+			}elseif (!is_null($args[2])) {
+				$args[2] = getEscapedSQLParam($args[2]);
+				$proc .= "t.status = $args[2]";
+			}
+		}elseif (!is_null($userID)){
+			if (!is_numeric($userID)){
+				return array(False);
+			}
+			$proc .= " WHERE t.userID = $userID";
+		}
+		$proc .= " LIMIT $start, 10;";
+		
 		return executeStoredProcedure($proc);
 	}
 
-	function getDefinedTasksByTitleAndRole($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.userRole = $args[1];";
-		return executeStoredProcedure($proc);
-	}
-
-	function getDefinedTasksByRoleAndStatus($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t WHERE t.userRole = $args[0] AND t.status = $args[1];";
-		return executeStoredProcedure($proc);
-	}
-
-	function getDefinedTasksByTitleAndStatus($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0] AND t.status = $args[1];";
-		return executeStoredProcedure($proc);
-	}
-
-	function getDefinedTasksByTitle($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t WHERE s.seriesTitle = $args[0];";
-		return executeStoredProcedure($proc);
-	}
-
-	function getDefinedTasksByRole($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t WHERE t.userRole = $args[0];";
-		return executeStoredProcedure($proc);
-	}
-
-	function getDefinedTasksByStatus($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$proc = "SELECT * FROM Task AS t WHERE t.status = $args[0];";
-		return executeStoredProcedure($proc);
-	}
 
 	/**
 	 * Converts a char to its equivalent status string. eg. d = dropped.
