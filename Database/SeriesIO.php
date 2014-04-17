@@ -2,7 +2,6 @@
 
 	require_once('Connection.php');
     require_once(databaseDir.'Settings.php');
-    require_once(databaseDir.'meekrodb.2.2.class.php');
 
 	//Example usage:
 	//echo getProjectCount();
@@ -21,31 +20,13 @@
 	 * @param $projectManagerID ID of the member managing this specific series.
 	 * @param $visibleToPublic True if series is visible to guest users, otherwise false.
 	 * @param $boolAdult True if series is adults-only, otherwise false.
-	 *
-	 * @return True if command is successful, otherwise false.
 	 */
 	function addSeries($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult){
 
-		DB::$user = dbUser;
-		DB::$password = dbPass;
-		DB::$dbName = dbName;
-		DB::$host = host;
-		DB::$error_handler = 'DBError';
-
-		$return = DB::insert('Series', array(
-			'seriesTitle' => $seriesTitle,
-			'status' => $status,
-			'description' => $description,
-			'projectManagerID' => $projectManagerID,
-			'visibleToPublic' => $visibleToPublic,
-			'isAdult' => $boolAdult
-		));
-		return $return;
+		$names = array('seriesTitle', 'status', 'description', 'projectManagerID', 'visibleToPublic', 'isAdult');
+		$params = array($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult);
+		return insertIntoTable('Series', $names, $params);
 		
-	}
-
-	function DBError($params){
-		die("-1Database operation failed");
 	}
 
 	/**
@@ -58,10 +39,9 @@
 	 */
 	function deleteSeries($seriesID){
 
-		$procedure_name = 'delete_series';
-		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT delete_series(%i);", $seriesID);
+		return $result;
 		
 	}
 
@@ -74,10 +54,9 @@
 	 */
 	function deleteSeriesByForce($seriesID){
 
-		$procedure_name = 'delete_series_force';
-		$args = array($seriesID);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT delete_series_force(%i);", $seriesID);
+		return $result;
 		
 	}
 
@@ -91,10 +70,9 @@
 	 */
 	function seriesSetStatus($seriesID, $status){
 
-		$procedure_name = 'series_set_status';
-		$args = array($seriesID, $status);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT series_set_status(%i, %s);", $seriesID, $status);
+		return $result;
 		
 	}
 
@@ -108,10 +86,9 @@
 	 */
 	function seriesSetVisible($seriesID, $boolVisible){
 
-		$procedure_name = 'series_set_visible';
-		$args = array($seriesID, $boolVisible);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT series_set_visible(%i, %s);", $seriesID, $boolVisible);
+		return $result;
 		
 	}
 
@@ -125,10 +102,9 @@
 	 */
 	function seriesSetAdult($seriesID, $boolAdult){
 
-		$procedure_name = 'series_set_adult';
-		$args = array($seriesID, $boolAdult);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT series_set_adult(%i, %s);", $seriesID, $boolAdult);
+		return $result;
 		
 	}
 
@@ -142,13 +118,11 @@
 	 */
 	function seriesSetProjectManager($seriesID, $managerID){
 
-		$procedure_name = 'series_set_project_manager';
-		$args = array($seriesID, $managerID);
-		$result = executeFunction($procedure_name, $args);
-		return $result[0];
+		connectToMeekro();
+		$result = DB::query("SELECT series_set_project_manager(%i, %i);", $seriesID, $managerID);
+		return $result;
 		
 	}
-
 
 	/**
 	 * Returns the number of Series currently in the DB.
@@ -156,11 +130,10 @@
 	 * @return Number of projects ("Series" in the DB). If connection failed, returns false.
 	 **/
 	function getProjectCount(){
-		
-		$procedure_name = 'get_project_count';
-		$row = executeFunction($procedure_name, null);
 
-		return $row[0];
+		connectToMeekro();
+		$result = DB::query("SELECT get_project_count();");
+		return $result;
 		
 	}
 
@@ -173,21 +146,16 @@
 	 **/
 	function getSeriesByID($seriesID){
 
-		if (!is_numeric($seriesID)){
-			return array(False);
-		}
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
-		$row = executeStoredProcedure($procedure_name);
-		return $row[0];
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesID = %i;", $seriesID);
+		return $result;
 
 	}
+
 	function updateSeriesThumbnail($seriesID, $thumb){
 
-		if (!is_numeric($seriesID) || empty($thumb)){
-			return array(False);
-		}
-		$procedure_name = "series_set_thumbnail";
-		$result = executeFunction($procedure_name, array($seriesID, $thumb));
+		connectToMeekro();
+		$result = DB::query("SELECT series_set_thumbnail(%i, %s);", $seriesID, $thumb);
 		return $result;
 
 	}
@@ -216,9 +184,9 @@
 	 **/
 	function getSeriesByStatus($character){
 
-		$character = getEscapedSQLParam($character);
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.status = $character;";
-		return executeStoredProcedure($procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.status = %s;", $character);
+		return $result;
 
 	}
 
@@ -230,9 +198,11 @@
 	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
 	 */
 	function getSeriesByGenre($genre){
-		$genre = getEscapedSQLParam($genre);
-		$proc = "SELECT * FROM SERIES AS s INNER JOIN SeriesGenre AS sg ON sg.name = $genre WHERE s.seriesID = sg.seriesID;";
-		return executeStoredProcedure($proc);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM SERIES AS s INNER JOIN SeriesGenre AS sg ON sg.name = %s WHERE s.seriesID = sg.seriesID;", $genre);
+		return $result;
+
 	}
 
 	/**
@@ -245,9 +215,9 @@
 	 */
 	function getSeriesByTitle($searchString){
 
-		$searchString = '%' . getEscapedSQLParam($searchString) . '%';
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $searchString;";
-		return executeStoredProcedure($procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $ss;", $character);
+		return $result;
 		
 	}
 

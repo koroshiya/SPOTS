@@ -18,6 +18,36 @@
 		global $connection;
 		mysqli_close($connection);
 	}
+
+	function connectToMeekro(){
+		require_once(databaseDir.'Settings.php');
+    	require_once(databaseDir.'meekrodb.2.2.class.php');
+
+		DB::$user = dbUser;
+		DB::$password = dbPass;
+		DB::$dbName = dbName;
+		DB::$host = host;
+		DB::$error_handler = 'DBError';
+	}
+
+	function insertIntoTable($table, $names, $params){
+		connectToMeekro();
+		if (count($names) != count($params) || !is_array($names) || !is_array($params)){
+			die("Name/Param arrays don't match");
+		}
+
+		$args = array();
+		for ($count=0; $count < count($names); $count++) { 
+			$args[$names[$count]] = $params[$count];
+		}
+
+		$return = DB::insert($table, $args);
+		return $return;
+	}
+
+	function DBError($params){
+		die("-1Database operation failed");
+	}
 	
 	/**
 	 * Executes a function, passing in a list of arguments (or single argument).
