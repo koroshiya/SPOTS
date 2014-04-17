@@ -3,13 +3,6 @@
 	require_once('Connection.php');
     require_once(databaseDir.'Settings.php');
 
-	//Example usage:
-	//echo getProjectCount();
-	//echo getSeriesByLetter('t');
-	//echo getSeriesStatus(4);
-	//echo getSeriesByStatus('d');
-	//echo getSeriesByID(4);
-
 	/**
 	 * Adds a new series to the database.
 	 * 
@@ -231,10 +224,9 @@
 	 */
 	function getSeriesByStatusAndTitle($character, $searchString){
 
-		$character = getEscapedSQLParam($character);
-		$searchString = '%' . getEscapedSQLParam($searchString) . '%';
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.status = $character AND s.seriesTitle LIKE $searchString;";
-		return executeStoredProcedure($procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.status = $s AND s.seriesTitle LIKE $ss;", $character, $searchString);
+		return $result;
 
 	}
 
@@ -247,9 +239,9 @@
 	 **/
 	function getSeriesStatus($seriesID){
 
-		$procedure_name = "get_series_status";
-		$result = executeFunction($procedure_name, $seriesID);
-		return getSeriesStatusFromChar($result[0]);
+		connectToMeekro();
+		$result = DB::query("SELECT get_series_status($i);", $seriesID);
+		return getSeriesStatusFromChar($result);
 
 	}
 
@@ -286,8 +278,11 @@
 	 * @return All series from the database.
 	 */
 	function getSeriesAll(){
-		$procedure_name = "SELECT * FROM Series;";
-		return executeStoredProcedure($procedure_name);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series;");
+		return $result;
+
 	}
 
 	/**
@@ -296,8 +291,11 @@
 	 * @return All series from the database.
 	 */
 	function getSeriesAllPublic(){
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.visibleToPublic = True;";
-		return executeStoredProcedure($procedure_name);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True;");
+		return $result;
+
 	}
 
 ?>

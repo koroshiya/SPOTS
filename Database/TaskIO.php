@@ -207,41 +207,38 @@
 
 	function getFullyDefinedTasks($args, $start, $userID){
 
-		$proc = "SELECT * FROM Task AS t";
+		connectToMeekro();
+
+		$clause = False;
+		$where = new WhereClause('and');
+		if (!is_null($args[1])){
+			$where->add('userRole=%i', $args[1]);
+			$clause = True;
+		}
+		if (!is_null($args[2])){
+			$where->add('status=%s', $args[2]);
+			$clause = True;
+		}
+		if (!is_null($userID)){
+			$where->add('userID=%i', $userID);
+			$clause = True;
+		}
 		if (!is_null($args[0])){
-			if (!is_numeric($args[0])){
-				return array(False);
+			if ($clause){
+				$result = DB::query("SELECT * FROM Task AS t INNER JOIN Series AS s ON s.seriesID = %i WHERE %l LIMIT %i, %i;", $args[0], $where, $start, 10);
+			}else{
+				$result = DB::query("SELECT * FROM Task AS t INNER JOIN Series AS s ON s.seriesID = %i LIMIT %i, %i;", $args[0], $start, 10);
 			}
-			$proc .= " INNER JOIN Series AS s ON s.seriesID = $args[0]";
+		}else{
+			if ($clause){
+				$result = DB::query("SELECT * FROM Task AS t WHERE %l LIMIT %i, %i;", $where, $start, 10);
+			}else{
+				$result = DB::query("SELECT * FROM Task AS t LIMIT %i, %i;", $start, 10);
+			}
 		}
-		if (!is_null($args[1]) || !is_null($args[2])){
-			$proc .= " WHERE ";
-			if (!is_null($userID)){
-				if (!is_numeric($userID)){
-					return array(False);
-				}
-				$proc .= "t.userID = $userID AND ";
-			}
-			if (!is_null($args[1]) && !is_null($args[2])){
-				$args[1] = getEscapedSQLParam($args[1]);
-				$args[2] = getEscapedSQLParam($args[2]);
-				$proc .= "t.userRole = $args[1] AND t.status = $args[2]";
-			}elseif (!is_null($args[1])) {
-				$args[1] = getEscapedSQLParam($args[1]);
-				$proc .= "t.userRole = $args[1]";
-			}elseif (!is_null($args[2])) {
-				$args[2] = getEscapedSQLParam($args[2]);
-				$proc .= "t.status = $args[2]";
-			}
-		}elseif (!is_null($userID)){
-			if (!is_numeric($userID)){
-				return array(False);
-			}
-			$proc .= " WHERE t.userID = $userID";
-		}
-		$proc .= " LIMIT $start, 10;";
-		
-		return executeStoredProcedure($proc);
+
+		return $result;
+
 	}
 
 

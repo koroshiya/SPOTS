@@ -17,7 +17,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				require_once(databaseDir . 'TaskIO.php');
 				require_once(databaseDir . 'RoleIO.php');
 				require_once(databaseDir . 'SeriesIO.php');
-				$arrayOfTasks = getUserTasks($_SESSION['SPOTS_ID']);
+				$arrayOfTasks = getFullyDefinedTasks(array(null,null,'A'), 0, $_SESSION['SPOTS_ID']);
 				$arrayOfSeries = getSeriesAll();
 				$arrayOfRoles = getRolesAll();
 
@@ -26,20 +26,21 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				echo 'var arrayOfSeries = [];';
 				echo 'var arrayOfRoles = [];';
 				foreach ($arrayOfTasks as $task) {
+					//var_dump($task);
 					echo 'arrayOfTasks.push({
-						seriesID: '.$task[0].',
-						chapterNumber: '.$task[1].',
-						chapterSubNumber: '.$task[2].',
-						userID: '.$task[3].',
-						desc: "'.$task[4].'",
-						status: "'.$task[5].'",
-						userRole: "'.$task[6].'"
+						seriesID: '.$task['seriesID'].',
+						chapterNumber: '.$task['chapterNumber'].',
+						chapterSubNumber: '.$task['chapterSubNumber'].',
+						userID: '.$task['userID'].',
+						desc: "'.$task['desc'].'",
+						status: "'.$task['status'].'",
+						userRole: "'.$task['userRole'].'"
 					});';
 				}
 				foreach ($arrayOfSeries as $series) {
 					echo 'arrayOfSeries.push({
-						seriesID: "'.$series[0].'",
-						seriesTitle: "'.$series[1].'"
+						seriesID: "'.$series['seriesID'].'",
+						seriesTitle: "'.$series['seriesTitle'].'"
 					});';
 				}
 				foreach ($arrayOfRoles as $role) {
