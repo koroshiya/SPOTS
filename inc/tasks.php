@@ -148,7 +148,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				status: task.status,
 				seriesName: getSeriesName(task.seriesID)})
 			.done(function(data) {
-				$("#pageContent").html(data);
+				$("#projectList").html(data);
 			})
 			.fail(function(msg) {
 				console.log(msg);
