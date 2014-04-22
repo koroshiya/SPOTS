@@ -3,13 +3,13 @@
 session_start();
 if (!isset($_SESSION['SPOTS_authorized'])){
 	die("You are not permitted to access this page");
-}elseif (!isset($_POST['seriesID']) or empty($_POST['seriesID'])){
+}elseif (!isset($_POST['seriesID'])){
 	die("No seriesID set");
-}elseif (!isset($_POST['userID']) or empty($_POST['userID'])){
+}elseif (!isset($_POST['userID'])){
 	die("No userID set");
-}elseif (!isset($_POST['chapterNumber']) or empty($_POST['chapterNumber'])){
+}elseif (!isset($_POST['chapterNumber'])){
 	die("No chapterNumber set");
-}elseif (!isset($_POST['chapterSubNumber']) or empty($_POST['chapterSubNumber'])){
+}elseif (!isset($_POST['chapterSubNumber'])){
 	die("No chapterSubNumber set");
 }elseif (!isset($_POST['userRole']) or empty($_POST['userRole'])){
 	die("No userRole set");
