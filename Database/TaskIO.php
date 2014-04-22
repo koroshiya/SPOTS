@@ -2,9 +2,6 @@
 
 	require_once('Connection.php');
 
-	//Example usage:
-	//echo getUserTaskCount(1);
-
 	/**
 	 * Pushes the different parameters necessary to define a specific task into one array.
 	 * 
@@ -79,10 +76,9 @@
 	 * @return Returns the total number of tasks a specific user has assigned to them.
 	 */
 	function getUserTaskCount($userID){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		return executeChapterFunction($userID, 'get_user_task_count');
+		connectToMeekro();
+		$result = DB::query("SELECT get_user_task_count(%i);", $userID);
+		return $result;
 	}
 
 	/**
@@ -93,10 +89,9 @@
 	 * @return Returns the total number of tasks a specific user has started, but not completed.
 	 */
 	function getUserActiveTaskCount($userID){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		return executeChapterFunction($userID, 'get_user_task_count_active');
+		connectToMeekro();
+		$result = DB::query("SELECT get_user_task_count_active(%i);", $userID);
+		return $result;
 	}
 
 	/**
@@ -107,18 +102,15 @@
 	 * @return Returns the total number of tasks a specific user has completed.
 	 */
 	function getUserCompleteTaskCount($userID){
-		if (!is_numeric($userID)){
-			return array(False);
-		}
-		return executeChapterFunction($userID, 'get_user_task_count_complete');
+		connectToMeekro();
+		$result = DB::query("SELECT get_user_task_count_complete(%i);", $userID);
+		return $result;
 	}
 
 	function getTasks($start){
-		if (!$start || !is_numeric($start)){
-			$start = 0;
-		}
-		$proc = "SELECT * FROM Task limit $start, 10;";
-		return executeStoredProcedure($proc);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Task limit %i, %i;", $start, 10);
+		return $result;
 	}
 
 	/**
@@ -166,43 +158,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterTasks($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$args[2] = getEscapedSQLParam($args[2]);
-		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
-		return executeStoredProcedure($proc);
-	}
-
-	/**
-	 * Retrieves all incomplete tasks associated with a specific chapter.
-	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
-	 *
-	 * @param $args Arguments to process with this function.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function getChapterActiveTasks($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$args[2] = getEscapedSQLParam($args[2]);
-		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
-		return executeStoredProcedure($proc);
-	}
-
-	/**
-	 * Retrieves all complete tasks associated with a specific chapter.
-	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
-	 *
-	 * @param $args Arguments to process with this function.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function getChapterCompleteTasks($args){
-		$args[0] = getEscapedSQLParam($args[0]);
-		$args[1] = getEscapedSQLParam($args[1]);
-		$args[2] = getEscapedSQLParam($args[2]);
-		$proc = "SELECT * FROM Task AS t WHERE t.seriesID = $args[0] AND t.chapterNumber = $args[1] AND t.chapterSubNumber = $args[2];";
-		return executeStoredProcedure($proc);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Task AS t WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i;", $args[0], $args[1], $args[2]);
+		return $result;
 	}
 
 	function getFullyDefinedTasks($args, $start, $userID){
@@ -223,6 +181,7 @@
 			$where->add('userID=%i', $userID);
 			$clause = True;
 		}
+		//var_dump($where);
 		if (!is_null($args[0])){
 			if ($clause){
 				$result = DB::query("SELECT * FROM Task AS t INNER JOIN Series AS s ON s.seriesID = %i WHERE %l LIMIT %i, %i;", $args[0], $where, $start, 10);

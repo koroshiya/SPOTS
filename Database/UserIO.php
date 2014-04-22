@@ -10,15 +10,12 @@
 	 * @param $userRole Role of the user to create.
 	 * @param $email Email address of the user to create.
 	 * @param $title Title given to user to create.
-	 *
-	 * @return True if successful, otherwise false.
 	 */
 	function insertUser($userName, $userPassword, $userRole, $email, $title){
-		
-		$procedure_name = 'insert_user';
-		
-		$array = array($userName, $userPassword, $userRole, $email, $title);
-		return executeUserFunction($procedure_name, $array);
+
+		$names = array('userName', 'userPassword', 'userRole', 'email', 'title');
+		$params = array($userName, $userPassword, $userRole, $email, $title);
+		return insertIntoTable('ScanUser', $names, $params);
 		
 	}
 	
@@ -27,13 +24,12 @@
 	 * Fails if the user is assigned to any incomplete tasks or other such tables.
 	 *
 	 * @param $userID ID of the user to be affected by this function.
-	 *
-	 * @return True if successful, otherwise false.
 	 */
 	function deleteUser($userID){
 
-		$procedure_name = 'delete_user';
-		return executeUserFunction($procedure_name, $userID);
+		connectToMeekro();
+		$result = DB::query("SELECT delete_user(%i);", $userID);
+		return $result;
 		
 	}
 	
@@ -46,8 +42,9 @@
 	 */
 	function deleteUserForcibly($userID){
 
-		$procedure_name = 'delete_user_force';
-		return executeUserFunction($procedure_name, $userID);
+		connectToMeekro();
+		$result = DB::query("SELECT delete_user_force(%i);", $userID);
+		return $result;
 		
 	}
 
@@ -61,9 +58,9 @@
 	 */
 	function userSetPassword($userID, $newPassword){
 
-		$procedure_name = 'user_set_password';
-		$arr = array($userID, $newPassword);
-		return executeUserFunction($procedure_name, $arr);
+		connectToMeekro();
+		$result = DB::query("SELECT user_set_password(%i, %s);", $userID, $newPassword);
+		return $result;
 		
 	}
 
@@ -77,9 +74,9 @@
 	 */
 	function userSetEmail($userID, $newEmail){
 
-		$procedure_name = 'user_set_email';
-		$arr = array($userID, $newEmail);
-		return executeUserFunction($procedure_name, $arr);
+		connectToMeekro();
+		$result = DB::query("SELECT user_set_email(%i, %s);", $userID, $newEmail);
+		return $result;
 		
 	}
 
@@ -93,9 +90,9 @@
 	 */
 	function userGetPasswordIsValid($userID, $passwordAttempt){
 
-		$procedure_name = 'user_get_password_valid';
-		$arr = array($userID, $passwordAttempt);
-		return executeUserFunction($procedure_name, $arr);
+		connectToMeekro();
+		$result = DB::query("SELECT user_get_password_valid(%i, %s);", $userID, $passwordAttempt);
+		return $result;
 		
 	}
 
@@ -108,9 +105,11 @@
 	 * @return True if password is correct, otherwise false
 	 */
 	function userGetPasswordIsValidByName($name, $passwordAttempt){
-		$procedure_name = 'user_get_password_valid_by_name';
-		$arr = array($name, $passwordAttempt);
-		return executeUserFunction($procedure_name, $arr);
+
+		connectToMeekro();
+		$result = DB::query("SELECT user_get_password_valid_by_name(%s, %s);", $name, $passwordAttempt);
+		return $result;
+
 	}
 
 	/**
@@ -122,8 +121,9 @@
 	 */
 	function userGetEmail($userID){
 
-		$procedure_name = 'user_get_email';
-		return executeUserFunction($procedure_name, $userID);
+		connectToMeekro();
+		$result = DB::query("SELECT user_get_email(%i);", $userID);
+		return $result;
 		
 	}
 
@@ -137,9 +137,9 @@
 	 */
 	function userSetPermission($userID, $char){
 
-		$procedure_name = 'user_set_permission';
-		$arr = array($userID, $char);
-		return executeUserFunction($procedure_name, $arr);
+		connectToMeekro();
+		$result = DB::query("SELECT user_set_permission(%i, %s);", $userID, $char);
+		return $result;
 		
 	}
 
@@ -148,8 +148,9 @@
 	 */
 	function userGetPermission($userID){
 
-		$procedure_name = 'user_get_permission';
-		return executeUserFunction($procedure_name, $userID);
+		connectToMeekro();
+		$result = DB::query("SELECT user_get_permission(%i);", $userID);
+		return $result;
 		
 	}
 
@@ -174,13 +175,12 @@
 	 * Checks if the specified user is the project manager of any series'.
 	 * 
 	 * @param $userID ID of the user to check the authority of.
-	 *
-	 * @return True if the user is the project manager of at least one series, otherwise false.
 	 */
 	function isProjectManager($userID){
 
-		$procedure_name = 'is_project_manager';
-		return executeUserFunction($procedure_name, $userID);
+		connectToMeekro();
+		$result = DB::query("SELECT is_project_manager(%i);", $userID);
+		return $result;
 		
 	}
 
@@ -188,14 +188,12 @@
 	 * Checks if the specified user is the project manager of a particular series.
 	 * 
 	 * @param $userID ID of the user to check the authority of.
-	 *
-	 * @return True if the user is the project manager of a specific series, otherwise false.
 	 */
 	function isProjectManagerOfSeries($userID, $seriesID){
 
-		$procedure_name = 'is_project_manager_of_series';
-		$arr = array($userID, $seriesID);
-		return executeUserFunction($procedure_name, $arr);
+		connectToMeekro();
+		$result = DB::query("SELECT is_project_manager_of_series(%i, %i);", $userID, $seriesID);
+		return $result;
 		
 	}
 
@@ -207,10 +205,11 @@
 	 * @return User specified by ID. False if function fails.
 	 */
 	function getUser($userID){
-		$userID = getEscapedSQLParam($userID);
-		$procedure_name = "SELECT * FROM ScanUser AS s WHERE s.userID = $userID;";
-		$result = executeStoredProcedure($procedure_name);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ScanUser AS s WHERE s.userID = %i;", $userID);
 		return $result[0];
+
 	}
 
 	/**
@@ -219,13 +218,19 @@
 	 * @return All users stored in the DB. False if function fails.
 	 */
 	function getUsersAll(){
-		$procedure_name = "SELECT * FROM ScanUser;";
-		return executeStoredProcedure($procedure_name);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ScanUser;");
+		return $result;
+
 	}
 
 	function getUsersInOrder($start){
-		$procedure_name = "SELECT * FROM ScanUser LIMIT $start, 20;";
-		return executeStoredProcedure($procedure_name);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ScanUser LIMIT %i, %i;", $start, 20);
+		return $result;
+
 	}
 
 	/**
@@ -238,25 +243,12 @@
 	 */
 	function getUsersByPosition($position){
 		if ($position === 'S' OR $position === 'A' OR $position === 'M'){ /*s = staff, a = admin, m = mod*/
-			$position = getEscapedSQLParam($position);
-			$procedure_name = "SELECT * FROM ScanUser AS s WHERE s.title = $position;";
-			return executeStoredProcedure($procedure_name);
+			connectToMeekro();
+			$result = DB::query("SELECT * FROM ScanUser AS s WHERE s.title = %s;", $position);
+			return $result;
 		}else{
 			return getUsersAll();
 		}
-	}
-
-	/**
-	 * Processed a user function and attempts to run it.
-	 *
-	 * @param $procedure_name Name of the function/procedure we want to run.
-	 * @param $array Array of arguments (or single argument, or null) to pass into the function we want to run.
-	 *
-	 * @return First row returned by the function. False if function fails.
-	 */
-	function executeUserFunction($procedure_name, $array){
-		$row = executeFunction($procedure_name, $array);
-		return $row[0];
 	}
 
 ?>

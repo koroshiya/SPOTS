@@ -1,12 +1,5 @@
 <?php
 
-/**
- *File: UserRoleIO.php
- *Author: Koro
- *Changelog: 1.01: Grouped similar functions, removed unnecessary.
- *Purpose: Provides methods for interacting with UserRole objects in the database
-**/ 
-
 	require_once('Connection.php');
 
 	/**
@@ -14,11 +7,11 @@
 	 *
 	 * @param $userID ID of the user to assign a role to.
 	 * @param $name Name of the role to assign to a user.
-	 *
-	 * @return True if successful, otherwise false.
 	 */
 	function addUserRole($userID, $name){
-		return userIOFunction($userID, $name, 'user_add_role');
+		connectToMeekro();
+		$result = DB::query("SELECT user_add_role(%i, %s);", $userID, $name);
+		return $result[0];
 	}
 
 	/**
@@ -26,62 +19,44 @@
 	 *
 	 * @param $userID ID of the user specified in the pairing.
 	 * @param $name Name of the role specified in the pairing.
-	 *
-	 * @return True if successful, otherwise false.
 	 */
 	function removeUserRole($userID, $name){
-		return userIOFunction($userID, $name, 'user_remove_role');
+		connectToMeekro();
+		$result = DB::query("SELECT user_remove_role(%i, %s);", $userID, $name);
+		return $result[0];
 	}
 
 	/**
 	 * Removes all roles pertaining to a specific user.
 	 *
 	 * @param $userID ID of the user to remove all role from.
-	 *
-	 * @return True if successful, otherwise false.
 	 */
 	function removeAllUserRoles($userID){
-		return userIOFunction($userID, null, 'user_remove_role_all');
+		connectToMeekro();
+		$result = DB::query("SELECT user_remove_role_all(%i);", $userID);
+		return $result[0];
 	}
 
 	/**
 	 * Retrieves all roles pertaining to a specific user.
 	 *
 	 * @param $userID ID of the user specified in the pairing.
-	 *
-	 * @return All roles pertaining to a specific user.
 	 */
 	function getUserRoles($userID){
-		$userID = getEscapedSQLParam($userID);
-		$proc = "SELECT ur.name FROM UserRole AS ur WHERE ur.userID = $userID;";
-		return executeStoredProcedure($proc);
+		connectToMeekro();
+		$result = DB::query("SELECT ur.name FROM UserRole AS ur WHERE ur.userID = %i;", $userID);
+		return $result[0];
 	}
 
 	/**
 	 * Retrieves all users of a specific role.
 	 *
 	 * @param $name Name of the role specified in the pairing.
-	 *
-	 * @return All users of a specific role.
 	 */
 	function getUsersByRole($name){
-		$name = getEscapedSQLParam($name);
-		$proc = "SELECT * FROM ScanUser AS su INNER JOIN UserRole AS ur ON su.userID = ur.userID WHERE ur.name = $name;";
-		return executeStoredProcedure($proc);
-	}
-	
-	/**
-	 * Executes a user function.
-	 *
-	 * @param $userID ID of the user whom the function affected.
-	 * @param $name Name of the role to process. (not mandatory)
-	 */
-	function userIOFunction($userID, $name, $procedure_name){
-
-		$array = array($userID, $name);
-		$row = executeFunction($procedure_name, $array);
-		return $row[0];
-		
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ScanUser AS su INNER JOIN UserRole AS ur ON su.userID = ur.userID WHERE ur.name = %s;", $name);
+		return $result[0];
 	}
 
 ?>

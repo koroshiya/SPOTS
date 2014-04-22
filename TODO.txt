@@ -1,0 +1,12 @@
+Fix AddSeries page CSS
+Restrict AddSeries to Admin/Mod
+Return count of Task, to use for page numbering
+Same of projects?
+Menu items for Members page
+Add, delete, etc.
+Mod can modify, Admin can do all
+CSS of tasks on User page
+Profile option on My Page
+PM on My Page (details of series user is the PM of?)
+Release class in DB? (chapter is deleted, Task deleted, turned into "Release", add timestamp, revision, etc)
+Add last Release to series page, hover on projects page?

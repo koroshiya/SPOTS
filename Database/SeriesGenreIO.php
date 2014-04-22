@@ -1,12 +1,5 @@
 <?php
 
-/**
- *File: SeriesGenreIO.php
- *Author: Koro
- *Changelog: 
- *Purpose: Provides methods for interacting with SeriesGenre objects in the database
-*/ 
-
 	require_once('Connection.php');
 
 	/**
@@ -14,12 +7,11 @@
 	 * 
 	 * @param $seriesID ID of the series to add to the pairing.
 	 * @param $name Name of the Genre to pair with the series.
-	 * 
-	 * @return True if successful, otherwise false.
 	 */
 	function addSeriesGenre($seriesID, $name){
-		$procedure_name = 'series_add_genre';
-		return seriesIOFunction($seriesID, $name, $procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT series_add_genre(%s);", $name);
+		return $result;
 	}
 
 	/**
@@ -31,65 +23,31 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function removeSeriesGenre($seriesID, $name){
-		$procedure_name = 'series_remove_genre';
-		return seriesIOFunction($seriesID, $name, $procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT series_remove_genre(%i, %s);", $seriesID, $name);
+		return $result;
 	}
 
 	/**
 	 * Removes all Series/Genre pairings associated with a specific series.
 	 * 
 	 * @param $seriesID ID of the Series for which to remove all pairings.
-	 * 
-	 * @return True if successful, otherwise false.
 	 */
 	function removeAllSeriesGenres($seriesID){
-		$procedure_name = 'series_remove_genre_all';
-		return seriesFunction($seriesID, $procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT series_remove_genre_all(%i);", $seriesID);
+		return $result;
 	}
 
 	/**
 	 * Retrieves all genres for a specific series.
 	 * 
 	 * @param $seriesID ID of the series for which to grab all of the genres.
-	 * 
-	 * @return True if successful, otherwise false.
 	 */
 	function getSeriesGenres($seriesID){
-		$seriesID = getEscapedSQLParam($seriesID);
-		$procedure_name = "SELECT sg.name FROM SeriesGenre AS sg WHERE sg.seriesID = $seriesID;";
-		return executeStoredProcedure($procedure_name);
-	}
-	
-	/**
-	 * Convenience method for performing an IO function.
-	 * 
-	 * @param $seriesID ID of the Series of a pairing.
-	 * @param $name Name of the Genre of a pairing.
-	 * @param $procedure_name Name of the IO function to run.
-	 * 
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesIOFunction($seriesID, $name, $procedure_name){
-
-		$array = array($seriesID, $name);
-		$row = executeFunction($procedure_name, $array);
-		return $row[0];
-		
-	}
-	
-	/**
-	 * Convenience method for performing a Series function.
-	 * 
-	 * @param $seriesID ID of the series to add to the pairing.
-	 * @param $procedure_name Name of the function to run.
-	 * 
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesFunction($seriesID, $procedure_name){
-		
-		$row = executeFunction($procedure_name, $seriesID);
-		return $row[0];
-		
+		connectToMeekro();
+		$result = DB::query("SELECT sg.name FROM SeriesGenre AS sg WHERE sg.seriesID = %i;", $seriesID);
+		return $result;
 	}
 
 ?>

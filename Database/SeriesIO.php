@@ -1,7 +1,6 @@
 <?php
 
 	require_once('Connection.php');
-    require_once(databaseDir.'Settings.php');
 
 	/**
 	 * Adds a new series to the database.

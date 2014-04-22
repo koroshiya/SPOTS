@@ -27,12 +27,12 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					echo 'var arrayOfSeries = [];';
 					foreach ($arrayOfSeries as $series) {
 						echo 'arrayOfSeries.push({
-							id: "'.$series[0].'",
-							title: "'.$series[1].'",
-							status: "'.$series[2].'",
-							desc: "'.$series[3].'",
-							thumb: "'.$series[4].'",
-							adult: '.$series[7].'
+							id: "'.$series['seriesID'].'",
+							title: "'.$series['seriesTitle'].'",
+							status: "'.$series['status'].'",
+							desc: "'.$series['description'].'",
+							thumb: "'.$series['thumbnailURL'].'",
+							adult: '.$series['isAdult'].'
 						});';
 					}
 					echo '</script>';

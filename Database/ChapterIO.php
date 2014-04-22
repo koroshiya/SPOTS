@@ -3,30 +3,21 @@
 	require_once('Connection.php');
 
 	/**
-	 * Pushes the different parameters necessary to define a specific chapter into one array.
-	 * 
 	 * @param $seriesID ID of the series to which the chapter belongs.
 	 * @param $chapterNumber Whole number representing the chapter number.
 	 * @param $chapterSubNumber Point number for the chapter. 
 	 * eg. If $chapterNumber was 10 and $chapterSubNumber was 5, you would be specifying chapter 10.5
-	 *
-	 * @return An array containing the necessary parameters to define a specific chapter.
 	 */
-	function setChapterParams($seriesID, $chapterNumber, $chapterSubNumber){
-		return array($seriesID, $chapterNumber, $chapterSubNumber);
-	}
 
 	/**
 	 * Adds a new chapter to the database.
 	 * 
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
-	 * 
-	 * @return True if command was successful, otherwise false.
 	 */
-	function addChapter($args){
-		
-		$procedure_name = 'insert_chapter';
-		$result = executeFunction($procedure_name, $args);
+	function addChapter($seriesID, $chapterNumber, $chapterSubNumber){
+
+		connectToMeekro();
+		$result = DB::query("SELECT insert_chapter(%i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber);
 		return $result[0];
 
 	}
@@ -36,13 +27,11 @@
 	 * Command will fail if any incomplete tasks pertaining to the chapter exist.
 	 * 
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
-	 * 
-	 * @return True if command was successful, otherwise false.
 	 */
-	function deleteChapter($args){
-		
-		$procedure_name = 'delete_chapter';
-		$result = executeFunction($procedure_name, $args);
+	function deleteChapter($seriesID, $chapterNumber, $chapterSubNumber){
+
+		connectToMeekro();
+		$result = DB::query("SELECT delete_chapter(%i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber);
 		return $result[0];
 
 	}
@@ -51,19 +40,17 @@
 	 * Removes a chapter from the database.
 	 * 
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
-	 * 
-	 * @return True if command was successful, otherwise false.
 	 */
-	function deleteChapterForce($args){
-		
-		$procedure_name = 'delete_chapter_force';
-		$result = executeFunction($procedure_name, $args);
+	function deleteChapterForce($seriesID, $chapterNumber, $chapterSubNumber){
+
+		connectToMeekro();
+		$result = DB::query("SELECT delete_chapter_force(%i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber);
 		return $result[0];
 
 	}
 
 	function modifyChapter($args, $newArgs){
-		//TODO: delete old, attempt to create new. If new fails, recreate old.
+		//TODO
 	}
 
 	/**
@@ -72,14 +59,11 @@
 	 *
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
 	 * @param $revision Revision number to set.
-	 *
-	 * @return True or false, depending on success.
 	 */
-	function modifyChapterRevision($args, $revision){
-		
-		$procedure_name = 'chapter_revision_modify';
-		array_push($args, $revision);
-		$result = executeFunction($procedure_name, $args);
+	function modifyChapterRevision($seriesID, $chapterNumber, $chapterSubNumber, $revision){
+
+		connectToMeekro();
+		$result = DB::query("SELECT chapter_revision_modify(%i, %i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber, $revision);
 		return $result[0];
 
 	}
@@ -90,14 +74,11 @@
 	 * 
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
 	 * @param $newGroupID ID of the group to attach to a chapter.
-	 *
-	 * @return True or false, depending on success.
 	 **/
-	function attachGroup($args, $newGroupID){
-		
-		$procedure_name = 'chapter_add_group';
-		array_push($args, $newGroupID);
-		$result = executeFunction($procedure_name, $args);
+	function attachGroup($seriesID, $chapterNumber, $chapterSubNumber, $newGroupID){
+
+		connectToMeekro();
+		$result = DB::query("SELECT chapter_add_group(%i, %i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber, $newGroupID);
 		return $result[0];
 
 	}
@@ -111,11 +92,10 @@
 	 *
 	 * @return True or false, depending on success.
 	 **/
-	function removeGroup($args, $newGroupID){
-		
-		$procedure_name = 'chapter_remove_group';
-		array_push($args, $newGroupID);
-		$result = executeFunction($procedure_name, $args);
+	function removeGroup($seriesID, $chapterNumber, $chapterSubNumber, $newGroupID){
+
+		connectToMeekro();
+		$result = DB::query("SELECT chapter_remove_group(%i, %i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber, $newGroupID);
 		return $result[0];
 
 	}
@@ -127,10 +107,10 @@
 	 *
 	 * @return True or false, depending on success.
 	 **/
-	function removeGroupAll($args){
-		
-		$procedure_name = 'chapter_remove_group_all';
-		$result = executeFunction($procedure_name, $args);
+	function removeGroupAll($seriesID, $chapterNumber, $chapterSubNumber){
+
+		connectToMeekro();
+		$result = DB::query("SELECT chapter_remove_group_all(%i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber);
 		return $result[0];
 
 	}
@@ -139,13 +119,11 @@
 	 * Checks if a chapter is visible to guest users or not.
 	 *
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
-	 * 
-	 * @return True if the chapter is visible to guest users, otherwise false.
 	 */
-	function isChapterVisible($args){
+	function isChapterVisible($seriesID, $chapterNumber, $chapterSubNumber){
 
-		$procedure_name = 'is_visible_chapter';
-		$result = executeFunction($procedure_name, $args);
+		connectToMeekro();
+		$result = DB::query("SELECT is_visible_chapter(%i, %i, %i);", $seriesID, $chapterNumber, $chapterSubNumber);
 		return $result[0];
 
 	}
@@ -155,57 +133,51 @@
 	 *
 	 * @param $args Array of arguments necessary to uniquely identify a specific chapter.
 	 * @param $visible Boolean value indicating the new visibility of the chapter.
-	 * 
-	 * @return True if the command was successful, otherwise false
 	 */
-	function setChapterVisible($args, $visible){
+	function setChapterVisible($seriesID, $chapterNumber, $chapterSubNumber, $visible){
 
-		$procedure_name = 'chapter_set_visible';
-		array_push($args, $visible);
-		$result = executeFunction($procedure_name, $args);
+		connectToMeekro();
+		$result = DB::query("SELECT chapter_set_visible(%i, %i, %i, %s);", $seriesID, $chapterNumber, $chapterSubNumber, $visible);
 		return $result[0];
 
 	}
 
 	function getChapterBySeriesId($seriesID){
-		if (!is_numeric($seriesID)){
-			return array(False);
-		}
-		$proc = "SELECT * FROM Series AS s WHERE s.seriesID = $seriesID;";
-		return executeStoredProcedure($proc);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesID = %i;", $seriesID);
+		return $result;
 	}
 
 	function getChapterListByGroupId($groupID, $start){
-		if (!is_numeric($groupID)){
-			return array(False);
-		}elseif (!$start || !is_numeric($start)){
+		if (!$start){
 			$start = 0;
 		}
-		$proc = "SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = $groupID LIMIT $start, 10;";
-		return executeStoredProcedure($proc);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = %i LIMIT %i, %i;", $groupID, $start, 10);
+		return $result;
 	}
 
 	function getChapterListRecentByGroupId($groupID, $start, $total){
-		if (!is_numeric($groupID)){
-			return array(False);
-		}
-		if (!$total || !is_numeric($total)){
+		if (!$total){
 			$total = 0;
 		}
-		if (!$start || !is_numeric($start)){
+		if (!$start){
 			$start = 0;
 		}
 		$start = $total - $start;
-		$proc = "SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = $groupID LIMIT $start, 10;";
-		return executeStoredProcedure($proc);
+
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM ChapterGroup AS s INNER JOIN Chapter AS c ON c.seriesID = s.seriesID AND c.chapterNumber = s.chapterNumber AND c.chapterSubNumber = s.chapterSubNumber WHERE s.seriesID = %i LIMIT %i, %i;", $groupID, $start, 10);
+		return $result;
 	}
 
 	function getChapterCountByGroupId($groupID){
-		if (!is_numeric($groupID)){
-			return array(False);
-		}
-		$proc = "SELECT COUNT(*) AS count FROM ChapterGroup AS s WHERE s.seriesID = $groupID;";
-		return executeStoredProcedure($proc);
+
+		connectToMeekro();
+		$result = DB::query("SELECT COUNT(*) AS count FROM ChapterGroup AS s WHERE s.seriesID = %i;", $groupID);
+		return $result;
+
 	}
 
 ?>

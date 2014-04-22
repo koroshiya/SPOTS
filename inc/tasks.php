@@ -17,9 +17,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				require_once(databaseDir . 'TaskIO.php');
 				require_once(databaseDir . 'RoleIO.php');
 				require_once(databaseDir . 'SeriesIO.php');
-				$arrayOfTasks = getFullyDefinedTasks(array(null,null,'A'), 0, $_SESSION['SPOTS_ID']);
-				$arrayOfSeries = getSeriesAll();
-				$arrayOfRoles = getRolesAll();
+				$id = intval($_SESSION['SPOTS_ID']);
+				$arrayOfTasks = getFullyDefinedTasks(array(null,null,'A'), 0, $id);
 
 				echo '<script type="text/javascript">';
 				echo 'var arrayOfTasks = [];';
@@ -37,14 +36,16 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						userRole: "'.$task['userRole'].'"
 					});';
 				}
+				$arrayOfSeries = getSeriesAll();
 				foreach ($arrayOfSeries as $series) {
 					echo 'arrayOfSeries.push({
 						seriesID: "'.$series['seriesID'].'",
 						seriesTitle: "'.$series['seriesTitle'].'"
 					});';
 				}
+				$arrayOfRoles = getRolesAll();
 				foreach ($arrayOfRoles as $role) {
-					echo 'arrayOfRoles.push({role: "'.$role[0].'"});';
+					echo 'arrayOfRoles.push({role: "'.$role['name'].'"});';
 				}
 				echo 'var logUserID = '.$_SESSION['SPOTS_ID'].';';
 				echo '</script>';
