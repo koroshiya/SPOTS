@@ -1,4 +1,6 @@
 <?php
+
+    require_once(databaseDir.'Settings.php');
 	
 	/**
 	 * Attempts to connect to MySQL on the target machine with the credentials supplied.
@@ -6,7 +8,6 @@
 	 * @return False if the connection failed, otherwise returns the established connection.
 	 * */
 	function connect(){
-    	require_once(databaseDir.'Settings.php');
 		global $connection;
 		$connection = @mysqli_connect('p:'.host, dbUser, dbPass, dbName);
 	}
@@ -20,7 +21,6 @@
 	}
 
 	function connectToMeekro(){
-		require_once(databaseDir.'Settings.php');
     	require_once(databaseDir.'meekrodb.2.2.class.php');
 
 		DB::$user = dbUser;
