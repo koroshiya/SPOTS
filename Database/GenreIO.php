@@ -8,11 +8,9 @@
 	 * @param $name Name of the genre to add.
 	 */
 	function addGenre($name){
-
-		connectToMeekro();
-		$result = DB::query("SELECT insert_genre(%s);", $name);
-		return $result;
-		
+		$names = array('name');
+		$params = array($name);
+		return insertIntoTable('Genre', $names, $params);
 	}
 
 	/**
@@ -22,11 +20,7 @@
 	 * @param $name Name of the genre to remove.
 	 */
 	function removeGenre($name){
-
-		connectToMeekro();
-		$result = DB::query("SELECT delete_genre(%s);", $name);
-		return $result;
-		
+		return deleteFromTableSingle('Genre', 'name', $name);
 	}
 
 	/**
@@ -35,11 +29,18 @@
 	 * @param $name Name of the genre to add.
 	 */
 	function removeGenreForce($name){
-
 		connectToMeekro();
 		$result = DB::query("SELECT delete_genre_force(%s);", $name);
 		return $result;
-		
+	}
+
+	/**
+	 * Gets all available genres from the DB.
+	 */
+	function getGenresAll(){
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Genre;");
+		return $result;
 	}
 
 ?>

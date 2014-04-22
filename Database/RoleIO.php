@@ -29,22 +29,18 @@
 	 * @param $name Name of the Role to add.
 	 */
 	function removeRoleForce($name){
-
 		connectToMeekro();
 		$result = DB::query("SELECT delete_role_force(%s);", $name);
 		return $result[0];
-		
 	}
 
 	/**
 	 * Gets all available roles from the DB.
 	 */
 	function getRolesAll(){
-
 		connectToMeekro();
 		$result = DB::query("SELECT * FROM Role;");
 		return $result;
-
 	}
 
 ?>
