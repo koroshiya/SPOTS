@@ -29,7 +29,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function addTask($args){
-		return executeChapterFunction($args, 'insert_task');
+		connectToMeekro();
+		$result = DB::query("SELECT insert_task(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
+		return $result;
 	}
 
 	/**
@@ -41,7 +43,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function deleteTask($args){
-		return executeChapterFunction($args, 'delete_task');
+		connectToMeekro();
+		$result = DB::query("SELECT delete_task(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
+		return $result;
 	}
 
 	/**
@@ -53,7 +57,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function updateStatus($args){
-		return executeChapterFunction($args, 'task_set_status');
+		connectToMeekro();
+		$result = DB::query("SELECT task_set_status(%i, %i, %i, %i, %s, %s);", $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+		return $result;
 	}
 
 	/**
@@ -65,7 +71,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function updateDescription($args){
-		return executeChapterFunction($args, 'task_set_description');
+		connectToMeekro();
+		$result = DB::query("SELECT task_set_description(%i, %i, %i, %i, %s, %s);", $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+		return $result;
 	}
 	
 	/**
@@ -121,8 +129,14 @@
 	 *
 	 * @return True if successful, otherwise false.
 	 */
-	function getChapterTaskCount($args){
-		return executeChapterFunction($args, 'get_chapter_task_count');
+	function getChapterTaskCount($args, $status){
+		connectToMeekro();
+		if (is_null($status)) {
+			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i;", $args[0], $args[1], $args[2]);
+		}else{
+			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i AND t.status = %s;", $args[0], $args[1], $args[2], $status);
+		}
+		return $result;
 	}
 
 	/**
@@ -134,7 +148,7 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterActiveTaskCount($args){
-		return executeChapterFunction($args, 'get_chapter_task_count_active');
+		return getChapterTaskCount($args, 'A');
 	}
 
 	/**
@@ -146,7 +160,7 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function getChapterCompleteTaskCount($args){
-		return executeChapterFunction($args, 'get_chapter_task_count_complete');
+		return getChapterTaskCount($args, 'C');
 	}
 
 	/**
@@ -211,7 +225,9 @@
 	 */
 	function getTaskStatus($args){
 		
-		$charStatus = executeChapterFunction($args, 'get_task_status');
+		connectToMeekro();
+		$result = DB::query("SELECT get_task_status(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
+		return $result;
 
 		if ($charStatus === 'A'){
 			return 'Active';
@@ -225,22 +241,6 @@
 			return 'N/A';
 		}
 
-	}
-
-	/**
-	 * Executes a function using a variable set of possible Task params.
-	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber
-	 *
-	 * @param $args Arguments to process with this function.
-	 * @param $procedure_name Name of the procedure to execute.
-	 *
-	 * @return False if command failed, otherwise returns the result of the function.
-	 */
-	function executeChapterFunction($args, $procedure_name){
-		
-		$row = executeFunction($procedure_name, $args);
-		return $row[0];
-		
 	}
 
 ?>

@@ -108,39 +108,3 @@ SELECT t.status INTO status FROM Task AS t WHERE t.seriesID = seriesID AND t.cha
 RETURN status;
 END // 
 DELIMITER ;
-
-/*get_chapter_task_count*/
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS get_chapter_task_count //
-CREATE FUNCTION get_chapter_task_count(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
-BEGIN
-DECLARE total smallint unsigned;
-SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-RETURN total;
-END // 
-DELIMITER ;
-
-/*get_chapter_task_count_active*/
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS get_chapter_task_count_active //
-CREATE FUNCTION get_chapter_task_count_active(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
-BEGIN
-DECLARE total smallint unsigned;
-SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-RETURN total;
-END // 
-DELIMITER ;
-
-/*get_chapter_task_count_complete*/
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS get_chapter_task_count_complete //
-CREATE FUNCTION get_chapter_task_count_complete(seriesID smallint unsigned, chapterNumber smallint unsigned, chapterSubNumber tinyint unsigned) RETURNS smallint unsigned DETERMINISTIC
-BEGIN
-DECLARE total smallint unsigned;
-SELECT COUNT(*) INTO total FROM Task AS t WHERE t.seriesID = seriesID AND t.chapterNumber = chapterNumber AND t.chapterSubNumber = chapterSubNumber;
-RETURN total;
-END // 
-DELIMITER ;
