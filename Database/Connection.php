@@ -45,6 +45,12 @@
 		return $return;
 	}
 
+	function deleteFromTableSingle($table, $name, $param){
+		connectToMeekro();
+		$result = DB::delete($table, $name."=%s", $param);
+		return $result;
+	}
+
 	function DBError($params){
 		die("-1Database operation failed");
 	}

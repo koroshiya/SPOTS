@@ -8,11 +8,9 @@
 	 * @param $name Name of the role to add.
 	 */
 	function addRole($name){
-
-		connectToMeekro();
-		$result = DB::query("SELECT insert_role(%s);", $name);
-		return $result[0];
-		
+		$names = array('name');
+		$params = array($name);
+		return insertIntoTable('Role', $names, $params);
 	}
 
 	/**
@@ -22,11 +20,7 @@
 	 * @param $name Name of the Role to remove.
 	 */
 	function removeRole($name){
-
-		connectToMeekro();
-		$result = DB::query("SELECT delete_role(%s);", $name);
-		return $result[0];
-		
+		return deleteFromTableSingle('Role', 'name', $name);
 	}
 
 	/**
