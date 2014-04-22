@@ -29,9 +29,9 @@
 	 * @return True if successful, otherwise false.
 	 */
 	function addTask($args){
-		connectToMeekro();
-		$result = DB::query("SELECT insert_task(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
-		return $result;
+		$names = array('seriesID', 'chapterNumber', 'chapterSubNumber', 'userID', 'description', 'status', 'userRole');
+		$params = array($args[0], $args[1], $args[2], $args[3], 'NULL', 'A', $args[4]);
+		return insertIntoTable('Task', $names, $params);
 	}
 
 	/**
@@ -44,8 +44,8 @@
 	 */
 	function deleteTask($args){
 		connectToMeekro();
-		$result = DB::query("SELECT delete_task(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
-		return $result;
+		$result = DB::query("DELETE FROM Task WHERE Task.seriesID = %i AND Task.chapterNumber = %i AND Task.chapterSubNumber = %i AND Task.userID = %i AND Task.userRole = %s;", $args[0], $args[1], $args[2], $args[3], $args[4]);
+		return $result;		
 	}
 
 	/**
@@ -58,7 +58,7 @@
 	 */
 	function updateStatus($args){
 		connectToMeekro();
-		$result = DB::query("SELECT task_set_status(%i, %i, %i, %i, %s, %s);", $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+		$result = DB::query("UPDATE Task AS t SET t.status = %s WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i AND t.userID = %i AND t.userRole = %s;", $args[5], $args[0], $args[1], $args[2], $args[3], $args[4]);
 		return $result;
 	}
 
@@ -72,7 +72,7 @@
 	 */
 	function updateDescription($args){
 		connectToMeekro();
-		$result = DB::query("SELECT task_set_description(%i, %i, %i, %i, %s, %s);", $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
+		$result = DB::query("UPDATE Task AS t SET t.description = %s WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i AND t.userID = %i AND t.userRole = %s;", $args[5], $args[0], $args[1], $args[2], $args[3], $args[4]);
 		return $result;
 	}
 	
@@ -83,9 +83,13 @@
 	 *
 	 * @return Returns the total number of tasks a specific user has assigned to them.
 	 */
-	function getUserTaskCount($userID){
+	function getUserTaskCount($userID, $status){
 		connectToMeekro();
-		$result = DB::query("SELECT get_user_task_count(%i);", $userID);
+		if (is_null($status)) {
+			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = %i;", $userID);
+		}else{
+			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = %i AND t.status = %s;", $status);
+		}
 		return $result;
 	}
 
@@ -97,9 +101,7 @@
 	 * @return Returns the total number of tasks a specific user has started, but not completed.
 	 */
 	function getUserActiveTaskCount($userID){
-		connectToMeekro();
-		$result = DB::query("SELECT get_user_task_count_active(%i);", $userID);
-		return $result;
+		return getUserTaskCount($userID, 'A');
 	}
 
 	/**
@@ -110,9 +112,7 @@
 	 * @return Returns the total number of tasks a specific user has completed.
 	 */
 	function getUserCompleteTaskCount($userID){
-		connectToMeekro();
-		$result = DB::query("SELECT get_user_task_count_complete(%i);", $userID);
-		return $result;
+		return getUserTaskCount($userID, 'C');
 	}
 
 	function getTasks($start){
@@ -214,7 +214,6 @@
 
 	}
 
-
 	/**
 	 * Converts a char to its equivalent status string. eg. d = dropped.
 	 * Mandatory: $seriesID, $chapterNumber, $chapterSubNumber, $userID, $userRole
@@ -226,8 +225,7 @@
 	function getTaskStatus($args){
 		
 		connectToMeekro();
-		$result = DB::query("SELECT get_task_status(%i, %i, %i, %i, %s);", $args[0], $args[1], $args[2], $args[3], $args[4]);
-		return $result;
+		$charStatus = DB::query("SELECT t.status FROM Task AS t WHERE t.seriesID = %i AND t.chapterNumber = %i AND t.chapterSubNumber = %i AND t.userID = %i AND t.userRole = %s;", $args[0], $args[1], $args[2], $args[3], $args[4]);
 
 		if ($charStatus === 'A'){
 			return 'Active';
