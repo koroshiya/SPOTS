@@ -55,7 +55,8 @@
 		});
 		function loginSuccess(output){
 			$("#userMenu").hide();
-			if (output == "-1"){
+			console.log(output);
+			if (output !== "Success"){
 				alert("Invalid username or password");
 				return false; //login failed
 			}

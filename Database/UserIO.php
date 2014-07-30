@@ -108,7 +108,7 @@
 
 		connectToMeekro();
 		$result = DB::query("SELECT user_get_password_valid_by_name(%s, %s);", $name, $passwordAttempt);
-		return $result;
+		return current($result[0]);
 
 	}
 
