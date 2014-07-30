@@ -21,7 +21,7 @@
 	}
 
 	function connectToMeekro(){
-    	require_once(databaseDir.'meekrodb.2.2.class.php');
+    	require_once(databaseDir.'meekrodb.2.3.class.php');
 
 		DB::$user = dbUser;
 		DB::$password = dbPass;
