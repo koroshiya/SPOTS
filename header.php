@@ -4,7 +4,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>SPOTS</title>
 	<link rel="stylesheet" href="css/style.css" type="text/css">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
