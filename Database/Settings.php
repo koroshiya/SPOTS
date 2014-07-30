@@ -11,7 +11,7 @@
 if (!fromIndex){die();}
 DEFINE('host', 'localhost');
 DEFINE('dbUser', 'root');
-DEFINE('dbPass', '');
+DEFINE('dbPass', 'toor');
 DEFINE('dbName', 'SPOTS');
 
 DEFINE('homeGroup', 0);

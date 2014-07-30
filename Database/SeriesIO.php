@@ -161,9 +161,9 @@
 	 **/
 	function getSeriesByLetter($character){
 
-		$character = getEscapedSQLParam($character) . '%';
-		$procedure_name = "SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $character;";
-		return executeStoredProcedure($procedure_name);
+		connectToMeekro();
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesTitle LIKE %s;", $character);
+		return $result;
 
 	}
 
