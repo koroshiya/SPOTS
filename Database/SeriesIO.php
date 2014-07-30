@@ -140,7 +140,7 @@
 
 		connectToMeekro();
 		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesID = %i;", $seriesID);
-		return $result;
+		return $result[0];
 
 	}
 

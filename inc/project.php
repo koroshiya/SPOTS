@@ -12,10 +12,13 @@ $id = $_POST['id'];
 require_once(databaseDir . 'SeriesIO.php');
 session_start();
 $seriesInfo = getSeriesByID($id);
-if ($seriesInfo[0] && ($seriesInfo[6] || isset($_SESSION['SPOTS_authorized']))){
+//var_dump($seriesInfo);
+//echo $seriesInfo["status"];
+if ($seriesInfo['visibleToPublic'] || isset($_SESSION['SPOTS_authorized'])){
 	
 require_once(databaseDir . 'UserIO.php');
-$pm = getUser($seriesInfo[5]);
+$pm = getUser($seriesInfo['projectManagerID']);
+//var_dump($pm);
 
 ?>
 
@@ -35,25 +38,10 @@ $pm = getUser($seriesInfo[5]);
 		</div>
 		<div id="projectDiv">
 			<table><tbody>
-			<?php
-				echo "<tr><th>Title</th><td>$seriesInfo[1]</td>";
-				echo "<tr><td colspan=\"2\" style=\"height:200px;\"><img id=\"seriesImage\" style=\"max-height:200px; max-width:200px;\" src=\"thumbs/$seriesInfo[4]\" /></td></tr>"; //TODO: series image
-				echo "<tr><th>Status</th><td>$seriesInfo[2]</td>";
-				echo "<tr><th>Project Manager</th><td>$pm[1]</td>";
-				/*
-					seriesID smallint unsigned not null AUTO_INCREMENT,0
-					seriesTitle varchar(100) not null,1
-					status character null,2
-					description varchar(255) null,3
-					thumbnailURL varchar(255) null,4
-					projectManagerID smallint unsigned null,5
-					visibleToPublic boolean not null,6
-					isAdult boolean not null,7
-					author varchar(50) null,8
-					artist varchar(50) null,9
-					type varchar(50) null, --eg. manga, manhwa, etc.10
-				*/
-			?>
+				<tr><th>Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
+				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$seriesInfo["thumbnailURL"]; /*TODO: series image*/ ?> /></td></tr>
+				<tr><th>Status</th><td><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
+				<tr><th>Project Manager</th><td><?php echo $pm["userName"]; /*TODO: link to user's profile page if logged in*/ ?></td></tr>
 			</tbody></table>
 		</div>
 	</center>
@@ -125,7 +113,7 @@ $pm = getUser($seriesInfo[5]);
 	}
 </script>
 
-<?php }else{ ?>
+<?php }else{ /*TODO: show series info, without edit options and such*/ ?>
 
 <center>You are not permitted to view this series</center>
 <script type="text/javascript">
