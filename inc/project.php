@@ -12,9 +12,8 @@ $id = $_POST['id'];
 require_once(databaseDir . 'SeriesIO.php');
 session_start();
 $seriesInfo = getSeriesByID($id);
-if (!$seriesInfo[0] || (!$seriesInfo[6] && !isset($_SESSION['SPOTS_authorized']))){
-	die("You are not permitted to view this series");
-}
+if ($seriesInfo[0] && ($seriesInfo[6] || isset($_SESSION['SPOTS_authorized']))){
+	
 require_once(databaseDir . 'UserIO.php');
 $pm = getUser($seriesInfo[5]);
 
@@ -125,3 +124,15 @@ $pm = getUser($seriesInfo[5]);
 		$("#btn_thumb").text("Return to Series");
 	}
 </script>
+
+<?php }else{ ?>
+
+<center>You are not permitted to view this series</center>
+<script type="text/javascript">
+	$("#sidebar").html(
+		'<a id="sidebar_back">Back to Projects</a>'
+	);
+	$("#sidebar_back").click(function(){GoToPage("projects");});
+</script>
+
+<?php } ?>
