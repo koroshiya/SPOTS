@@ -199,5 +199,12 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	showTasks();
 	$("#sidebar_submit").click(function(){FilterTasks(false);});
 	$("#sidebar_personal").click(function(){FilterTasks(true);});
+
+	$(document).ready(function(){
+	<?php if (isset($_POST['args'])){ ?>
+		var task = <?php echo $_POST['args']; ?>;
+		showTask(task);
+	<?php } ?>
+	});
 </script>
 </div>
