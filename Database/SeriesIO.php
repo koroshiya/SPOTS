@@ -147,7 +147,7 @@
 	function updateSeriesThumbnail($seriesID, $thumb){
 
 		connectToMeekro();
-		$result = DB::query("UPDATE Series AS s SET s.thumbnailURL = thumbnailURL WHERE s.seriesID = seriesID;", $thumb, $seriesID);
+		$result = DB::query("UPDATE Series AS s SET s.thumbnailURL = %s WHERE s.seriesID = %i;", $thumb, $seriesID);
 		return $result;
 
 	}
@@ -281,11 +281,11 @@
 	 *
 	 * @return All series from the database.
 	 */
-	function getSeriesAll(){
+	function getSeriesAll($start=0, $limit=10){
 
 		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series;");
-		return $result;
+		$result = DB::query("SELECT * FROM Series LIMIT %i, %i;", $start, $limit);
+		return json_encode($result);
 
 	}
 
@@ -294,11 +294,11 @@
 	 *
 	 * @return All series from the database.
 	 */
-	function getSeriesAllPublic(){
+	function getSeriesAllPublic($start=0, $limit=10){
 
 		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True;");
-		return $result;
+		$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True LIMIT %i, %i;", $start, $limit);
+		return json_encode($result);
 
 	}
 

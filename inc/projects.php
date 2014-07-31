@@ -23,23 +23,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				}
 
 				if ($arrayOfSeries !== false && sizeof($arrayOfSeries) > 0){
-					echo '<script type="text/javascript">';
-					echo 'var arrayOfSeries = [];';
-					foreach ($arrayOfSeries as $series) {
-						$thumb = $series['thumbnailURL'];
-						if (is_null($thumb) || strlen($thumb) == 0) {
-							$thumb = "missing.png";
-						}
-						echo 'arrayOfSeries.push({
-							id: "'.$series['seriesID'].'",
-							title: "'.$series['seriesTitle'].'",
-							status: "'.$series['status'].'",
-							desc: "'.$series['description'].'",
-							thumb: "'.$thumb.'",
-							adult: '.$series['isAdult'].'
-						});';
-					}
-					echo '</script>';
+					echo '<script type="text/javascript">var arrayOfSeries = '.$arrayOfSeries.';</script>';
 
 				}else{
 					echo 'No series found';
@@ -70,17 +54,20 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		$("#projectList").html("<h2>"+title+"</h2><br><br>");
 		$.each(arrayOfSeries, function( index, value ) {
 			if (filter === "all" || filter === value.status){
-				var anch = $("<div id=\"imgDiv\"></div>");
+				var anch = $("<div id=\"imgDiv\" style=\"height: 340px; width: 300px;\"></div>");
 				var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
-				anch_img.attr("src", "thumbs/"+value.thumb); //anch_img.attr("src", value.thumb);
+
+				value.thumbnailURL = value.thumbnailURL == null ? 'missing.png' : value.thumbnailURL;
+
+				anch_img.attr("src", "thumbs/"+value.thumbnailURL);
 				anch.append(anch_img);
 				anch.append("<br />");
 				var btitle = $("<b></b>");
-				btitle.append(value.title);
+				btitle.append(value.seriesTitle);
 				anch.append(btitle);
 				anch.click(function(){
 					$("#projectList").html("Loading...");
-					$.post("./inc/project.php", {id: value.id})
+					$.post("./inc/project.php", {id: value.seriesID})
 						.done(function(data) {
 							$("#pageContent").html(data);
 						})
@@ -101,6 +88,6 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_dropped").click(function(){FilterSeries("D", "Dropped Series");});
 	$("#sidebar_complete").click(function(){FilterSeries("C", "Complete Series");});
 	$("#sidebar_add_series").click(function(){GoToPage("project_add");});
-	FilterSeries("A", "Active Series");
+	FilterSeries("all", "All Series");
 </script>
 </div>
