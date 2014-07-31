@@ -69,6 +69,7 @@ if (is_null($down) || strlen($down) == 0) {
 						?>
 					</td>
 				</tr>
+				<tr><th>Notes</th><td style="max-width:200px;"><?php echo $seriesInfo["notes"]; ?></td></tr>
 			</tbody></table>
 		</div>
 	</center>
