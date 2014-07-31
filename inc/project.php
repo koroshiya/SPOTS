@@ -54,7 +54,7 @@ if (is_null($down) || strlen($down) == 0) {
 				<tr><th>Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
 				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$thumb; ?> /></td></tr>
 				<tr><th>Status</th><td><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
-				<?php if (isset($_SESSION['SPOTS_authorized'])){ ?>
+				<?php if (isset($_SESSION['SPOTS_authorized']) && !is_null($pm)){ ?>
 				<tr><th>Project Manager</th><td id="userProfile"><?php echo $pm["userName"]; /*TODO: link to user's profile page*/ ?></td></tr>
 				<?php } ?>
 				<tr>
@@ -146,9 +146,11 @@ if (isset($_SESSION['SPOTS_authorized'])){
 		$("#seriesImage").attr('src', 'thumbs/'+<?php echo $id; ?>+"."+$('#FileInput')[0].files[0].name.split('.').pop());
 		$("#btn_thumb").text("Return to Series");
 	}
+	<?php if (!is_null($pm)){ ?>
 	$("#userProfile").click(function(){
 		GoToPage("members", <?php echo $pm['userID'] ?>);
 	});
+	<?php } ?>
 </script>
 
 <?php }else{ ?>
