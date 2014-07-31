@@ -108,4 +108,6 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_tasks_inactive").click(function(){FilterTasks("I");});
 	$("#sidebar_tasks_stalled").click(function(){FilterTasks("S");});
 	$("#sidebar_tasks_complete").click(function(){FilterTasks("C");});
+
+	FilterTasks("A");
 </script>
