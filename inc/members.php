@@ -124,7 +124,35 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				$("#projectList").html("Query failed");
 			});
 	}
+	function showMemberById(id){
+		$.each(memberList, function( index, value ) {
+			console.log(index+": "+value+" versus "+value.userID);
+			if (value.userID == id){
+				showMember(value);
+				return;
+			}
+		});
+		console.log("Empty list");
+	}
 	resetSidebar();
 	queryMembers(0);
+
+	$(document).ready(function(){
+	<?php if (isset($_POST['args'])){ ?>
+		if (typeof start == 'undefined' || start < 0){
+			start = 0;
+		}
+		$.post("./ajax/memberList.php", {userID: <?php echo $_POST['args']; ?>})
+			.done(function(data) {
+				member = $.parseJSON(data);
+				showMember(member);
+			})
+			.fail(function(msg) {
+				console.log(msg);
+				$("#projectList").html("Query failed");
+			});
+	<?php } ?>
+	});
+
 </script>
 </div>

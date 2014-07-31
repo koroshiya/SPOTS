@@ -180,7 +180,7 @@
 
 		connectToMeekro();
 		$result = DB::query("SELECT is_project_manager(%i);", $userID);
-		return $result;
+		return current($result[0]);
 		
 	}
 

@@ -45,7 +45,9 @@ if (is_null($thumb) || strlen($thumb) == 0) {
 				<tr><th>Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
 				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$thumb; ?> /></td></tr>
 				<tr><th>Status</th><td><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
-				<tr><th>Project Manager</th><td><?php echo $pm["userName"]; /*TODO: link to user's profile page if logged in*/ ?></td></tr>
+				<?php if (isset($_SESSION['SPOTS_authorized'])){ ?>
+				<tr><th>Project Manager</th><td id="userProfile"><?php echo $pm["userName"]; /*TODO: link to user's profile page*/ ?></td></tr>
+				<?php } ?>
 				<tr>
 					<td><a href=<?php echo $seriesInfo["readOnlineURL"]; /*TODO: only implement if link isn't null*/ ?> >Read online</a></td>
 					<td><a href=<?php echo $seriesInfo["downloadURL"]; ?> >Download</a></td>
@@ -126,6 +128,9 @@ if (isset($_SESSION['SPOTS_authorized'])){
 		$("#seriesImage").attr('src', 'thumbs/'+<?php echo $id; ?>+"."+$('#FileInput')[0].files[0].name.split('.').pop());
 		$("#btn_thumb").text("Return to Series");
 	}
+	$("#userProfile").click(function(){
+		GoToPage("members", <?php echo $pm['userID'] ?>);
+	});
 </script>
 
 <?php }else{ ?>

@@ -9,12 +9,17 @@ if (!isset($_SESSION['SPOTS_authorized'])){
 DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 require_once(databaseDir.'UserIO.php');
 
-$start = 0;
-if (isset($_POST['start']) && is_numeric($_POST['start'])){
-	$start = $_POST['start'];
-}
+if (isset($_POST['userID']) && is_numeric($_POST['userID'])){
+	$user = getUser($_POST['userID']);
+	echo json_encode($user);
+}else{
+	$start = 0;
+	if (isset($_POST['start']) && is_numeric($_POST['start'])){
+		$start = $_POST['start'];
+	}
 
-$data = getUsersInOrder($start);
-echo json_encode($data);
+	$data = getUsersInOrder($start);
+	echo json_encode($data);
+}
 
 ?>

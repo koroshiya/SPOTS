@@ -86,11 +86,11 @@
 	function getUserTaskCount($userID, $status){
 		connectToMeekro();
 		if (is_null($status)) {
-			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = %i;", $userID);
+			$result = DB::query("SELECT COUNT(*) FROM Task AS t WHERE t.userID = %i;", $userID);
 		}else{
-			$result = DB::query("SELECT COUNT(*) INTO total FROM Task AS t WHERE t.userID = %i AND t.status = %s;", $status);
+			$result = DB::query("SELECT COUNT(*) FROM Task AS t WHERE t.userID = %i AND t.status = %s;", $status);
 		}
-		return $result;
+		return current($result[0]);
 	}
 
 	/**
