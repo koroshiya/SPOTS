@@ -26,12 +26,16 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					echo '<script type="text/javascript">';
 					echo 'var arrayOfSeries = [];';
 					foreach ($arrayOfSeries as $series) {
+						$thumb = $series['thumbnailURL'];
+						if (is_null($thumb) || strlen($thumb) == 0) {
+							$thumb = "missing.png";
+						}
 						echo 'arrayOfSeries.push({
 							id: "'.$series['seriesID'].'",
 							title: "'.$series['seriesTitle'].'",
 							status: "'.$series['status'].'",
 							desc: "'.$series['description'].'",
-							thumb: "'.$series['thumbnailURL'].'",
+							thumb: "'.$thumb.'",
 							adult: '.$series['isAdult'].'
 						});';
 					}
@@ -67,8 +71,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		$.each(arrayOfSeries, function( index, value ) {
 			if (filter === "all" || filter === value.status){
 				var anch = $("<div id=\"imgDiv\"></div>");
-				var anch_img = $("<img />");
-				anch_img.attr("src", "thumbs/Aiki.jpg"); //anch_img.attr("src", value.thumb);
+				var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
+				anch_img.attr("src", "thumbs/"+value.thumb); //anch_img.attr("src", value.thumb);
 				anch.append(anch_img);
 				anch.append("<br />");
 				var btitle = $("<b></b>");

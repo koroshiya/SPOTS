@@ -19,6 +19,10 @@ if ($seriesInfo['visibleToPublic'] || isset($_SESSION['SPOTS_authorized'])){
 require_once(databaseDir . 'UserIO.php');
 $pm = getUser($seriesInfo['projectManagerID']);
 //var_dump($pm);
+$thumb = $seriesInfo["thumbnailURL"];
+if (is_null($thumb) || strlen($thumb) == 0) {
+	$thumb = "missing.png";
+}
 
 ?>
 
@@ -39,13 +43,24 @@ $pm = getUser($seriesInfo['projectManagerID']);
 		<div id="projectDiv">
 			<table><tbody>
 				<tr><th>Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
-				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$seriesInfo["thumbnailURL"]; /*TODO: series image*/ ?> /></td></tr>
+				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$thumb; ?> /></td></tr>
 				<tr><th>Status</th><td><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
 				<tr><th>Project Manager</th><td><?php echo $pm["userName"]; /*TODO: link to user's profile page if logged in*/ ?></td></tr>
+				<tr>
+					<td><a href=<?php echo $seriesInfo["readOnlineURL"]; /*TODO: only implement if link isn't null*/ ?> >Read online</a></td>
+					<td><a href=<?php echo $seriesInfo["downloadURL"]; ?> >Download</a></td>
+				</tr>
 			</tbody></table>
 		</div>
 	</center>
 </section>
+
+<?php
+
+if (isset($_SESSION['SPOTS_authorized'])){
+
+?>
+
 <script type="text/javascript">
 	$("#sidebar").html(
 		'<a id="sidebar_back">Back to Projects</a>'+
@@ -113,13 +128,18 @@ $pm = getUser($seriesInfo['projectManagerID']);
 	}
 </script>
 
-<?php }else{ /*TODO: show series info, without edit options and such*/ ?>
+<?php }else{ ?>
+
+<script type="text/javascript">
+	$("#sidebar").html('<a id="sidebar_back">Back to Projects</a>');
+	$("#sidebar_back").click(function(){GoToPage("projects");});
+</script>
+
+<?php } }else{ /*TODO: show series info, without edit options and such*/ ?>
 
 <center>You are not permitted to view this series</center>
 <script type="text/javascript">
-	$("#sidebar").html(
-		'<a id="sidebar_back">Back to Projects</a>'
-	);
+	$("#sidebar").html('<a id="sidebar_back">Back to Projects</a>');
 	$("#sidebar_back").click(function(){GoToPage("projects");});
 </script>
 
