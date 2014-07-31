@@ -24,7 +24,6 @@ $pm = getUser($id);
 ?>
 
 <section>
-	
 	<center>
 		<div id="projectDiv">
 			<table><tbody>
@@ -34,7 +33,7 @@ $pm = getUser($id);
 				echo "<tr><th>Sub-Chapter</th><td>".$_POST['chapterSubNumber']."</td>";
 				echo "<tr><th>Task Role</th><td>".$_POST['userRole']."</td>";
 				echo "<tr><th>Role Status</th><td>".$_POST['status']."</td>";
-				echo "<tr><th>Assigned User</th><td>".$pm[1]."</td>";
+				echo "<tr><th>Assigned User</th><td>".$pm['userName']."</td>";
 				echo "<tr><th>Notes</th><td><textarea>".$_POST['desc']."</textarea></td>";
 			?>
 			</tbody></table>
