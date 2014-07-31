@@ -24,6 +24,15 @@ if (is_null($thumb) || strlen($thumb) == 0) {
 	$thumb = "missing.png";
 }
 
+$online = $seriesInfo["readOnlineURL"];
+if (is_null($thumb) || strlen($thumb) == 0) {
+	$online = null;
+}
+$down = $seriesInfo["downloadURL"];
+if (is_null($down) || strlen($down) == 0) {
+	$down = null;
+}
+
 ?>
 
 <section>
@@ -49,8 +58,16 @@ if (is_null($thumb) || strlen($thumb) == 0) {
 				<tr><th>Project Manager</th><td id="userProfile"><?php echo $pm["userName"]; /*TODO: link to user's profile page*/ ?></td></tr>
 				<?php } ?>
 				<tr>
-					<td><a href=<?php echo $seriesInfo["readOnlineURL"]; /*TODO: only implement if link isn't null*/ ?> >Read online</a></td>
-					<td><a href=<?php echo $seriesInfo["downloadURL"]; ?> >Download</a></td>
+					<td>
+						<?php
+							echo is_null($online) ? "No online reader<br>link available" : "<a href=".$seriesInfo["readOnlineURL"].">Read Online</a>";
+						?>
+					</td>
+					<td>
+						<?php
+							echo is_null($down) ? "No download<br>link available" : "<a href=".$seriesInfo["downloadURL"].">Download</a>";
+						?>
+					</td>
 				</tr>
 			</tbody></table>
 		</div>

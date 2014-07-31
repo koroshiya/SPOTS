@@ -27,15 +27,13 @@ $pm = getUser($id);
 	<center>
 		<div id="projectDiv">
 			<table><tbody>
-			<?php
-				echo "<tr><th>Series</th><td>".$_POST['seriesName']."</td>";
-				echo "<tr><th>Chapter</th><td>".$_POST['chapterNumber']."</td>";
-				echo "<tr><th>Sub-Chapter</th><td>".$_POST['chapterSubNumber']."</td>";
-				echo "<tr><th>Task Role</th><td>".$_POST['userRole']."</td>";
-				echo "<tr><th>Role Status</th><td>".$_POST['status']."</td>";
-				echo "<tr><th>Assigned User</th><td>".$pm['userName']."</td>";
-				echo "<tr><th>Notes</th><td><textarea>".$_POST['desc']."</textarea></td>";
-			?>
+				<tr><th>Series</th><td><?php echo $_POST['seriesName']; ?></td>
+				<tr><th>Chapter</th><td><?php echo $_POST['chapterNumber']; ?></td>
+				<tr><th>Sub-Chapter</th><td><?php echo $_POST['chapterSubNumber']; ?></td>
+				<tr><th>Task Role</th><td><?php echo $_POST['userRole']; ?></td>
+				<tr><th>Role Status</th><td><?php echo $_POST['status']; ?></td>
+				<tr><th>Assigned User</th><td><?php echo $pm['userName']; ?></td>
+				<tr><th>Notes</th><td><textarea><?php echo $_POST['desc']; ?></textarea></td>
 			</tbody></table>
 		</div>
 	</center>
