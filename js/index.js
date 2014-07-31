@@ -3,9 +3,9 @@ $.ajaxSetup ({
     cache: false
 });
 
-function GoToPage(page){
+function GoToPage(page, args){
 	$("#pageContent").html("Loading...");
-	$.post("./inc/"+page+".php")
+	$.post("./inc/"+page+".php", {args: args})
 		.done(function(data) {
 			$("#pageContent").html(data);
 		})
