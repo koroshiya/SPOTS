@@ -253,20 +253,25 @@
 	 */
 	function getSeriesStatusFromChar($char){
 
-		if ($char === 'i') {
-			return "Inactive";
-		} else if ($char === 'a') {
-			return "Active";
-		} else if ($char === 's') {
-			return "Stalled";
-		} else if ($char === 'h') {
-			return "Hiatus";
-		} else if ($char === 'd') {
-			return "Dropped";
-		} else if ($char === 'c') {
-			return "Complete";
-		} else {
+		if (is_null($char) || strlen($char) != 1){
 			return "N/A";
+		}
+
+		switch (strtolower($char)) {
+			case 'i':
+				return "Inactive";
+			case 'a':
+				return "Active";
+			case 's':
+				return "Stalled";
+			case 'h':
+				return "Hiatus";
+			case 'd':
+				return "Dropped";
+			case 'c':
+				return "Complete";
+			default:
+				return "N/A";
 		}
 
 	}
