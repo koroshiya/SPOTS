@@ -75,7 +75,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		$.post("./ajax/groupInfo.php", {groupID: group.groupID})
 			.done(function(data) {
 				var arr = $.parseJSON(data);
-				var count = arr[0][0].count;
+				var count = arr[0];
 				var chapters = arr[1];
 				
 				var memberDiv = $("<div></div>");

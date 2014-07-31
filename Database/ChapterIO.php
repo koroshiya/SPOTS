@@ -176,7 +176,7 @@
 
 		connectToMeekro();
 		$result = DB::query("SELECT COUNT(*) AS count FROM ChapterGroup AS s WHERE s.seriesID = %i;", $groupID);
-		return $result;
+		return current($result[0]);
 
 	}
 
