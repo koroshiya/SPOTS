@@ -13,10 +13,10 @@
 	 * @param $visibleToPublic True if series is visible to guest users, otherwise false.
 	 * @param $boolAdult True if series is adults-only, otherwise false.
 	 */
-	function addSeries($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult){
+	function addSeries($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult, $author, $artist, $type, $download, $reader, $notes){
 
-		$names = array('seriesTitle', 'status', 'description', 'projectManagerID', 'visibleToPublic', 'isAdult');
-		$params = array($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult);
+		$names = array('seriesTitle', 'status', 'description', 'projectManagerID', 'visibleToPublic', 'isAdult', 'author', 'artist', 'type', 'downloadURL', 'readOnlineURL', 'notes');
+		$params = array($seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult, $author, $artist, $type, $download, $reader, $notes);
 		return insertIntoTable('Series', $names, $params);
 		
 	}
@@ -147,7 +147,7 @@
 	function updateSeriesThumbnail($seriesID, $thumb){
 
 		connectToMeekro();
-		$result = DB::query("SELECT series_set_thumbnail(%i, %s);", $seriesID, $thumb);
+		$result = DB::query("UPDATE Series AS s SET s.thumbnailURL = thumbnailURL WHERE s.seriesID = seriesID;", $thumb, $seriesID);
 		return $result;
 
 	}

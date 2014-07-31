@@ -79,17 +79,6 @@ RETURN true;
 END // 
 DELIMITER ;
 
-/*series_set_thumbnail*/
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS series_set_thumbnail //
-CREATE FUNCTION series_set_thumbnail(seriesID smallint unsigned, thumbnailURL varchar(255)) RETURNS boolean DETERMINISTIC
-BEGIN 
-UPDATE Series AS s SET s.thumbnailURL = thumbnailURL WHERE s.seriesID = seriesID;
-RETURN true;
-END // 
-DELIMITER ;
-
 /*series_set_project_manager*/
 
 DELIMITER // 

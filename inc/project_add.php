@@ -82,6 +82,55 @@ $users = getUsersAll();
 					</tr>
 					<tr>
 						<td>
+							<b>Author&emsp;</b>
+						</td>
+						<td>
+							<input maxlength="50" type="text" id="form_author" name="form_author" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Artist&emsp;</b>
+						</td>
+						<td>
+							<input maxlength="50" type="text" id="form_artist" name="form_artist" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Comic Type&emsp;</b>
+						</td>
+						<td>
+							<input maxlength="50" type="text" id="form_type" name="form_type" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Download URL&emsp;</b>
+						</td>
+						<td>
+							<input maxlength="255" type="text" id="form_download" name="form_download" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Online reader URL&emsp;</b>
+						</td>
+						<td>
+							<input maxlength="255" type="text" id="form_reader" name="form_reader" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Notes&emsp;</b>
+						</td>
+						<td>
+							<textarea maxlength="255" id="form_notes" name="form_notes"></textarea>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
 							<input type="submit" id="btn_submit" name="btn_submit" value="Submit" />
 						</td>
 						<td>
@@ -105,9 +154,17 @@ $users = getUsersAll();
 		var pm = $("#form_pm").val();
 		var ispublic = $("#form_public").is(':checked') ? "1" : "-1";
 		var isadult = $("#form_adult").is(':checked') ? "1" : "-1";
+		var author = $("#form_author").val();
+		var artist = $("#form_artist").val();
+		var type = $("#form_type").val();
+		var download = $("#form_download").val();
+		var reader = $("#form_reader").val();
+		var notes = $("#form_notes").val();
 		$('#output').text("");
 	    $(this).ajaxSubmit({
-	    	data: {title:title, status:status, desc:desc, pm:pm, ispublic:ispublic, isadult:isadult},
+	    	data: {title:title, status:status, desc:desc, pm:pm, ispublic:ispublic, isadult:isadult,
+	    		author: author, artist: artist, type: type, downloadURL: download, readerURL: reader, 
+	    		notes: notes},
 		    success: afterSuccess,
 		    resetForm: true
 		});
