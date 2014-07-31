@@ -14,6 +14,8 @@ DEFINE('dbUser', 'root');
 DEFINE('dbPass', 'toor');
 DEFINE('dbName', 'SPOTS');
 
-DEFINE('homeGroup', 0);
+DEFINE('homeGroup', 1);
+DEFINE('homeMessage', "Back to Japanzai");
+DEFINE('homeURL', "http://japanzai.com/index.php");
 
 ?>

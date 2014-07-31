@@ -16,6 +16,7 @@
 		<a class="header_nav" id="nav_members">Members</a>
 		<a class="header_nav" id="nav_groups">Groups</a>
 		<a class="header_nav" id="nav_user">My Page</a>
+		<a class="header_nav" id="nav_homeurl" href=<?php echo homeURL; ?>><?php echo homeMessage; ?></a>
 	</nav>
     <span id="header_user"></span>
 </header>
@@ -80,10 +81,12 @@
 				for (; i >= 0; i--) {
 					$("#"+menuItems[i]).show();
 				};
+				$("#nav_homeurl").hide();
 			}else{
 				for (; i >= 0; i--) {
 					$("#"+menuItems[i]).hide();
 				};
+				$("#nav_homeurl").show();
 			}
 		}
 		<?php echo 'var loggedIn = '.($loggedIntoSPOTS ? "true" : "false").';'; ?>

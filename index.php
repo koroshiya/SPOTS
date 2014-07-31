@@ -9,6 +9,7 @@ DEFINE('databaseDir', dirname(__FILE__).'/Database/');
 session_start();
 $loggedIntoSPOTS = isset($_SESSION['SPOTS_authorized']);
 
+require_once(databaseDir.'Settings.php');
 require_once('./header.php');
 require_once('./footer.html');
 
