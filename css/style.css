@@ -232,3 +232,8 @@ nav a:hover{cursor:pointer;}
 .pageNumber:hover{
 	text-decoration: none;
 }
+
+.sidebar_selected{
+	background-color: #0088C0;
+	color: #FFFFFF;
+}

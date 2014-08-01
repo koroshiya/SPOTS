@@ -121,18 +121,26 @@
 	 * 
 	 * @return Number of projects ("Series" in the DB). If connection failed, returns false.
 	 **/
-	function getProjectCount(){
+	function getProjectCount($status=null){
 
 		connectToMeekro();
-		$result = DB::query("SELECT COUNT(*) FROM Series;");
+		if (is_null($status)){
+			$result = DB::query("SELECT COUNT(*) FROM Series;");
+		}else{
+			$result = DB::query("SELECT COUNT(*) FROM Series AS s WHERE s.status = %s;", $status);
+		}
 		return current($result[0]);
 		
 	}
 
-	function getProjectCountPublic(){
+	function getProjectCountPublic($status=null){
 
 		connectToMeekro();
-		$result = DB::query("SELECT COUNT(*) FROM Series AS s WHERE s.visibleToPublic = True;");
+		if (is_null($status)){
+			$result = DB::query("SELECT COUNT(*) FROM Series AS s WHERE s.visibleToPublic = True;");
+		}else{
+			$result = DB::query("SELECT COUNT(*) FROM Series AS s WHERE s.visibleToPublic = True AND s.status = %s;", $status);
+		}
 		return current($result[0]);
 		
 	}
@@ -171,21 +179,6 @@
 
 		connectToMeekro();
 		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesTitle LIKE %s;", $character);
-		return $result;
-
-	}
-
-	/**
-	 * Returns all series for which the specified status applies.
-	 *
-	 * @param $character Char representing the status of a series. eg. 'd' for Dropped.
-	 *
-	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
-	 **/
-	function getSeriesByStatus($character){
-
-		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series AS s WHERE s.status = %s;", $character);
 		return $result;
 
 	}
@@ -289,10 +282,14 @@
 	 *
 	 * @return All series from the database.
 	 */
-	function getSeriesAll($start=0, $limit=10){
+	function getSeriesAll($status=null, $start=0, $limit=10){
 
 		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series LIMIT %i, %i;", $start, $limit);
+		if (is_null($status)){
+			$result = DB::query("SELECT * FROM Series LIMIT %i, %i;", $start, $limit);
+		}else{
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.status = %s LIMIT %i, %i;", $status, $start, $limit);
+		}
 		return json_encode($result);
 
 	}
@@ -302,10 +299,14 @@
 	 *
 	 * @return All series from the database.
 	 */
-	function getSeriesAllPublic($start=0, $limit=10){
+	function getSeriesAllPublic($status=null, $start=0, $limit=10){
 
 		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True LIMIT %i, %i;", $start, $limit);
+		if (is_null($status)){
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True LIMIT %i, %i;", $start, $limit);
+		}else{
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True AND s.status = %s LIMIT %i, %i;", $status, $start, $limit);
+		}
 		return json_encode($result);
 
 	}

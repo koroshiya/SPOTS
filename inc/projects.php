@@ -58,9 +58,22 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<br />'
 					);
 	
-	function FilterSeries(filter, title){
+	function FilterSeries(filter, title, count){
+
+		var sArr = ['all', 'active', 'stalled', 'inactive', 'hiatus', 'dropped', 'complete'];
+		$.each(sArr, function( index, value ) {
+			if (value == filter || value[0] == filter.toLowerCase() && value != 'all'){
+				$("#sidebar_"+value).addClass('sidebar_selected');
+			}else{
+				$("#sidebar_"+value).removeClass('sidebar_selected');
+			}
+		});
+
 		$("#projectList").html("<h2>"+title+"</h2>");
 		var sCount = <?php echo $totalSeries; ?>;
+		if (typeof(count)!=='undefined'){
+			sCount = count;
+		}
 		if (sCount > 10){
 			for (var i = 0, sCurrent = 0; i < sCount; i+=10, sCurrent++){
 				var curImage = $("<span><b id=\""+sCurrent+"\" class=\"pageNumber\">"+(sCurrent+1)+"</b>&emsp;</span>");
@@ -70,49 +83,62 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						type: "POST", url: "./ajax/projectList.php",
 						data: {start: event.target.id * 10}, dataType: 'json'
 					})
-					.done(function(data) { arrayOfSeries = $.parseJSON(data); })
+					.done(function(data) {
+						sCount = data[0];
+						arrayOfSeries = $.parseJSON(data[1]);
+					})
 					.fail(function() { console.log("Series listing failed"); })
-					.always(function() { FilterSeries("all", "All Series"); });
+					.always(function() { FilterSeries(filter, title); });
 				});
 				$("#projectList").append(curImage);
 			}
 		}
 		$("#projectList").append("<br><br>");
 		$.each(arrayOfSeries, function( index, value ) {
-			if (filter === "all" || filter === value.status){
-				var anch = $("<div class=\"imgDiv\"></div>");
-				var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
+			var anch = $("<div class=\"imgDiv\"></div>");
+			var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
 
-				value.thumbnailURL = value.thumbnailURL == null ? 'missing.png' : value.thumbnailURL;
+			value.thumbnailURL = value.thumbnailURL == null ? 'missing.png' : value.thumbnailURL;
 
-				anch_img.attr("src", "thumbs/"+value.thumbnailURL);
-				anch.append(anch_img);
-				anch.append("<br />");
-				var btitle = $("<b></b>");
-				btitle.append(value.seriesTitle);
-				anch.append(btitle);
-				anch.click(function(){
-					$("#projectList").html("Loading...");
-					$.post("./inc/project.php", {id: value.seriesID})
-						.done(function(data) {
-							$("#pageContent").html(data);
-						})
-						.fail(function() {
-							console.log("Series does not exist or could not be loaded");
-							FilterSeries("all", "All Series");
-						});
-				});
-				$("#projectList").append(anch);
-			}
+			anch_img.attr("src", "thumbs/"+value.thumbnailURL);
+			anch.append(anch_img);
+			anch.append("<br />");
+			var btitle = $("<b></b>");
+			btitle.append(value.seriesTitle);
+			anch.append(btitle);
+			anch.click(function(){
+				$("#projectList").html("Loading...");
+				$.post("./inc/project.php", {id: value.seriesID})
+					.done(function(data) {
+						$("#pageContent").html(data);
+					})
+					.fail(function() {
+						console.log("Series does not exist or could not be loaded");
+						FilterSeries("all", "All Series");
+					});
+			});
+			$("#projectList").append(anch);
 		});
 	}
-	$("#sidebar_all").click(function(){FilterSeries("all", "All Series");});
-	$("#sidebar_active").click(function(){FilterSeries("A", "Active Series");});
-	$("#sidebar_stalled").click(function(){FilterSeries("S", "Stalled Series");});
-	$("#sidebar_inactive").click(function(){FilterSeries("I", "Inactive Series");});
-	$("#sidebar_hiatus").click(function(){FilterSeries("H", "Series on Hiatus");});
-	$("#sidebar_dropped").click(function(){FilterSeries("D", "Dropped Series");});
-	$("#sidebar_complete").click(function(){FilterSeries("C", "Complete Series");});
+	function resetFilter(code, title){
+		$("#projectList").html("Loading...");
+		$.ajax({
+			type: "POST", url: "./ajax/projectList.php",
+			data: {start: 0, status: code}, dataType: 'json'
+		})
+		.done(function(data) {
+			arrayOfSeries = $.parseJSON(data[1]);
+			FilterSeries(code, title, data[0]);
+		})
+		.fail(function() { console.log("Series listing failed"); });
+	}
+	$("#sidebar_all").click(function(){resetFilter("all", "All Series");});
+	$("#sidebar_active").click(function(){resetFilter("A", "Active Series");});
+	$("#sidebar_stalled").click(function(){resetFilter("S", "Stalled Series");});
+	$("#sidebar_inactive").click(function(){resetFilter("I", "Inactive Series");});
+	$("#sidebar_hiatus").click(function(){resetFilter("H", "Series on Hiatus");});
+	$("#sidebar_dropped").click(function(){resetFilter("D", "Dropped Series");});
+	$("#sidebar_complete").click(function(){resetFilter("C", "Complete Series");});
 	$("#sidebar_add_series").click(function(){GoToPage("project_add");});
 	FilterSeries("all", "All Series");
 </script>
