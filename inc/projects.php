@@ -76,7 +76,8 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		}
 		if (sCount > 10){
 			for (var i = 0, sCurrent = 0; i < sCount; i+=10, sCurrent++){
-				var curImage = $("<span><b id=\""+sCurrent+"\" class=\"pageNumber\">"+(sCurrent+1)+"</b>&emsp;</span>");
+
+				var curImage = $("<input type=\"button\" id=\""+sCurrent+"\" value=\""+(sCurrent+1)+"\" style=\"cursor:pointer;\">");
 				curImage.click(function(event){
 					$("#projectList").html("Loading...");
 					$.ajax({
@@ -84,11 +85,10 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						data: {start: event.target.id * 10}, dataType: 'json'
 					})
 					.done(function(data) {
-						sCount = data[0];
 						arrayOfSeries = $.parseJSON(data[1]);
+						FilterSeries(filter, title, data[0]);
 					})
-					.fail(function() { console.log("Series listing failed"); })
-					.always(function() { FilterSeries(filter, title); });
+					.fail(function() { console.log("Series listing failed"); });
 				});
 				$("#projectList").append(curImage);
 			}
@@ -96,13 +96,14 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		$("#projectList").append("<br><br>");
 		$.each(arrayOfSeries, function( index, value ) {
 			var anch = $("<div class=\"imgDiv\"></div>");
+			var anch_outer = $("<div style=\"width:300px; height:300px;\"></div>");
 			var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
 
 			value.thumbnailURL = value.thumbnailURL == null ? 'missing.png' : value.thumbnailURL;
 
 			anch_img.attr("src", "thumbs/"+value.thumbnailURL);
-			anch.append(anch_img);
-			anch.append("<br />");
+			anch_outer.append(anch_img);
+			anch.append(anch_outer);
 			var btitle = $("<b></b>");
 			btitle.append(value.seriesTitle);
 			anch.append(btitle);
