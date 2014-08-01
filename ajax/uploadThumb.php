@@ -33,6 +33,7 @@ if(isset($_FILES["FileInput"])&&isset($_POST['SeriesID'])&&$_FILES["FileInput"][
         case 'image/png':
         case 'image/gif':
         case 'image/jpeg':
+        case 'image/webp':
             break;
         default:
             die('Unsupported File!'); //output error

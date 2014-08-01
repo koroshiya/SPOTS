@@ -118,6 +118,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 	            case 'image/png':
 	            case 'image/gif':
 	            case 'image/jpeg':
+	            case 'image/webp':
 	            	break;
 	            default:
 	            	$("#output").html("<b>"+ftype+"</b> Unsupported file type!");
