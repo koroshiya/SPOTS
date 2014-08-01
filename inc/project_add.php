@@ -58,7 +58,7 @@ $users = getUsersAll();
 								<option value="-1">No project manager</option>
 								<?php
 									foreach ($users as $user) {
-										echo "<option value=\"$user[0]\">".$user[1]."</option>";
+										echo "<option value=\"$user[\"userID\"]$user[\"userName\"]</option>";
 									}
 								?>
 							</select>
