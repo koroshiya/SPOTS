@@ -286,9 +286,9 @@
 
 		connectToMeekro();
 		if (is_null($status)){
-			$result = DB::query("SELECT * FROM Series LIMIT %i, %i;", $start, $limit);
+			$result = DB::query("SELECT * FROM Series AS s ORDER BY s.seriesTitle LIMIT %i, %i;", $start, $limit);
 		}else{
-			$result = DB::query("SELECT * FROM Series AS s WHERE s.status = %s LIMIT %i, %i;", $status, $start, $limit);
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.status = %s ORDER BY s.seriesTitle LIMIT %i, %i;", $status, $start, $limit);
 		}
 		return json_encode($result);
 
@@ -303,9 +303,9 @@
 
 		connectToMeekro();
 		if (is_null($status)){
-			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True LIMIT %i, %i;", $start, $limit);
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True ORDER BY s.seriesTitle LIMIT %i, %i;", $start, $limit);
 		}else{
-			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True AND s.status = %s LIMIT %i, %i;", $status, $start, $limit);
+			$result = DB::query("SELECT * FROM Series AS s WHERE s.visibleToPublic = True AND s.status = %s ORDER BY s.seriesTitle LIMIT %i, %i;", $status, $start, $limit);
 		}
 		return json_encode($result);
 
