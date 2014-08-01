@@ -136,18 +136,6 @@ RETURN boolAdult;
 END // 
 DELIMITER ;
 
-/*get_project_count*/
-
-DELIMITER // 
-DROP FUNCTION IF EXISTS get_project_count //
-CREATE FUNCTION get_project_count() RETURNS smallint unsigned DETERMINISTIC
-BEGIN
-DECLARE total smallint unsigned;
-SELECT COUNT(*) INTO total FROM Series;
-RETURN total;
-END // 
-DELIMITER ;
-
 /*get_series_status*/
 
 DELIMITER // 

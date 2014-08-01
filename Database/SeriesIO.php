@@ -124,8 +124,16 @@
 	function getProjectCount(){
 
 		connectToMeekro();
-		$result = DB::query("SELECT get_project_count();");
-		return $result;
+		$result = DB::query("SELECT COUNT(*) FROM Series;");
+		return current($result[0]);
+		
+	}
+
+	function getProjectCountPublic(){
+
+		connectToMeekro();
+		$result = DB::query("SELECT COUNT(*) FROM Series AS s WHERE s.visibleToPublic = True;");
+		return current($result[0]);
 		
 	}
 

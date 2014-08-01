@@ -194,13 +194,17 @@ select {
 	height:100%;
 }
 
-#imgDiv{
+.imgDiv{
 	margin:2px;
 	float:left;
+	height:340px;
+	width:300px;
 }
 
-#imgDiv:hover{
-	padding:2px solid black;
+.imgDiv:hover{
+	margin:0px;
+	border:2px solid black;
+	cursor:pointer;
 }
 
 tbody tr:nth-child(odd){background-color:#eee;}
@@ -218,4 +222,13 @@ nav a:hover{cursor:pointer;}
 #form_desc{
 	width:250px;
 	height:75px;
+}
+
+.pageNumber{
+	color:red;
+	cursor:pointer;
+	text-decoration: underline;
+}
+.pageNumber:hover{
+	text-decoration: none;
 }

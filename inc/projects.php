@@ -18,16 +18,24 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				session_start();
 				if (!isset($_SESSION['SPOTS_authorized'])){
 					$arrayOfSeries = getSeriesAllPublic();
+					$totalSeries = getProjectCountPublic();
 				}else{
 					$arrayOfSeries = getSeriesAll();
+					$totalSeries = getProjectCount();
 				}
 
+				echo '<script type="text/javascript">';
 				if ($arrayOfSeries !== false && sizeof($arrayOfSeries) > 0){
-					echo '<script type="text/javascript">var arrayOfSeries = '.$arrayOfSeries.';</script>';
-
+					echo 'var arrayOfSeries = '.$arrayOfSeries.';';
+					echo 'var sCount = '.$totalSeries.';';
+					echo '</script>';
 				}else{
+					echo 'var arrayOfSeries = [];';
+					$totalSeries = 0;
+					echo '</script>';
 					echo 'No series found';
 				}
+		
 
 			?>
 	
@@ -51,10 +59,28 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					);
 	
 	function FilterSeries(filter, title){
-		$("#projectList").html("<h2>"+title+"</h2><br><br>");
+		$("#projectList").html("<h2>"+title+"</h2>");
+		var sCount = <?php echo $totalSeries; ?>;
+		if (sCount > 10){
+			for (var i = 0, sCurrent = 0; i < sCount; i+=10, sCurrent++){
+				var curImage = $("<span><b id=\""+sCurrent+"\" class=\"pageNumber\">"+(sCurrent+1)+"</b>&emsp;</span>");
+				curImage.click(function(event){
+					$("#projectList").html("Loading...");
+					$.ajax({
+						type: "POST", url: "./ajax/projectList.php",
+						data: {start: event.target.id * 10}, dataType: 'json'
+					})
+					.done(function(data) { arrayOfSeries = $.parseJSON(data); })
+					.fail(function() { console.log("Series listing failed"); })
+					.always(function() { FilterSeries("all", "All Series"); });
+				});
+				$("#projectList").append(curImage);
+			}
+		}
+		$("#projectList").append("<br><br>");
 		$.each(arrayOfSeries, function( index, value ) {
 			if (filter === "all" || filter === value.status){
-				var anch = $("<div id=\"imgDiv\" style=\"height: 340px; width: 300px;\"></div>");
+				var anch = $("<div class=\"imgDiv\"></div>");
 				var anch_img = $("<img style=\"max-width:300px; max-height:300px;\" />");
 
 				value.thumbnailURL = value.thumbnailURL == null ? 'missing.png' : value.thumbnailURL;
@@ -73,7 +99,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						})
 						.fail(function() {
 							console.log("Series does not exist or could not be loaded");
-							FilterSeries("A", "Active Series");
+							FilterSeries("all", "All Series");
 						});
 				});
 				$("#projectList").append(anch);
