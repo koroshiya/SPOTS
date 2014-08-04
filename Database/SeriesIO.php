@@ -21,6 +21,19 @@
 		
 	}
 
+	function updateSeries($id, $seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult, $author, $artist, $type, $download, $reader, $notes){
+
+		connectToMeekro();
+		//$result = DB::query("SELECT delete_series(%i);", $seriesID);
+		return DB::update('Series', array('seriesTitle' => $seriesTitle, 
+								'status' => $status, 'description' => $description, 'projectManagerID' => $projectManagerID, 
+								'visibleToPublic' => $visibleToPublic, 'isAdult' => $boolAdult, 'author' => $author, 
+								'artist' => $artist, 'type' => $type, 'downloadURL' => $download, 'readOnlineURL' => $reader, 
+								'notes' => $notes), "seriesID=%i", $id);
+		//return $result;
+
+	}
+
 	/**
 	 * Removes a series from the database.
 	 * Fails if the series has any chapters, tasks, etc. assigned to it.
