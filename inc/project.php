@@ -68,12 +68,12 @@ if (is_null($down) || strlen($down) == 0) {
 						</td>
 						<td>
 							<select id="form_status" name="form_status">
-								<option value="A" checked=<?php echo '"'.($seriesInfo["status"] == "A" ? 'checked' : '').'"'; ?> >Active</option>
-								<option value="S" checked=<?php echo '"'.($seriesInfo["status"] == "S" ? 'checked' : '').'"'; ?> >Stalled</option>
-								<option value="I" checked=<?php echo '"'.($seriesInfo["status"] == "I" ? 'checked' : '').'"'; ?> >Inactive</option>
-								<option value="H" checked=<?php echo '"'.($seriesInfo["status"] == "H" ? 'checked' : '').'"'; ?> >Hiatus</option>
-								<option value="D" checked=<?php echo '"'.($seriesInfo["status"] == "D" ? 'checked' : '').'"'; ?> >Dropped</option>
-								<option value="C" checked=<?php echo '"'.($seriesInfo["status"] == "C" ? 'checked' : '').'"'; ?> >Complete</option>
+								<option value="A" <?php if ($seriesInfo["status"] == "A"){echo 'selected=selected';} ?> >Active</option>
+								<option value="S" <?php if ($seriesInfo["status"] == "S"){echo 'selected=selected';} ?> >Stalled</option>
+								<option value="I" <?php if ($seriesInfo["status"] == "I"){echo 'selected=selected';} ?> >Inactive</option>
+								<option value="H" <?php if ($seriesInfo["status"] == "H"){echo 'selected=selected';} ?> >Hiatus</option>
+								<option value="D" <?php if ($seriesInfo["status"] == "D"){echo 'selected=selected';} ?> >Dropped</option>
+								<option value="C" <?php if ($seriesInfo["status"] == "C"){echo 'selected=selected';} ?> >Complete</option>
 							</select>
 						</td>
 					</tr>
