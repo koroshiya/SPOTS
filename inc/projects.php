@@ -16,18 +16,37 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				require_once(databaseDir . 'SeriesIO.php');
 
 				session_start();
-				if (isset($_POST['args']) && is_numeric($_POST['args'])){
-					$start = $_POST['args'];
+				if (isset($_POST['args']) && is_array($_POST['args'])){
+					$args = $_POST['args'];
+					if (isset($args[0]) && is_numeric($args[0])){
+						$start = $args[0];
+					}else{
+						$start = 0;
+					}
+					if (isset($args[1]) && strlen($args[1]) == 1){
+						$status = $args[1];
+					}else{
+						$status = null;
+					}
+					if (isset($args[2]) && strlen($args[2]) > 0){
+						$title = $args[2];
+					}else{
+						$title = 'All Series';
+					}
 				}else{
 					$start = 0;
+					$status = null;
+					$title = 'All Series';
 				}
-				echo "Start: ".$start."\n";
 				if (!isset($_SESSION['SPOTS_authorized'])){
-					$arrayOfSeries = getSeriesAllPublic(null, $start);
-					$totalSeries = getProjectCountPublic();
+					$arrayOfSeries = getSeriesAllPublic($status, $start);
+					$totalSeries = getProjectCountPublic($status);
 				}else{
-					$arrayOfSeries = getSeriesAll(null, $start);
-					$totalSeries = getProjectCount();
+					$arrayOfSeries = getSeriesAll($status, $start);
+					$totalSeries = getProjectCount($status);
+				}
+				if (is_null($status)){
+					$status = 'all';
 				}
 
 				echo '<script type="text/javascript">';
@@ -65,9 +84,13 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<br />'
 					);
 	
-	function FilterSeries(filter, title, count, startInx){
+	function FilterSeries(f, t, count, startInx){
 
 		var sArr = ['all', 'active', 'stalled', 'inactive', 'hiatus', 'dropped', 'complete', 'licensed'];
+		var filter = <?php echo "'".$status."'"; ?>;
+		if (typeof(f)!=='undefined'){ //TODO: sidebar_selected for back to projects
+			filter = f;
+		}
 		$.each(sArr, function( index, value ) {
 			if (value == filter || value[0] == filter.toLowerCase() && value != 'all'){
 				$("#sidebar_"+value).addClass('sidebar_selected');
@@ -75,6 +98,11 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				$("#sidebar_"+value).removeClass('sidebar_selected');
 			}
 		});
+
+		var title = <?php echo "'".$title."'"; ?>;
+		if (typeof(t)!=='undefined'){
+			title = t;
+		}
 
 		$("#projectList").html("<h2>"+title+"</h2>");
 		var sCount = <?php echo $totalSeries; ?>;
@@ -120,7 +148,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 			anch.append(btitle);
 			anch.click(function(){
 				$("#projectList").html("Loading...");
-				$.post("./inc/project.php", {id: value.seriesID, start: startIndex})
+				$.post("./inc/project.php", {id: value.seriesID, start: startIndex, status: filter, title: title})
 					.done(function(data) {
 						$("#pageContent").html(data);
 					})
@@ -153,6 +181,6 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_complete").click(function(){resetFilter("C", "Complete Series");});
 	$("#sidebar_licensed").click(function(){resetFilter("L", "Licensed Series");});
 	$("#sidebar_add_series").click(function(){GoToPage("project_add");});
-	FilterSeries("all", "All Series");
+	FilterSeries(<?php echo "'".$status."'"; ?>, <?php echo "'".$title."'"; ?>, <?php echo $totalSeries; ?>, <?php echo $start; ?>);
 </script>
 </div>

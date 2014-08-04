@@ -12,6 +12,19 @@ $id = $_POST['id'];
 require_once(databaseDir . 'SeriesIO.php');
 session_start();
 $seriesInfo = getSeriesByID($id);
+
+$start = $_POST['start'];
+if (!(isset($start) && is_numeric($start))){
+	$start = 0;
+}
+$status = $_POST['status'];
+if (!(isset($status) && strlen($status) == 1)){
+	$status = 'all';
+}
+$title = $_POST['title'];
+if (!(isset($title) && strlen($title) > 0)){
+	$title = 'All Series';
+}
 //var_dump($seriesInfo);
 //echo $seriesInfo["status"];
 if ($seriesInfo['visibleToPublic'] || isset($_SESSION['SPOTS_authorized'])){
@@ -225,7 +238,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 		'<a id="btn_thumb">New thumbnail</a>'+
 		'<a id="btn_edit">Edit Project</a>'
 	);
-	$("#sidebar_back").click(function(){GoToPage("projects", <?php echo $_POST['start']; ?>);});
+	$("#sidebar_back").click(function(){GoToPage("projects", <?php echo json_encode(array($_POST['start'], $_POST['status'], $_POST['title'])); ?>);});
 
 	$("#btn_thumb").click(function() {
 		if ($(this).text() === "New thumbnail"){
@@ -407,7 +420,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 
 <script type="text/javascript">
 	$("#sidebar").html('<a id="sidebar_back">Back to Projects</a>');
-	$("#sidebar_back").click(function(){GoToPage("projects");});
+	$("#sidebar_back").click(function(){GoToPage("projects", <?php echo json_encode(array($start, $status, $title)); ?>);});
 </script>
 
 <?php } }else{ /*TODO: show series info, without edit options and such*/ ?>
@@ -415,7 +428,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 <center>You are not permitted to view this series</center>
 <script type="text/javascript">
 	$("#sidebar").html('<a id="sidebar_back">Back to Projects</a>');
-	$("#sidebar_back").click(function(){GoToPage("projects");});
+	$("#sidebar_back").click(function(){GoToPage("projects", <?php echo json_encode(array($start, $status, $title)); ?>);});
 </script>
 
 <?php } ?>
