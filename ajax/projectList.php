@@ -13,7 +13,7 @@ require_once(databaseDir.'SeriesIO.php');
 	}
 
 	if (isset($_POST['status']) && strlen($_POST['status']) == 1){
-		if (in_array($_POST['status'], array('A', 'S', 'I', 'H', 'D', 'C'))){
+		if (in_array($_POST['status'], array('A', 'S', 'I', 'H', 'D', 'C', 'L'))){
 			$status = $_POST['status'];
 		}else{
 			$status = null;

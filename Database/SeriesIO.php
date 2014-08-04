@@ -200,6 +200,8 @@
 				return "Dropped";
 			case 'c':
 				return "Complete";
+			case 'l':
+				return "Licensed";
 			default:
 				return "N/A";
 		}

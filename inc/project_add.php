@@ -38,6 +38,7 @@ $users = getUsersAll();
 								<option value="H">Hiatus</option>
 								<option value="D">Dropped</option>
 								<option value="C">Complete</option>
+								<option value="L">Licensed</option>
 							</select>
 						</td>
 					</tr>
@@ -58,7 +59,7 @@ $users = getUsersAll();
 								<option value="-1">No project manager</option>
 								<?php
 									foreach ($users as $user) {
-										echo "<option value=\"$user[\"userID\"]$user[\"userName\"]</option>";
+										echo "<option value=\"".$user["userID"]."\">".$user["userName"]."</option>";
 									}
 								?>
 							</select>

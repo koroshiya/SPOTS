@@ -25,6 +25,7 @@ switch ($status) {
 	case 'H':
 	case 'D':
 	case 'C':
+	case 'L':
 		break;
 	default:
 		returnError("Invalid status code");

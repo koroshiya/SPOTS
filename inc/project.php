@@ -79,6 +79,7 @@ if (is_null($down) || strlen($down) == 0) {
 								<option value="H" <?php if ($seriesInfo["status"] == "H"){echo 'selected=selected';} ?> >Hiatus</option>
 								<option value="D" <?php if ($seriesInfo["status"] == "D"){echo 'selected=selected';} ?> >Dropped</option>
 								<option value="C" <?php if ($seriesInfo["status"] == "C"){echo 'selected=selected';} ?> >Complete</option>
+								<option value="L" <?php if ($seriesInfo["status"] == "L"){echo 'selected=selected';} ?> >Licensed</option>
 							</select>
 						</td>
 					</tr>
@@ -350,6 +351,9 @@ if (isset($_SESSION['SPOTS_authorized'])){
 					break;
 				case 'D':
 					statusVal = 'Dropped';
+					break;
+				case 'L':
+					statusVal = 'Licensed';
 					break;
 				case 'I':
 					statusVal = 'Inactive';

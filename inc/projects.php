@@ -55,6 +55,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<a id="sidebar_inactive">Inactive Series</a><br />'+
 						'<a id="sidebar_hiatus">Series on Hiatus</a><br />'+
 						'<a id="sidebar_complete">Completed Series</a><br />'+
+						'<a id="sidebar_licensed">Licensed Series</a><br />'+
 						'<a id="sidebar_dropped">Dropped Series</a>'+
 						<?php if (isset($_SESSION['SPOTS_authorized'])){
 							echo "'<p>------------------------------------</p>'+";
@@ -66,7 +67,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	
 	function FilterSeries(filter, title, count, startInx){
 
-		var sArr = ['all', 'active', 'stalled', 'inactive', 'hiatus', 'dropped', 'complete'];
+		var sArr = ['all', 'active', 'stalled', 'inactive', 'hiatus', 'dropped', 'complete', 'licensed'];
 		$.each(sArr, function( index, value ) {
 			if (value == filter || value[0] == filter.toLowerCase() && value != 'all'){
 				$("#sidebar_"+value).addClass('sidebar_selected');
@@ -150,6 +151,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 	$("#sidebar_hiatus").click(function(){resetFilter("H", "Series on Hiatus");});
 	$("#sidebar_dropped").click(function(){resetFilter("D", "Dropped Series");});
 	$("#sidebar_complete").click(function(){resetFilter("C", "Complete Series");});
+	$("#sidebar_licensed").click(function(){resetFilter("L", "Licensed Series");});
 	$("#sidebar_add_series").click(function(){GoToPage("project_add");});
 	FilterSeries("all", "All Series");
 </script>
