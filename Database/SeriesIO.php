@@ -24,13 +24,11 @@
 	function updateSeries($id, $seriesTitle, $status, $description, $projectManagerID, $visibleToPublic, $boolAdult, $author, $artist, $type, $download, $reader, $notes){
 
 		connectToMeekro();
-		//$result = DB::query("SELECT delete_series(%i);", $seriesID);
 		return DB::update('Series', array('seriesTitle' => $seriesTitle, 
 								'status' => $status, 'description' => $description, 'projectManagerID' => $projectManagerID, 
 								'visibleToPublic' => $visibleToPublic, 'isAdult' => $boolAdult, 'author' => $author, 
 								'artist' => $artist, 'type' => $type, 'downloadURL' => $download, 'readOnlineURL' => $reader, 
 								'notes' => $notes), "seriesID=%i", $id);
-		//return $result;
 
 	}
 
@@ -45,8 +43,7 @@
 	function deleteSeries($seriesID){
 
 		connectToMeekro();
-		$result = DB::query("SELECT delete_series(%i);", $seriesID);
-		return $result;
+		return DB::query("SELECT delete_series(%i);", $seriesID);
 		
 	}
 
@@ -60,72 +57,7 @@
 	function deleteSeriesByForce($seriesID){
 
 		connectToMeekro();
-		$result = DB::query("SELECT delete_series_force(%i);", $seriesID);
-		return $result;
-		
-	}
-
-	/**
-	 * Updates the status of a series.
-	 *
-	 * @param $seriesID ID of the series to perform this function on.
-	 * @param $status New status to set for the series. eg. Dropped, complete, etc.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesSetStatus($seriesID, $status){
-
-		connectToMeekro();
-		$result = DB::query("SELECT series_set_status(%i, %s);", $seriesID, $status);
-		return $result;
-		
-	}
-
-	/**
-	 * Updates the status of a series.
-	 *
-	 * @param $seriesID ID of the series to perform this function on.
-	 * @param $boolVisible True if the series is visible to guests, otherwise false.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesSetVisible($seriesID, $boolVisible){
-
-		connectToMeekro();
-		$result = DB::query("SELECT series_set_visible(%i, %s);", $seriesID, $boolVisible);
-		return $result;
-		
-	}
-
-	/**
-	 * Updates the status of a series.
-	 *
-	 * @param $seriesID ID of the series to perform this function on.
-	 * @param $boolAdult True if the series is adults-only, otherwise false.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesSetAdult($seriesID, $boolAdult){
-
-		connectToMeekro();
-		$result = DB::query("SELECT series_set_adult(%i, %s);", $seriesID, $boolAdult);
-		return $result;
-		
-	}
-
-	/**
-	 * Updates the status of a series.
-	 *
-	 * @param $seriesID ID of the series to perform this function on.
-	 * @param $managerID ID of the user to assign as a series' manager.
-	 *
-	 * @return True if successful, otherwise false.
-	 */
-	function seriesSetProjectManager($seriesID, $managerID){
-
-		connectToMeekro();
-		$result = DB::query("SELECT series_set_project_manager(%i, %i);", $seriesID, $managerID);
-		return $result;
+		return DB::query("SELECT delete_series_force(%i);", $seriesID);
 		
 	}
 
@@ -225,22 +157,6 @@
 		$result = DB::query("SELECT * FROM Series AS s WHERE s.seriesTitle LIKE $ss;", $character);
 		return $result;
 		
-	}
-
-	/**
-	 * Returns all series with a title similar to the string provided, and of the entered status.
-	 *
-	 * @param $searchString Title to query against the database.
-	 * @param $character Char representing the status of a series. eg. 'd' for Dropped.
-	 *
-	 * @return Returns an array of arrays in the form: array(Series1, Series2, Series3, ...)
-	 */
-	function getSeriesByStatusAndTitle($character, $searchString){
-
-		connectToMeekro();
-		$result = DB::query("SELECT * FROM Series AS s WHERE s.status = $s AND s.seriesTitle LIKE $ss;", $character, $searchString);
-		return $result;
-
 	}
 
 	/**
