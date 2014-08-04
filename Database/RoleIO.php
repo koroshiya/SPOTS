@@ -1,6 +1,6 @@
 <?php
 
-	require_once('Connection.php');
+	require_once(databaseDir . 'Connection.php');
 
 	/**
 	 * Creates a new user role.

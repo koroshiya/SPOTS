@@ -1,6 +1,6 @@
 <?php
 
-	require_once('Connection.php');
+	require_once(databaseDir . 'Connection.php');
 
 	/**
 	 * Pushes the different parameters necessary to define a specific task into one array.

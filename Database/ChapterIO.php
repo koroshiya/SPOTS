@@ -1,6 +1,6 @@
 <?php
 
-	require_once('Connection.php');
+	require_once(databaseDir . 'Connection.php');
 
 	/**
 	 * @param $seriesID ID of the series to which the chapter belongs.
