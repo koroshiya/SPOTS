@@ -183,25 +183,25 @@ if (is_null($down) || strlen($down) == 0) {
 
 		<div id="projectDiv">
 			<table><tbody>
-				<tr><th>Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
+				<tr><th id="projectDiv_seriesTitle">Title</th><td><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
 				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$thumb; ?> /></td></tr>
-				<tr><th>Status</th><td><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
+				<tr><th>Status</th><td id="projectDiv_status"><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
 				<?php if (isset($_SESSION['SPOTS_authorized']) && !is_null($pm)){ ?>
 				<tr><th>Project Manager</th><td id="userProfile"><?php echo $pm["userName"]; /*TODO: link to user's profile page*/ ?></td></tr>
 				<?php } ?>
 				<tr>
-					<td>
+					<td id="projectDiv_readOnlineURL">
 						<?php
 							echo is_null($online) ? "No online reader<br>link available" : "<a href=".$seriesInfo["readOnlineURL"].">Read Online</a>";
 						?>
 					</td>
-					<td>
+					<td id="projectDiv_downloadURL">
 						<?php
 							echo is_null($down) ? "No download<br>link available" : "<a href=".$seriesInfo["downloadURL"].">Download</a>";
 						?>
 					</td>
 				</tr>
-				<tr><th>Notes</th><td style="max-width:200px;"><?php echo $seriesInfo["notes"]; ?></td></tr>
+				<tr><th>Notes</th><td style="max-width:200px;" id="projectDiv_notes"><?php echo $seriesInfo["notes"]; ?></td></tr>
 			</tbody></table>
 		</div>
 	</center>
@@ -334,10 +334,56 @@ if (isset($_SESSION['SPOTS_authorized'])){
 			$('#editOutput').text(arguments[0].substring(2));
 		}else{
 			$('#editOutput').text("Edited successfully");
+			$("#projectDiv_seriesTitle").text($("#form_title").val());
+			var statusVal = 'N/A';
+			switch($("#form_status").val()){
+				case 'A':
+					statusVal = 'Active';
+					break;
+				case 'S':
+					statusVal = 'Stalled';
+					break;
+				case 'D':
+					statusVal = 'Dropped';
+					break;
+				case 'I':
+					statusVal = 'Inactive';
+					break;
+				case 'C':
+					statusVal = 'Complete';
+					break;
+				case 'H':
+					statusVal = 'Hiatus';
+					break;
+			}
+			$("#projectDiv_status").text(statusVal);
+
+			var readerVal = $("#form_reader").val();
+			if (readerVal.length > 0){
+				if (endsWith(readerVal, '/')){readerVal += "index.php";}
+				$("#projectDiv_readOnlineURL").html("<a href="+readerVal+">Read Online</a>");
+			}else{
+				$("#projectDiv_readOnlineURL").html("No online reader<br>link available");
+			}
+
+			var readerVal = $("#form_download").val();
+			if (readerVal.length > 0){
+				if (endsWith(readerVal, '/')){readerVal += "index.php";}
+				$("#projectDiv_downloadURL").html("<a href="+readerVal+">Download</a>");
+			}else{
+				$("#projectDiv_downloadURL").html("No download<br>link available");
+			}
+
+			$("#projectDiv_notes").text($("#form_notes").val());
+			id="projectDiv_readOnlineURL"
 		}
 		for (var i = 0; i < arguments.length; i++) {
 			console.log(arguments[i]);
 		}
+	}
+
+	function endsWith(str, suffix) {
+	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
 
