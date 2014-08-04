@@ -28,10 +28,15 @@ if (is_null($thumb) || strlen($thumb) == 0) {
 $online = $seriesInfo["readOnlineURL"];
 if (is_null($online) || strlen($online) == 0) {
 	$online = null;
+}elseif($online[strlen($online) - 1] === '/'){
+	$online .= "index.php";
 }
+
 $down = $seriesInfo["downloadURL"];
 if (is_null($down) || strlen($down) == 0) {
 	$down = null;
+}elseif($down[strlen($down) - 1] === '/'){
+	$down .= "index.php";
 }
 
 ?>
@@ -149,7 +154,7 @@ if (is_null($down) || strlen($down) == 0) {
 							<b>Download URL&emsp;</b>
 						</td>
 						<td>
-							<input maxlength="255" type="text" id="form_download" name="form_download" value=<?php echo '"'.$seriesInfo["downloadURL"].'"'; ?> />
+							<input maxlength="255" type="text" id="form_download" name="form_download" value=<?php echo '"'.$down.'"'; ?> />
 						</td>
 					</tr>
 					<tr>
@@ -157,7 +162,7 @@ if (is_null($down) || strlen($down) == 0) {
 							<b>Online reader URL&emsp;</b>
 						</td>
 						<td>
-							<input maxlength="255" type="text" id="form_reader" name="form_reader" value=<?php echo '"'.$seriesInfo["readOnlineURL"].'"'; ?> />
+							<input maxlength="255" type="text" id="form_reader" name="form_reader" value=<?php echo '"'.$online.'"'; ?> />
 						</td>
 					</tr>
 					<tr>
@@ -192,12 +197,12 @@ if (is_null($down) || strlen($down) == 0) {
 				<tr>
 					<td id="projectDiv_readOnlineURL">
 						<?php
-							echo is_null($online) ? "No online reader<br>link available" : "<a href=".$seriesInfo["readOnlineURL"].">Read Online</a>";
+							echo is_null($online) ? "No online reader<br>link available" : "<a href=".$online.">Read Online</a>";
 						?>
 					</td>
 					<td id="projectDiv_downloadURL">
 						<?php
-							echo is_null($down) ? "No download<br>link available" : "<a href=".$seriesInfo["downloadURL"].">Download</a>";
+							echo is_null($down) ? "No download<br>link available" : "<a href=".$down.">Download</a>";
 						?>
 					</td>
 				</tr>

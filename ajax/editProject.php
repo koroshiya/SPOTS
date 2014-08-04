@@ -65,13 +65,11 @@ $download = $_POST['downloadURL'];
 
 $dlSize = strlen($download);
 if ($dlSize > 255){returnError("Download URL is too long");}
-elseif ($download[$dlSize - 1] === '/' && $dlSize <= 247){$download .= "index.php";}
 
 $reader = $_POST['readerURL'];
 
 $dlSize = strlen($reader);
 if ($dlSize > 255){returnError("Reader URL is too long");}
-elseif ($reader[$dlSize - 1] === '/' && $dlSize <= 247){$reader .= "index.php";}
 
 $notes = $_POST['notes'];
 
