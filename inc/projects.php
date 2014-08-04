@@ -92,7 +92,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					$("#projectList").html("Loading...");
 					$.ajax({
 						type: "POST", url: "./ajax/projectList.php",
-						data: {start: event.target.id * 10}, dataType: 'json'
+						data: {start: event.target.id * 10, status: filter}, dataType: 'json'
 					})
 					.done(function(data) {
 						arrayOfSeries = $.parseJSON(data[1]);
