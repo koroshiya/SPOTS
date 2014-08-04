@@ -219,7 +219,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 		'<a id="btn_thumb">New thumbnail</a>'+
 		'<a id="btn_edit">Edit Project</a>'
 	);
-	$("#sidebar_back").click(function(){GoToPage("projects");});
+	$("#sidebar_back").click(function(){GoToPage("projects", <?php echo $_POST['start']; ?>);});
 
 	$("#btn_thumb").click(function() {
 		if ($(this).text() === "New thumbnail"){
@@ -389,7 +389,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 
 	<?php if (!is_null($pm)){ ?>
 	$("#userProfile").click(function(){
-		GoToPage("members", <?php echo $pm['userID'] ?>);
+		GoToPage("members", <?php echo $pm['userID']; ?>);
 	});
 	<?php } ?>
 </script>

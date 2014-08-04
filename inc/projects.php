@@ -16,11 +16,17 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 				require_once(databaseDir . 'SeriesIO.php');
 
 				session_start();
+				if (isset($_POST['args']) && is_numeric($_POST['args'])){
+					$start = $_POST['args'];
+				}else{
+					$start = 0;
+				}
+				echo "Start: ".$start."\n";
 				if (!isset($_SESSION['SPOTS_authorized'])){
-					$arrayOfSeries = getSeriesAllPublic();
+					$arrayOfSeries = getSeriesAllPublic(null, $start);
 					$totalSeries = getProjectCountPublic();
 				}else{
-					$arrayOfSeries = getSeriesAll();
+					$arrayOfSeries = getSeriesAll(null, $start);
 					$totalSeries = getProjectCount();
 				}
 
@@ -58,7 +64,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 						'<br />'
 					);
 	
-	function FilterSeries(filter, title, count){
+	function FilterSeries(filter, title, count, startInx){
 
 		var sArr = ['all', 'active', 'stalled', 'inactive', 'hiatus', 'dropped', 'complete'];
 		$.each(sArr, function( index, value ) {
@@ -74,6 +80,10 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		if (typeof(count)!=='undefined'){
 			sCount = count;
 		}
+		var startIndex = <?php echo $start; ?>;
+		if (typeof(startInx)!=='undefined'){
+			startIndex = startInx;
+		}
 		if (sCount > 10){
 			for (var i = 0, sCurrent = 0; i < sCount; i+=10, sCurrent++){
 
@@ -86,7 +96,7 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 					})
 					.done(function(data) {
 						arrayOfSeries = $.parseJSON(data[1]);
-						FilterSeries(filter, title, data[0]);
+						FilterSeries(filter, title, data[0], event.target.id * 10);
 					})
 					.fail(function() { console.log("Series listing failed"); });
 				});
@@ -109,13 +119,13 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 			anch.append(btitle);
 			anch.click(function(){
 				$("#projectList").html("Loading...");
-				$.post("./inc/project.php", {id: value.seriesID})
+				$.post("./inc/project.php", {id: value.seriesID, start: startIndex})
 					.done(function(data) {
 						$("#pageContent").html(data);
 					})
 					.fail(function() {
 						console.log("Series does not exist or could not be loaded");
-						FilterSeries("all", "All Series");
+						FilterSeries("all", "All Series", sCount, startIndex);
 					});
 			});
 			$("#projectList").append(anch);
