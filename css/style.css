@@ -209,6 +209,7 @@ select {
 
 tbody tr:nth-child(odd){background-color:#eee;}
 tbody tr:nth-child(even){background-color:#fff;}
+tbody td, tbody th{padding:10px;}
 .clickable{cursor:pointer;}
 .clickable:hover{background-color:rgba(0, 0, 0, 0.15);}
 .equitable th, .equitable td{min-width:100px;}
@@ -236,4 +237,14 @@ nav a:hover{cursor:pointer;}
 .sidebar_selected{
 	background-color: #0088C0;
 	color: #FFFFFF;
+}
+#seriesImage{
+	max-height:400px;
+	max-width:400px;
+}
+#projectTable{
+	width:500px;
+}
+#projectTable td{
+	text-align:center;
 }

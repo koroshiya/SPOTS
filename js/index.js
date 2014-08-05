@@ -15,7 +15,7 @@ function GoToPage(page, args){
 }
 
 $("#header_title").click(function(){
-	GoToPage("main");
+	GoToPage("projects");
 });
 $("#nav_tasks").click(function(){
 	GoToPage("tasks");

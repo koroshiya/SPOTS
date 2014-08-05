@@ -201,9 +201,9 @@ if (is_null($down) || strlen($down) == 0) {
 		</form>
 
 		<div id="projectDiv">
-			<table><tbody>
-				<tr><th>Title</th><td id="projectDiv_seriesTitle"><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
-				<tr><td colspan="2" style="height:200px;"><img id="seriesImage" style="max-height:200px; max-width:200px;" src=<?php echo "thumbs/".$thumb; ?> /></td></tr>
+			<table id="projectTable"><tbody>
+				<tr><th style="width:250px;">Title</th><td id="projectDiv_seriesTitle" style="width:250px;"><?php echo $seriesInfo["seriesTitle"]; ?></td></tr>
+				<tr><td id="imageTd" colspan="2"><center><img id="seriesImage" src="<?php echo "thumbs/".$thumb; ?>" /></center></td></tr>
 				<tr><th>Status</th><td id="projectDiv_status"><?php echo getSeriesStatusFromChar($seriesInfo["status"]); ?></td></tr>
 				<?php if (isset($_SESSION['SPOTS_authorized']) && !is_null($pm)){ ?>
 				<tr><th>Project Manager</th><td id="userProfile"><?php echo $pm["userName"]; /*TODO: link to user's profile page*/ ?></td></tr>
@@ -220,7 +220,8 @@ if (is_null($down) || strlen($down) == 0) {
 						?>
 					</td>
 				</tr>
-				<tr><th>Notes</th><td style="max-width:200px;" id="projectDiv_notes"><?php echo $seriesInfo["notes"]; ?></td></tr>
+				<tr><th>Notes</th><td style="max-width:200px;" id="projectDiv_notes"><p style="text-align:left;"><?php echo $seriesInfo["notes"]; ?></p></td></tr>
+				<tr><th>Series Description</th><td style="max-width:200px;" id="projectDiv_desc"><p style="text-align:left;"><?php echo $seriesInfo["description"]; ?></p></td></tr>
 			</tbody></table>
 		</div>
 	</center>
@@ -397,6 +398,7 @@ if (isset($_SESSION['SPOTS_authorized'])){
 			}
 
 			$("#projectDiv_notes").text($("#form_notes").val());
+			$("#projectDiv_desc").text($("#form_desc").val());
 			id="projectDiv_readOnlineURL"
 		}
 		for (var i = 0; i < arguments.length; i++) {
