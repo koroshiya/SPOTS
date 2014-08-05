@@ -116,19 +116,24 @@ DEFINE('databaseDir', dirname(dirname(__FILE__)).'/Database/');
 		if (sCount > 10){
 			for (var i = 0, sCurrent = 0; i < sCount; i+=10, sCurrent++){
 
-				var curImage = $("<input type=\"button\" id=\""+sCurrent+"\" value=\""+(sCurrent+1)+"\" style=\"cursor:pointer;\">");
-				curImage.click(function(event){
-					$("#projectList").html("Loading...");
-					$.ajax({
-						type: "POST", url: "./ajax/projectList.php",
-						data: {start: event.target.id * 10, status: filter}, dataType: 'json'
-					})
-					.done(function(data) {
-						arrayOfSeries = $.parseJSON(data[1]);
-						FilterSeries(filter, title, data[0], event.target.id * 10);
-					})
-					.fail(function() { console.log("Series listing failed"); });
-				});
+				var curImage = $("<input type=\"button\" id=\""+sCurrent+"\" value=\""+(sCurrent+1)+"\">");
+				if (i == startIndex){
+					curImage.attr("disabled", true);
+				}else{
+					curImage.css("cursor", "pointer");
+					curImage.click(function(event){
+						$("#projectList").html("Loading...");
+						$.ajax({
+							type: "POST", url: "./ajax/projectList.php",
+							data: {start: event.target.id * 10, status: filter}, dataType: 'json'
+						})
+						.done(function(data) {
+							arrayOfSeries = $.parseJSON(data[1]);
+							FilterSeries(filter, title, data[0], event.target.id * 10);
+						})
+						.fail(function() { console.log("Series listing failed"); });
+					});
+				}
 				$("#projectList").append(curImage);
 			}
 		}
