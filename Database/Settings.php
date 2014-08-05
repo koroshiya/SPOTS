@@ -17,5 +17,6 @@ DEFINE('dbName', 'SPOTS');
 DEFINE('homeGroup', 1);
 DEFINE('homeMessage', "Back to Japanzai");
 DEFINE('homeURL', "http://japanzai.com/index.php");
+DEFINE('homeTitle', "Japanzai Projects");
 
 ?>

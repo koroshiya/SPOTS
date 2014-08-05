@@ -10,13 +10,13 @@
 
 <header>
 	<nav style="display:inline-block; float:left; margin:0px; margin-left:10px;" role="navigation">
-		<a id="header_title">SPOTS</a>
+		<a id="header_title"><?php echo homeTitle; ?></a>
 		<a class="header_nav" id="nav_tasks">Tasks</a>
 		<a class="header_nav" id="nav_projects">Projects</a>
 		<a class="header_nav" id="nav_members">Members</a>
 		<a class="header_nav" id="nav_groups">Groups</a>
 		<a class="header_nav" id="nav_user">My Page</a>
-		<a class="header_nav" id="nav_homeurl" href=<?php echo homeURL; ?>><?php echo homeMessage; ?></a>
+		<a class="header_nav" id="nav_homeurl" href="<?php echo homeURL; ?>"><?php echo homeMessage; ?></a>
 	</nav>
     <span id="header_user"></span>
 </header>
